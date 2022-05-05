@@ -1,19 +1,63 @@
-{% comment %} Background del Modal {% endcomment %}
+/* Stile del modal */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  padding-top: 60px;
+  width: 100%; 
+  height: 100%;
+  overflow: auto; 
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+  padding-top: 80px;
 }
 
-{% comment %} Bottone nella home che apre il modal form {% endcomment %}
+.popup_container {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+img.avatar {
+  width: 15%;
+  border-radius: 50%;
+}
+
+.logo {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  width: 10%;
+  align-self: center;
+}
+
+.loginbtn {
+  width: 100px;
+  height: 30px;
+  border:none;
+  border-radius:5px;
+  color:#fff;
+  background-color:#1859c9;
+  cursor:pointer;
+}
+
+.loginbtn:hover {
+  opacity: 0.75;
+}
+
+
+.user_input, .pwd_input  {
+  width: 20%;
+  padding: 8px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 15px;
+  text-align: center;
+}
+
+ /* Bottone nella home che apre il modal form  */
 .button_home {
     background-color: #0478D2;
     padding: 10px 50px;
@@ -21,17 +65,21 @@
     color: white;
 }
 
-/* Modal Content/Box */
-.modal-content {
-  background-color: #fefefe;
-  margin: 5px auto; /* 15% from the top and centered */
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+.button_home:hover {
+  opacity: 0.75;
 }
 
-{% comment %} Pulsante "Close" {% endcomment %}
+/* Contenuto del pop-up container */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5px auto;
+  border: 1px solid #888;
+  width: 55%;
+  border-radius: 25px;
+}
+
+  /* Pulsante X in alto a destra del modal */
 .close {
-  /* Position it in the top right corner outside of the modal */
   position: absolute;
   right: 25px;
   top: 0;
@@ -47,7 +95,23 @@
   cursor: pointer;
 }
 
-{% comment %} Animazione di zoom {% endcomment %}
+/* Box che contiene gli elementi della home */
+.welcome_label {
+  text-align: center;
+  font-size: 45px;
+
+}
+.box_home {
+  text-align: center;
+  font-size: 15px;
+  border: 3px solid;
+  border-radius: 15px;
+  width: 50%;
+  margin: 0 25%;
+}
+
+
+/* Animazione di zoom */
 .animate {
   -webkit-animation: animatezoom 0.6s;
   animation: animatezoom 0.6s

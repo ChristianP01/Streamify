@@ -2,41 +2,102 @@
     <head>
         <link rel="stylesheet" href="home.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
+    
     <body>
-        <!-- Bottone per aprire il login form-->
-        <button onclick="document.getElementById('id01').style.display='block'" class="button_home">Login</button>
+        <!-- Bottone di login nella home -->
+        
 
-        <!-- The Modal -->
-        <div id="id01" class="modal">
-        <span onclick="document.getElementById('id01').style.display='none'"
-        class="close" title="Close Modal">&times;</span>
-        
-        <!-- Modal Content -->
-        <form class="modal-content animate" action="/action_page.php">
-            <div class="imgcontainer">
-            <img src="img_avatar2.png" alt="Avatar" class="avatar">
-            </div>
-        
-            <div class="container">
-            <label for="uname"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="uname" required>
-        
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
-        
-            <button type="submit">Login</button>
-            <label>
-                <input type="checkbox" checked="checked" name="remember"> Remember me
-            </label>
-            </div>
-        
-            <div class="container" style="background-color:#f1f1f1">
-            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-            <span class="psw">Forgot <a href="#">password?</a></span>
-            </div>
-        </form>
+        <!-- Scritta benvenuto -->
+        <p class="welcome_label">
+            Benvenuto su Streamify!
+            <img src="logo.png" alt="Logo" class="logo">
+        </p>
+
+        <div class="box_home">
+            <p> Sei già iscritto? Esegui il login attraverso il bottone qui sotto </p>
+            <button onclick="document.getElementById('form_login').style.display='block'" class="button_home">Login</button>
+            <p> <br><br><br> </p>
+            <p> Per iscriverti, clicca qui! </p> 
+            <button onclick="document.getElementById('form_register').style.display='block'" class="button_home">Registrati</button>
+            <br><br>
+        </div>
+
+
+        <!--Modal login-->
+        <div id="form_login" class="modal">
+            
+            <!-- X in alto a destra -->
+            <span onclick="document.getElementById('form_login').style.display='none'"
+            class="close" title="Close Modal">&times;</span>
+
+            <!-- Contenuto del Modal -->
+            <form class="modal-content animate" action="/action_page.php">
+                <div class="popup_container">
+                    <img src="img_avatar2.png" alt="Avatar" class="avatar">
+                        <br><br><br>
+                    <label for="uname"><b>Username</b></label>
+                    <input type="text" class="user_input" placeholder="Enter Username" name="uname" required>
+                        <br>
+                    <label for="psw"><b>Password</b></label>
+                    <input type="password" class="pwd_input" placeholder="Enter Password" name="psw" required>
+                        <br><br>
+                    <button type="submit" class="loginbtn">Login</button>
+                    <br><br>
+                    <label>
+                        <input type="checkbox" checked="checked" name="remember"> Salva accesso
+                    </label>
+                </div>
+            </form>
         </div> 
 
+        <!-- Modal register -->
+        <div id="form_register" class="modal">
+            
+            <!-- X in alto a destra -->
+            <span onclick="document.getElementById('form_register').style.display='none'"
+            class="close" title="Close Modal">&times;</span>
+            
+
+            <!-- Contenuto del Modal -->
+            <form class="modal-content animate" action="/action_page.php">
+                <div class="popup_container">
+                    <img src="img_avatar2.png" alt="Avatar" class="avatar">
+                        <br><br><br>
+                    <label for="uname"><b>Username</b></label>
+                    <input type="text" class="user_input" placeholder="Enter Username" name="uname" required>
+                        <br>
+                    <label for="psw"><b>Password</b></label>
+                    <input type="password" class="pwd_input" placeholder="Enter Password" name="psw" required>
+                        <br>
+                    <label for="email"><b>Email</b></label>
+                    <input type="email" class="user_input" placeholder="Enter Email" name="email" required>
+                        <br>
+                    <button type="submit" class="loginbtn">Login</button>
+                    <br><br>
+                    <label>
+                        <input type="checkbox" checked="checked" name="remember"> Salva accesso
+                    </label>
+                </div>
+            </form>
+        </div> 
+
+
+
     </body>
+
+    <script>
+        // Esci dal popup se clicchi fuori dalla finestra
+
+        var modal = document.getElementById('form_login')
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        
+    </script>
+
+</head>
+
 </html>

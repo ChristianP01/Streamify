@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import *
+from . import views
 
 app_name = "streamify"
 
 urlpatterns = [
-    path("home/", )
+    path("home/", views.homepage, name="home"),
+    path("listausers/", views.listausers.as_view(), name="listausers")
 ]

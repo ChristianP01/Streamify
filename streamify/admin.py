@@ -1,3 +1,4 @@
 from django.contrib import admin
+from streamify.models import Utente
 
-# Register your models here.
+admin.register(Utente)

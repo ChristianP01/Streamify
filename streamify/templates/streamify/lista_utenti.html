@@ -1,0 +1,10 @@
+{% block title %} Lista di studenti {% endblock %} 
+
+{% block content %} 
+
+{% for p in object_list %}
+<ul>
+    {{ p }}
+</ul>
+{% endfor %}
+{% endblock %}

@@ -1,16 +1,15 @@
+{% load static %}
 <html>
     <head>
-        <link rel="stylesheet" href="home.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <body>
-        <!-- Bottone di login nella home -->
-        
+    </head>
 
+    <body>
         <!-- Scritta benvenuto -->
         <p class="welcome_label">
             Benvenuto su Streamify!
-            <img src="logo.png" alt="Logo" class="logo">
+            <img src="{% static "imgs/logo.png" %}" alt="Logo" class="logo">
         </p>
 
         <div class="box_home">
@@ -22,7 +21,6 @@
             <br><br>
         </div>
 
-
         <!--Modal login-->
         <div id="form_login" class="modal">
             
@@ -33,7 +31,7 @@
             <!-- Contenuto del Modal -->
             <form class="modal-content animate" action="/action_page.php">
                 <div class="popup_container">
-                    <img src="img_avatar2.png" alt="Avatar" class="avatar">
+                    <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">
                         <br><br><br>
                     <label for="uname"><b>Username</b></label>
                     <input type="text" class="user_input" placeholder="Enter Username" name="uname" required>
@@ -61,7 +59,7 @@
             <!-- Contenuto del Modal -->
             <form class="modal-content animate" action="/action_page.php">
                 <div class="popup_container">
-                    <img src="img_avatar2.png" alt="Avatar" class="avatar">
+                    <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">
                         <br><br><br>
                     <label for="uname"><b>Username</b></label>
                     <input type="text" class="user_input" placeholder="Enter Username" name="uname" required>
@@ -80,14 +78,10 @@
                 </div>
             </form>
         </div> 
-
-
-
     </body>
 
     <script>
         // Esci dal popup se clicchi fuori dalla finestra
-
         var modal = document.getElementById('form_login')
 
         window.onclick = function(event) {
@@ -95,9 +89,6 @@
                 modal.style.display = "none";
             }
         }
-        
     </script>
-
-</head>
 
 </html>

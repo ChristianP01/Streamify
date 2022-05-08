@@ -29,7 +29,8 @@
             class="close" title="Close Modal">&times;</span>
 
             <!-- Contenuto del Modal -->
-            <form class="modal-content animate" action="/action_page.php">
+            <form class="modal-content animate" action="/streamify/logged/" method="POST">
+                {% csrf_token %}
                 <div class="popup_container">
                     <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">
                         <br><br><br>
@@ -54,10 +55,10 @@
             <!-- X in alto a destra -->
             <span onclick="document.getElementById('form_register').style.display='none'"
             class="close" title="Close Modal">&times;</span>
-            
 
             <!-- Contenuto del Modal -->
-            <form class="modal-content animate" action="/action_page.php">
+            <form class="modal-content animate" action="/streamify/registrato/" method="POST">
+                {% csrf_token %}
                 <div class="popup_container">
                     <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">
                         <br><br><br>

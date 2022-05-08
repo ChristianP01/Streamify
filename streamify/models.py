@@ -1,8 +1,8 @@
 from django.db import models
 
 class Utente(models.Model):
+    username = models.CharField(max_length=25, primary_key=True)
     email = models.CharField(max_length=50)
-    username = models.CharField(max_length=25)
     password = models.CharField(max_length=25)
     
     def __str__(self):

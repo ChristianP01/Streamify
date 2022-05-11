@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView
-from streamify.models import Utente
+from streamify.models import Film, Utente
 
 def homepage(request):
     return render(request,template_name="streamify/home.html")
@@ -38,3 +38,7 @@ def logged(request):
 
     except:
         return render(request,template_name="streamify/log_failed.html")
+
+class mostra_catalogo(ListView):
+    model = Film
+    template_name = "streamify/catalogue.html"

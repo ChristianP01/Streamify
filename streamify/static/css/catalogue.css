@@ -1,0 +1,25 @@
+/* Scritta di benvenuto */
+.welcome {
+    text-align: center;
+    font-size: 40px;
+}
+
+/* Tabella dei film */
+.listafilm {
+    /* border-spacing: 0 100px; */
+    text-align: center;
+    border: 3px solid black;
+}
+
+/* Prima riga (grassetto) */
+.listafilm th {
+    font-size: 20px;
+    border: 1px solid black;
+}
+
+/* Padding tra le colonne */
+.listafilm td {
+    font-size: 20px;
+    padding: 0 110px;
+    border: 1px solid black;
+}

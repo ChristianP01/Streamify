@@ -1,0 +1,41 @@
+{% load static %}
+
+<html>
+    
+    <title> Catalogo </title>
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/catalogue.css' %}">
+    </head>
+
+    <body>
+        <p class="welcome"> Catalogo </p>
+        <br><br><br>
+
+        <table class="listafilm" name="listafilm">
+            <tr>
+                <th>Titolo </th>
+                <th>Genere</th>
+                <th>Anno di uscita</th>
+                <th>Valutazione</th>
+                <th>Link</th>
+            </tr>
+
+            {% for p in object_list %}
+                <tr>
+                    <td> {{p.titolo}} </td>
+                    <td>
+                        {% for genere in p.generi.all %}
+                            {{genere}}
+                        {% endfor %}
+                    </td>
+                    <td> {{p.anno_uscita}} </td>
+                    <td> {{p.valutazione}} </td>
+                    <td>*bottone*</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </body>
+
+</html>

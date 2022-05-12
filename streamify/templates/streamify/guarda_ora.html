@@ -1,0 +1,14 @@
+<html>
+    {% if film == None %}
+        Il film non esiste!
+    
+    {% else %}
+
+        {% if logged_user is not None %}
+            Benvenuto {{logged_user}}, qui puoi guardaere il film: {{film.titolo}}
+        {% else %}
+            Il film è stato trovato, esegui il login per guardarlo!
+        {% endif %}
+
+    {% endif %}
+</html>

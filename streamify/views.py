@@ -30,10 +30,11 @@ def logged(request):
 
     try:
         logged_user = Utente.objects.get(username=uname, password=pwd)
-        print(Utente.objects.all())
-        return render(request,template_name="streamify/logged.html", context={
-            "user": uname,
-            "pass": pwd
+        object_list = Film.objects.all()
+        request.session["logged_user"] = logged_user.username
+        return render(request,template_name="streamify/catalogue.html", context={
+            "logged_user": logged_user,
+            "object_list": object_list
         })
 
     except:
@@ -42,3 +43,19 @@ def logged(request):
 class mostra_catalogo(ListView):
     model = Film
     template_name = "streamify/catalogue.html"
+
+
+def guardaFilm(request, titolo):
+
+    lista_film = Film.objects.all()
+
+    for film in lista_film:
+        if titolo == film.titolo:
+            return render(request,template_name="streamify/guarda_ora.html", context={
+                "film": film,
+                "logged_user": request.session["logged_user"]
+            })
+
+    return render(request, template_name="streamify/guarda_ora.html", context={
+        "film": None    
+    })

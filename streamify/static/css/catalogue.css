@@ -4,10 +4,18 @@
     font-size: 40px;
 }
 
+.logo {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    width: 10%;
+}
+
 /* Tabella dei film */
 .listafilm {
     /* border-spacing: 0 100px; */
     text-align: center;
+    border-radius: 10px;
     border: 3px solid black;
 }
 
@@ -15,11 +23,33 @@
 .listafilm th {
     font-size: 20px;
     border: 1px solid black;
+    border-radius: 10px;
 }
 
 /* Padding tra le colonne */
 .listafilm td {
     font-size: 20px;
-    padding: 0 110px;
+    padding: 0 100px;
     border: 1px solid black;
+    border-radius: 10px;
+}
+
+.guarda_ora {
+    background-color: #0478D2;
+    padding: 10px 50px;
+    border-radius: 10px;
+    color: white;
+}
+
+.guarda_ora:hover {
+    opacity: 0.75;
+}
+
+.top_right_panel {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    padding: 0 20px;
+    border: 2px solid black;
+    border-radius: 10px;
 }

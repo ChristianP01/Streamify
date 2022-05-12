@@ -6,9 +6,23 @@
 
     <head>
         <link rel="stylesheet" type="text/css" href="{% static 'css/catalogue.css' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
 
     <body>
+
+        {% comment %} Pannello utente in alto a destra {% endcomment %}
+        <div class="top_right_panel">
+            <select>
+                <option disabled="disabled">{{logged_user.username}}</option>
+                <option value="1">Il mio account</option>
+                <option value="2">Logout</option>
+              </select>
+              <form action="/streamify/catalogo/">
+                <button class="guarda_ora">Vai</button>
+            </form>
+        </div>
+
         <p class="welcome"> Catalogo </p>
         <br><br><br>
 
@@ -31,11 +45,15 @@
                     </td>
                     <td> {{p.anno_uscita}} </td>
                     <td> {{p.valutazione}} </td>
-                    <td>*bottone*</td>
+                    <td>
+                        <form action="/streamify/guarda_film/{{p.titolo}}/" method="GET">
+                            <button class="guarda_ora">Guardalo!</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
-
+            <img src="{% static "imgs/logo.png" %}" alt="Logo" class="logo">
     </body>
 
 </html>

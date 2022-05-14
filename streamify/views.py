@@ -72,3 +72,26 @@ def guardaFilm(request, titolo):
     return render(request, template_name="streamify/guarda_ora.html", context={
         "film": None    
     })
+
+def account(request):
+
+    # Non posso fare entrare un utente in questa pagina se non è loggato, quindi ritorno None.
+    try:
+        user = request.session["logged_user"]
+        # Se l'utente è entrato correttamente, lo cerco nel database al fine di ottenere i film che ha guardato.
+        utenti = Utente.objects.all()
+        print(utenti)
+        for utente in utenti:
+            if user == utente.username:
+                return render(request, template_name="streamify/account.html", context={
+                    "user": user,
+                    "lista_film": utente.film_guardati.all()
+                })
+
+    except:
+        return render(request, template_name="streamify/account.html", context={
+        "user": None,
+        "lista_film": None
+    })
+
+    

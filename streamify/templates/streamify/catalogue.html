@@ -10,9 +10,12 @@
     </head>
 
     <body>
+        <img class="userpng" src="{% static "imgs/user.png" %}" alt="Image">
+        <img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image">
 
         {% comment %} Pannello utente in alto a destra {% endcomment %}
-        <div class="top_right_panel">
+        {% comment %} <div class="top_right_panel">
+            
             <select>
                 <option disabled="disabled">{{logged_user.username}}</option>
                 <option value="1">Il mio account</option>
@@ -21,7 +24,7 @@
               <form action="/streamify/catalogo/">
                 <button class="guarda_ora">Vai</button>
             </form>
-        </div>
+        </div> {% endcomment %}
 
         <p class="welcome"> Catalogo </p>
         <br><br><br>

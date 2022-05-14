@@ -11,6 +11,20 @@
     width: 10%;
 }
 
+.userpng {
+    position: absolute;
+    right: 8%;
+    top: 7%;
+    width: 2%;
+}
+
+.logoutpng {
+    position: absolute;
+    right: 4%;
+    top: 7%;
+    width: 2%;
+}
+
 /* Tabella dei film */
 .listafilm {
     /* border-spacing: 0 100px; */

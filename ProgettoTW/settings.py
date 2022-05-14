@@ -32,7 +32,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 
 #Imposto il timeout dei cookie a un valore personalizzato
-SESSION_COOKIE_AGE = 30
+SESSION_COOKIE_AGE = 180
 
 
 # Application definition

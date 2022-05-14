@@ -1,14 +1,31 @@
 <html>
-    {% if film == None %}
-        Il film non esiste!
-    
-    {% else %}
-
-        {% if logged_user is not None %}
-            Benvenuto {{logged_user}}, qui puoi guardare il film: {{film.titolo}}
+    <body>
+        {% if film == None %}
+            Il film non esiste!
+        
         {% else %}
-            Il film {{film.titolo}} è disponibile nel nostro catalogo, è richiesto il login per guardarlo.
-        {% endif %}
 
-    {% endif %}
+            {% if logged_user is not None %}
+                {{logged_user}}, vuoi guardare {{film.titolo}}?
+                <br><br>
+
+                <form action="/streamify/account/" method="POST">
+                    {% csrf_token %}
+                    <button class="guarda" id="guarda" onclick="">Guarda</button>
+                </form>
+
+            {% else %}
+                Il film {{film.titolo}} è disponibile nel nostro catalogo, è richiesto il login per guardarlo.
+            {% endif %}
+
+        {% endif %}
+    </body>
+
+    <script>
+        document.getElementById("guarda").onclick = function() {
+            alert("Film guardato con successo! Lo trovi nella lista dei film guardati, nella pagina del tuo account.")
+        };
+    </script>
+
+
 </html>

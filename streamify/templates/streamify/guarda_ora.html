@@ -5,9 +5,9 @@
     {% else %}
 
         {% if logged_user is not None %}
-            Benvenuto {{logged_user}}, qui puoi guardaere il film: {{film.titolo}}
+            Benvenuto {{logged_user}}, qui puoi guardare il film: {{film.titolo}}
         {% else %}
-            Il film è stato trovato, esegui il login per guardarlo!
+            Il film {{film.titolo}} è disponibile nel nostro catalogo, è richiesto il login per guardarlo.
         {% endif %}
 
     {% endif %}

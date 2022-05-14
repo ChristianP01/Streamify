@@ -27,6 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#Alla chiusura, la sessione cadrà e l'utente loggato verrà "sloggato"
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+
+#Imposto il timeout dei cookie a un valore personalizzato
+SESSION_COOKIE_AGE = 30
+
 
 # Application definition
 

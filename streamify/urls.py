@@ -9,6 +9,6 @@ urlpatterns = [
     path("registrato/", views.registrato, name="registrato"),
     path("logged/", views.logged, name="logged"),
     path("catalogo/", views.mostra_catalogo.as_view(), name="catalogo"),
-    path("guarda_film/<str:titolo>/", views.guardaFilm, name="guarda_film"),
+    path("guarda_film/<str:titolo_film>/", views.guardaFilm, name="guarda_film"),
     path("account/", views.account, name="account")
 ]

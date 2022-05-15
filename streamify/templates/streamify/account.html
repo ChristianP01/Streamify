@@ -1,9 +1,93 @@
+{% load static %}
+
 <html>
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/account.css' %}">
+    </head>
+
+    {% comment %} Source di Chart.js {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <body>
-        {{user}} ha guardato questi film:
-        <br><br>
-        {% for film in lista_film %}
-            {{film}}
-        {% endfor %}
+        {% if user is not None %}
+
+            <div class="container mt-5 mb-5 d-flex justify-content-center">
+                <div class="card rounded">
+                    <div class=" d-block justify-content-center">
+                        <div class="area1 p-3 py-5"> </div>
+                        <div class="area2 p- text-center px-3">
+                            <div class="image mr-3"> <img src="{% static "imgs/christian.png" %}" class="rounded-circle" width="100" />
+                                <h4 class=" name mt-3 ">{{user}}</h4>
+                                {% comment %} <p class="information mt-3 text-justify">
+                                    
+                                </p> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{user}} ha guardato questi film:
+            <br><br>
+            {% for film in lista_film %}
+                {{film}}
+            {% endfor %}
+
+        {% else %}
+            Effettua il login per visualizzare questa pagina.
+
+        {% endif %}
+
+        <div class="radar">
+            <canvas id="radarChart"></canvas>
+          </div>
+        
     </body>
+
+    <script>
+
+        {% comment %} Recupero il dizionario dei generi dell'utente {% endcomment %}
+        var generi = JSON.parse('{{generi_dict | safe}}');
+
+        generi_titoli = [];
+        generi_voti = [];
+        for (const [key, value] of Object.entries(generi)) {
+            generi_titoli.push(key);
+            generi_voti.push(value);
+        }
+
+        const data = {
+            labels: generi_titoli,
+            
+            datasets: [{
+              label: 'Indicatore generi',
+              data: generi_voti,
+              fill: true,
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              borderColor: 'rgb(54, 162, 235)',
+              pointBackgroundColor: 'rgb(54, 162, 235)',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: 'rgb(54, 162, 235)'
+            }]
+          };
+
+        const config = {
+            type: 'radar',
+            data: data,
+            options: {
+              elements: {
+                line: {
+                  borderWidth: 3
+                }
+              }
+            },
+          };
+
+        const myChart = new Chart(
+            document.getElementById('radarChart'),
+            config
+        );
+    </script>
 </html>

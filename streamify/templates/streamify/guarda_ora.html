@@ -11,7 +11,7 @@
 
                 <form action="/streamify/account/" method="POST">
                     {% csrf_token %}
-                    <button class="guarda" id="guarda" onclick="">Guarda</button>
+                    <button class="guarda" id="guarda">Guarda</button>
                 </form>
 
             {% else %}
@@ -23,7 +23,7 @@
 
     <script>
         document.getElementById("guarda").onclick = function() {
-            alert("Film guardato con successo! Lo trovi nella lista dei film guardati, nella pagina del tuo account.")
+            alert("Film guardato con successo! Verrai reindirizzato al catalogo.")
         };
     </script>
 

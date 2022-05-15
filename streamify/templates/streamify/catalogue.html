@@ -10,21 +10,8 @@
     </head>
 
     <body>
-        <img class="userpng" src="{% static "imgs/user.png" %}" alt="Image">
-        <img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image">
-
-        {% comment %} Pannello utente in alto a destra {% endcomment %}
-        {% comment %} <div class="top_right_panel">
-            
-            <select>
-                <option disabled="disabled">{{logged_user.username}}</option>
-                <option value="1">Il mio account</option>
-                <option value="2">Logout</option>
-              </select>
-              <form action="/streamify/catalogo/">
-                <button class="guarda_ora">Vai</button>
-            </form>
-        </div> {% endcomment %}
+        <a href="/streamify/account/"><img class="userpng" src="{% static "imgs/user.png" %}" alt="Image"></a>
+        <a href="/streamify/home/"><img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image"></a>
 
         <p class="welcome"> Catalogo </p>
         <br><br><br>
@@ -50,7 +37,7 @@
                     <td> {{p.valutazione}} </td>
                     <td>
                         <form action="/streamify/guarda_film/{{p.titolo}}/" method="GET">
-                            <button class="guarda_ora">Guardalo!</button>
+                            <button class="guarda_ora" id="guarda_ora">Guardalo!</button>
                         </form>
                     </td>
                 </tr>
@@ -58,5 +45,11 @@
         </table>
             <img src="{% static "imgs/logo.png" %}" alt="Logo" class="logo">
     </body>
+
+    <script>
+        document.getElementById("guarda_ora").onclick = function() {
+            alert("Film guardato con successo! Verrai reindirizzato al catalogo.")
+        };
+    </script>
 
 </html>

@@ -1,11 +1,13 @@
 from email import message
 import json
 import pprint
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView
 from streamify.models import Film, Utente, Genere
 from django.contrib import messages
 from django.core import serializers
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 
 def homepage(request):
     return render(request,template_name="streamify/home.html")
@@ -26,8 +28,11 @@ def registrato(request):
             messages.error(request, "Username già in uso!")
             return render(request,template_name="streamify/home.html")
             
+    # Creo l'utente e lo aggiungo al gruppo dei loggati.
     new_user = Utente(uname, email, pwd)
     new_user.save()
+    gruppo_loggati, _ = Group.objects.get_or_create(name="Loggati")
+    gruppo_loggati.user_set.add(new_user)
 
     messages.success(request, f"Utente creato con successo! Benvenuto, {uname}!")
     return render(request,template_name="streamify/home.html")
@@ -40,8 +45,9 @@ def logged(request):
         logged_user = Utente.objects.get(username=uname, password=pwd)
         film_list = Film.objects.all()
         request.session["logged_user"] = logged_user.username
+        print(f"LOGGATO: {request.user}")
         return render(request,template_name="streamify/catalogue.html", context={
-            "logged_user": logged_user,
+            "user": logged_user,
             "film_list": film_list
         })
 
@@ -119,4 +125,32 @@ def account(request):
         "lista_film": None
     })
 
+# @login_required
+# def account(request):
+# # Non posso fare entrare un utente in questa pagina se non è loggato, quindi ritorno None.
+#     print(f"request = {request}") # WSGI ....
+#     user = get_object_or_404(Utente, username=request.user.username)
+#     print(f"user = {user}") #ChristianP01 ...
+#     print(f"pk = {request.user.pk}, {request.user}") # None, AnonymousUser
+#     generi = []
+#     # Se l'utente è entrato correttamente, lo cerco nel database al fine di ottenere i film che ha guardato.
+#     for film in user.film_guardati.all():
+#         for genere in film.generi.all():
+#             if genere.name not in generi:
+#                 generi[genere.name] = 1
+#             else:
+#                 generi[genere.name] += 1
+
+#     for genere in Genere.objects.all():
+#         if genere.name not in generi:
+#             generi[genere.name] = 0
+
+#     for k,v in generi.items():
+#         print(k,v)
     
+
+#     return render(request, template_name="streamify/account.html", context={
+#         "user": user.username,
+#         "lista_film": user.film_guardati.all(),
+#         "generi_dict": json.dumps(generi)
+#     })

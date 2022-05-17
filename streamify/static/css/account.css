@@ -3,7 +3,10 @@ body {
 }
 
 .card {
-    width:400px;border: none;border-radius: 14px !important
+    width:400px;
+    height: 500px;
+    border: none;
+    border-radius: 14px !important
 }
 
 /* Colore sopra */
@@ -15,23 +18,21 @@ body {
 }
 
 .image {
-    top: -62px;
+    /* Immagine a metà tra i colori */
+    top: -65px;
     position: relative;
 }
 
-/* .image img {
-    box-shadow: 5px 6px 6px 2px #e9ecef
-} */
-
 .area2 {
     background-color:#fff;
+    height: 100%;
     border-bottom-left-radius: 14px !important;
     border-bottom-right-radius: 14px !important
 }
 
 .name {
     font-size:25px;
-    font-weight:650
+    font-weight:650;
 }
 
 .information {
@@ -60,4 +61,13 @@ body {
 
 .radar {
     width: 40%;
+    position: absolute;
+    right: 20%;
+    top: 1%;
+}
+
+.watched_films {
+    position: absolute;
+    left: 30%;
+    top: 1%;
 }

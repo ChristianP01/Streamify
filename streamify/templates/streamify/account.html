@@ -1,4 +1,7 @@
+{% extends "base.html" %}
 {% load static %}
+
+{% block children %}
 
 <html>
 
@@ -19,20 +22,17 @@
                         <div class="area2 p- text-center px-3">
                             <div class="image mr-3"> <img src="{% static "imgs/christian.png" %}" class="rounded-circle" width="100" />
                                 <h4 class=" name mt-3 ">{{user}}</h4>
-                                {% comment %} <p class="information mt-3 text-justify">
-                                    
-                                </p> {% endcomment %}
+
+                                <p>Film guardati: <br>
+                                {% for film in lista_film %}
+                                    {{film}}
+                                {% endfor %}</p>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {{user}} ha guardato questi film:
-            <br><br>
-            {% for film in lista_film %}
-                {{film}}
-            {% endfor %}
 
         {% else %}
             Effettua il login per visualizzare questa pagina.
@@ -91,3 +91,5 @@
         );
     </script>
 </html>
+
+{% endblock %}

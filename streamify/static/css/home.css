@@ -23,14 +23,6 @@ img.avatar {
   border-radius: 50%;
 }
 
-.logo {
-  position: absolute;
-  right: 0px;
-  bottom: 0px;
-  width: 10%;
-  align-self: center;
-}
-
 .loginbtn {
   width: 100px;
   height: 30px;

@@ -71,3 +71,13 @@ body {
     left: 30%;
     top: 1%;
 }
+
+.starpng {
+    width: 8%;
+    position: relative;
+    left: 10%;
+}
+
+.starpng:hover {
+    cursor: pointer;
+}

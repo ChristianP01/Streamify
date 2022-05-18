@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <body>
-        {% if user is not None %}
+        {% if logged_user is not None %}
 
             <div class="container mt-5 mb-5 d-flex justify-content-center">
                 <div class="card rounded">
@@ -21,13 +21,31 @@
                         <div class="area1 p-3 py-5"> </div>
                         <div class="area2 p- text-center px-3">
                             <div class="image mr-3"> <img src="{% static "imgs/christian.png" %}" class="rounded-circle" width="100" />
-                                <h4 class=" name mt-3 ">{{user}}</h4>
+                                <h4 class=" name mt-3 ">{{logged_user.username}}</h4>
 
-                                <p>Film guardati: <br>
-                                {% for film in lista_film %}
-                                    {{film}}
-                                {% endfor %}</p>
+                                <b>Film guardati: </b><br><br>
+                                <form action="/streamify/review/" method="POST">
+                                    {% csrf_token %}
+                                    
+                                    {% for film in lista_film %}
+                                        {{film.titolo}}            
+                                        
+                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
+                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
+                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
+                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
+                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
+                                        <input type="hidden" value={{film.titolo}} name="selected_film">
+                                        
+                                        <br><br>
 
+                                    {% endfor %}
+
+                                        {% comment %} Separo per avere un solo TextField in cui inserire la valutazione {% endcomment %}
+                                        {% comment %} Stessa cosa con il bottone, evita molti problemi in caso di più film da recensire {% endcomment %}
+                                        <input type="text" value="" name="selected_star" id="result_data_js">
+                                        <input type="submit" name="submit" value="Vota">
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -42,7 +60,6 @@
         <div class="radar">
             <canvas id="radarChart"></canvas>
           </div>
-        
     </body>
 
     <script>
@@ -90,6 +107,17 @@
             config
         );
     </script>
+
+    <script>
+        {% comment %} Recupero il valore della stella cliccata e lo inserisco in un input type nascosto {% endcomment %}
+        function rate(star) {
+            value = star.getAttribute("value");
+            var data_container = document.getElementById("result_data_js")
+            data_container.setAttribute("value", value)
+        }  
+
+    </script>
+
 </html>
 
 {% endblock %}

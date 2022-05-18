@@ -47,11 +47,11 @@
             class="close" title="Close Modal">&times;</span>
 
             <!-- Contenuto del Modal -->
-            <form class="modal-content animate" action="/streamify/logged/" method="POST">
+            <form class="modal-content-login animate" action="/streamify/logged/" method="POST">
                 {% csrf_token %}
                 <div class="popup_container">
                     <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">
-                        <br><br><br>
+                        <br><br>
                     <label for="uname"><b>Username</b></label>
                     <input type="text" class="user_input" placeholder="Enter Username" name="uname" required>
                         <br>
@@ -60,9 +60,6 @@
                         <br><br>
                     <button type="submit" class="loginbtn">Login</button>
                     <br><br>
-                    <label>
-                        <input type="checkbox" checked="checked" name="remember"> Salva accesso
-                    </label>
                 </div>
             </form>
         </div> 
@@ -75,25 +72,40 @@
             class="close" title="Close Modal">&times;</span>
 
             <!-- Contenuto del Modal -->
-            <form class="modal-content animate" action="/streamify/registrato/" method="POST">
+            <form class="modal-content-register animate" action="/streamify/registrato/" method="POST">
                 {% csrf_token %}
                 <div class="popup_container" id="container_register">
                     <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">
-                        <br><br><br>
-                    <label for="uname"><b>Username</b></label>
-                    <input type="text" class="user_input" placeholder="Enter Username" name="uname" required>
-                        <br>
-                    <label for="psw"><b>Password</b></label>
-                    <input type="password" class="pwd_input" placeholder="Enter Password" name="psw" required>
-                        <br>
-                    <label for="email"><b>Email</b></label>
-                    <input type="email" class="user_input" placeholder="Enter Email" name="email" required>
-                        <br>
+
+                        <br><br>
+
+                        <label for="uname"><b>Username</b></label>
+                        <input type="text" class="user_input" placeholder="Inserisci username" name="uname" required>
+    
+                            <br>
+    
+                        <label for="nome"><b>Nome</b></label>
+                        <input type="text" class="nome_input" placeholder="Inserisci nome" name="nome" required>
+    
+                            <br>
+    
+                        <label for="cognome"><b>Cognome</b></label>
+                        <input type="text" class="cognome_input" placeholder="Inserisci cognome" name="cognome" required>
+    
+                            <br>
+    
+                        <label for="psw"><b>Password</b></label>
+                        <input type="password" class="pwd_input" placeholder="Enter Password" name="psw" required>
+    
+                            <br>
+
+                        <label for="email"><b>Email</b></label>
+                        <input type="email" class="user_input" placeholder="Enter Email" name="email" required>
+
+                            <br>
+
                     <button type="submit" class="loginbtn">Registrati</button>
                     <br><br>
-                    <label>
-                        <input type="checkbox" checked="checked" name="remember"> Salva accesso
-                    </label>
                 </div>
             </form>
         </div> 

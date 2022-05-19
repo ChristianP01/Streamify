@@ -13,6 +13,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <body>
+
+        {% for message in messages %}
+            <div class="alert alert-info" role="alert">
+                {{message}}
+            </div>
+        {% endfor %}
+
+
         {% if logged_user is not None %}
 
             <div class="container mt-5 mb-5 d-flex justify-content-center">
@@ -26,21 +34,19 @@
                                 <b>Film guardati: </b> <br><br>
                                     
                                     {% for film in lista_film %}
-                                        {{film.titolo}}
-                                        
-                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
-                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
-                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
-                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
-                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
-                                        
-                                        <form action="/streamify/review/{{film.titolo}}/" method="POST">
-                                            {% csrf_token %}
-                                            <input type="submit" name="submit" value="Vota">
+                                            <a href="/streamify/review/{{film.titolo}}">{{film.titolo}}</a> <br><br>
                                     {% endfor %}
-                                        
+
+                                    {% comment %} <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
+                                    <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
+                                    <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
+                                    <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
+                                    <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)"> {% endcomment %}
+                                    
+                                    {% comment %} <form method="POST">
+                                        {% csrf_token %}
                                         <input type="text" value="" name="selected_star" id="result_data_js">
-                                    </form>
+                                    </form> {% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -103,15 +109,14 @@
         );
     </script>
 
-    <script>
-        {% comment %} Recupero il valore della stella cliccata e lo inserisco in un input type nascosto {% endcomment %}
+    {% comment %} <script>
         function rate(star) {
             value = star.getAttribute("value");
             var data_container = document.getElementById("result_data_js");
             data_container.setAttribute("value", value);
         }  
 
-    </script>
+    </script> {% endcomment %}
 
 </html>
 

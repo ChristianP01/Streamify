@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block children %}
+
+<html>
+    {% if logged_user is None %}
+        Effettua il login per lasciare una recensione per {{film.titolo}}
+    
+    {% else %}
+
+    <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
+    <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
+    <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
+    <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
+    <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
+    
+    <form action="/streamify/review_final/" method="POST">
+        {% csrf_token %}
+        <input type="text" value="" name="selected_star" id="result_data_js">
+        <input type="submit" value="Vota">
+    </form>
+
+    {% endif %}
+</html>
+
+<script>
+    function rate(star) {
+        value = star.getAttribute("value");
+        var data_container = document.getElementById("result_data_js");
+        data_container.setAttribute("value", value);
+    }
+
+</script> 
+
+{% endblock %}

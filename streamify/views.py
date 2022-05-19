@@ -13,10 +13,6 @@ from django.contrib.auth.models import Group
 def homepage(request):
     return render(request,template_name="streamify/home.html")
 
-class listausers(ListView):
-    model = Utente
-    template_name = "streamify/lista_utenti.html"
-
 def registrato(request):
     uname = request.POST['uname']
     pwd = request.POST['psw']
@@ -45,7 +41,10 @@ def logged(request):
     try:
         logged_user = Utente.objects.get(username=uname, password=pwd)
         film_list = Film.objects.all()
+        
         request.session["logged_user"] = logged_user.username
+
+        messages.success(request, f"Benvenuto {request.session['logged_user']}")
         return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
             "film_list": film_list
@@ -66,23 +65,23 @@ def guardaFilm(request, titolo_film):
     # oppure i cookie della sessione scadono, ritorno None come utente per avvisare l'utente di effettuare il login.)
     try:
         logged_user = request.session["logged_user"]
+
+        for film in Film.objects.all():
+            if logged_user is not None and titolo_film == film.titolo:
+                
+                #Update del DB
+                Utente.objects.filter(username=logged_user)[0].film_guardati.add(Film.objects.filter(titolo=titolo_film)[0])
+
+                messages.success(request, f"{titolo_film} guardato con successo!")
+                return render(request,template_name="streamify/catalogo.html", context={
+                    "film_list": Film.objects.all(),
+                    "logged_user": logged_user
+                })
+
     except:
-        logged_user = None
 
-    for film in Film.objects.all():
-        if logged_user is not None and titolo_film == film.titolo:
-            
-            #Update del DB
-            Utente.objects.filter(username=logged_user)[0].film_guardati.add(Film.objects.filter(titolo=titolo_film)[0])
-
-            return render(request,template_name="streamify/catalogo.html", context={
-                "film_list": Film.objects.all(),
-                "logged_user": logged_user
-            })
-
-    return render(request, template_name="streamify/guarda_ora.html", context={
-        "film": None
-    })
+        messages.error(request, "Effettua il login per guardare il film!")
+        return render(request, template_name="home.html")
 
 def account(request):
 
@@ -127,22 +126,51 @@ def account(request):
 
 def review(request, titolo_film):
 
-    value = request.POST["selected_star"]
-    user = Utente.objects.get(username=request.session["logged_user"])
-    film = Film.objects.get(titolo=titolo_film)
+    try:
 
-    print(f"Recensione con voto {value} per {film}")
+        user = Utente.objects.get(username=request.session["logged_user"])
+        film = Film.objects.get(titolo=titolo_film)
+        request.session["film"] = film.titolo
+
+        return render(request, template_name="review.html", context={
+            "logged_user": user,
+            "film": film
+            })
     
-    # Creo una nuova recensione, scritta dall'utente loggato per il film selezionato
-    new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto="CommentoDiProva")
-    new_rece.save()
-
-    return render(request, template_name="account.html", context={
-        "logged_user": user,
-        "lista_film": user.film_guardati.all(),
-        "generi_dict": json.dumps(request.session["generi"])
+    except:
+        messages.error(request, "Effettua il login per lasciare una recensione!")
+        return render(request, template_name="home.html", context={
+            "logged_user": None,
+            "lista_film": None
         })
-    
-    # except:
-    #     return render(request, template_name="account.html")
         
+
+def review_final(request):
+
+    try:
+
+        value = request.POST["selected_star"]
+        film = Film.objects.get(titolo=request.session["film"])
+        user = Utente.objects.get(username=request.session["logged_user"])
+
+        if Recensione.objects.get(utente=user, film=film):
+            messages.error(request, "Hai già recensito questo film!")
+            return render(request, template_name="account.html", context={
+                "logged_user": user,
+                "lista_film": user.film_guardati.all(),
+                "generi_dict": json.dumps(request.session["generi"])
+            })
+
+        new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto="Commento_Di_Prova")
+        new_rece.save()
+
+        messages.error(request, "Hai recensito correttamente il film!")
+        return render(request, template_name="account.html", context={
+            "logged_user": user,
+            "lista_film": user.film_guardati.all(),
+            "generi_dict": json.dumps(request.session["generi"])
+        })
+
+    except:
+        messages.error(request, "Effettua il login per lasciare una recensione!")
+        return render(request, template_name="home.html")

@@ -10,5 +10,5 @@ urlpatterns = [
     path("catalogo/", views.mostra_catalogo.as_view(), name="catalogo"),
     path("guarda_film/<str:titolo_film>/", views.guardaFilm, name="guarda_film"),
     path("account/", views.account, name="account"),
-    path("review/", views.review, name="review")
+    path("review/<str:titolo_film>/", views.review, name="review")
 ]

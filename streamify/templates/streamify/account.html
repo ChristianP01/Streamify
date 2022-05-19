@@ -23,29 +23,24 @@
                             <div class="image mr-3"> <img src="{% static "imgs/christian.png" %}" class="rounded-circle" width="100" />
                                 <h4 class=" name mt-3 ">{{logged_user.username}}</h4>
 
-                                <b>Film guardati: </b><br><br>
-                                <form action="/streamify/review/" method="POST">
-                                    {% csrf_token %}
+                                <b>Film guardati: </b> <br><br>
                                     
                                     {% for film in lista_film %}
-                                        {{film.titolo}}            
+                                        {{film.titolo}}
                                         
                                         <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
                                         <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
                                         <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
                                         <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
                                         <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
-                                        <input type="hidden" value={{film.titolo}} name="selected_film">
                                         
-                                        <br><br>
-
+                                        <form action="/streamify/review/{{film.titolo}}/" method="POST">
+                                            {% csrf_token %}
+                                            <input type="submit" name="submit" value="Vota">
                                     {% endfor %}
-
-                                        {% comment %} Separo per avere un solo TextField in cui inserire la valutazione {% endcomment %}
-                                        {% comment %} Stessa cosa con il bottone, evita molti problemi in caso di più film da recensire {% endcomment %}
+                                        
                                         <input type="text" value="" name="selected_star" id="result_data_js">
-                                        <input type="submit" name="submit" value="Vota">
-                                </form>
+                                    </form>
                             </div>
                         </div>
                     </div>
@@ -112,8 +107,8 @@
         {% comment %} Recupero il valore della stella cliccata e lo inserisco in un input type nascosto {% endcomment %}
         function rate(star) {
             value = star.getAttribute("value");
-            var data_container = document.getElementById("result_data_js")
-            data_container.setAttribute("value", value)
+            var data_container = document.getElementById("result_data_js");
+            data_container.setAttribute("value", value);
         }  
 
     </script>

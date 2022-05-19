@@ -31,7 +31,7 @@ def registrato(request):
             messages.error(request, "Username già in uso!")
             return render(request,template_name="streamify/home.html")
             
-    # Creo l'utente e lo aggiungo al gruppo dei loggati.
+    # Creo l'utente e lo aggiungo al database
     new_user = Utente(uname, email, pwd, nome, cognome)
     new_user.save()
 
@@ -125,25 +125,24 @@ def account(request):
         "lista_film": None
     })
 
-def review(request):
+def review(request, titolo_film):
 
-    try:
+    value = request.POST["selected_star"]
+    user = Utente.objects.get(username=request.session["logged_user"])
+    film = Film.objects.get(titolo=titolo_film)
 
-        value = request.POST["selected_star"]
-        film = request.POST["selected_film"]
-        user = Utente.objects.get(username=request.session["logged_user"])
-
-        print(f"Recensione con voto {value} per {film}")
-        
-        # Creo una nuova recensione, scritta dall'utente loggato per il film selezionato
-        new_rece = Recensione(value, user, film, "")
-        new_rece.save()
-
-        return render(request, template_name="account.html")
+    print(f"Recensione con voto {value} per {film}")
     
-    except:
-        return render(request, template_name="account.html", context={
-            "logged_user": user,
-            "lista_film": user.film_guardati.all(),
-            "generi_dict": json.dumps(request.session["generi"])
+    # Creo una nuova recensione, scritta dall'utente loggato per il film selezionato
+    new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto="CommentoDiProva")
+    new_rece.save()
+
+    return render(request, template_name="account.html", context={
+        "logged_user": user,
+        "lista_film": user.film_guardati.all(),
+        "generi_dict": json.dumps(request.session["generi"])
         })
+    
+    # except:
+    #     return render(request, template_name="account.html")
+        

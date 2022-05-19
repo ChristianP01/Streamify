@@ -1,0 +1,23 @@
+{% load static %}
+
+<html>
+
+    <style>
+
+        .logo {
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+            width: 10%;
+            align-self: center;
+          }
+
+    </style>
+
+    {% comment %} Qui dentro ogni pagina che estenderà scriverà il suo HTML {% endcomment %}
+    {% block children %}
+        {% comment %}  {% endcomment %}
+    {% endblock %}
+
+    <img src="{% static "imgs/logo.png" %}" alt="Logo" class="logo">
+</html>

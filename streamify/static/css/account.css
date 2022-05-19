@@ -1,0 +1,83 @@
+body {
+    background-color:#FFEBEE
+}
+
+.card {
+    width:400px;
+    height: 500px;
+    border: none;
+    border-radius: 14px !important
+}
+
+/* Colore sopra */
+.area1{
+    background-color: #6fbddd;
+    border-top-left-radius: 14px !important;
+    border-top-right-radius: 14px !important;
+    padding-top: 83px !important
+}
+
+.image {
+    /* Immagine a metà tra i colori */
+    top: -65px;
+    position: relative;
+}
+
+.area2 {
+    background-color:#fff;
+    height: 100%;
+    border-bottom-left-radius: 14px !important;
+    border-bottom-right-radius: 14px !important
+}
+
+.name {
+    font-size:25px;
+    font-weight:650;
+}
+
+.information {
+    color:#0a2adf;
+    font-weight:500;
+    font-size:16px
+}
+
+.list-icons {
+    display: inline-flex;
+    color:#C5CAE9
+}
+
+.list-icons li {
+    list-style: none;
+    padding: 12px;
+    border-radius: 10px;
+    width: 49px;
+    margin-right: 10px
+}
+
+.list-icons li i {
+    font-size: 17px;
+    color: #fff
+}
+
+.radar {
+    width: 40%;
+    position: absolute;
+    right: 20%;
+    top: 1%;
+}
+
+.watched_films {
+    position: absolute;
+    left: 30%;
+    top: 1%;
+}
+
+.starpng {
+    width: 8%;
+    position: relative;
+    left: 10%;
+}
+
+.starpng:hover {
+    cursor: pointer;
+}

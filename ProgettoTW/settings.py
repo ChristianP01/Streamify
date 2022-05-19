@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,9 +28,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#Alla chiusura, la sessione cadrà e l'utente loggato verrà "sloggato"
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+
+#Imposto il timeout dei cookie a un valore personalizzato
+SESSION_COOKIE_AGE = 180
+
+# Se c'è qualche problema di login / azioni richieste da utenti non loggati
+LOGIN_URL = "/streamify/home/?auth=err"
+LOGIN_REDIRECT_URL = "/streamify/catalogo/?auth=ok"
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,7 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'streamify',
-    'crispy_forms'
+    'crispy_forms',
+    'django_truncate'
 ]
 
 MIDDLEWARE = [
@@ -56,7 +67,7 @@ ROOT_URLCONF = 'ProgettoTW.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'streamify/templates/streamify')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

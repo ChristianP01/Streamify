@@ -1,4 +1,7 @@
+{% extends "base.html" %}
 {% load static %}
+
+{% block children %}
 
 <html>
     
@@ -6,9 +9,13 @@
 
     <head>
         <link rel="stylesheet" type="text/css" href="{% static 'css/catalogue.css' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
 
     <body>
+        <a href="/streamify/account/"><img class="userpng" src="{% static "imgs/user.png" %}" alt="Image"></a>
+        <a href="/streamify/home/"><img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image"></a>
+
         <p class="welcome"> Catalogo </p>
         <br><br><br>
 
@@ -21,7 +28,7 @@
                 <th>Link</th>
             </tr>
 
-            {% for p in object_list %}
+            {% for p in film_list %}
                 <tr>
                     <td> {{p.titolo}} </td>
                     <td>
@@ -31,11 +38,22 @@
                     </td>
                     <td> {{p.anno_uscita}} </td>
                     <td> {{p.valutazione}} </td>
-                    <td>*bottone*</td>
+                    <td>
+                        <form action="/streamify/guarda_film/{{p.titolo}}/" method="GET">
+                            <button class="guarda_ora" id="guarda_ora">Guardalo!</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
-
     </body>
 
+    <script>
+        document.getElementById("guarda_ora").onclick = function() {
+            alert("Film guardato con successo! Verrai reindirizzato al catalogo.")
+        };
+    </script>
+
 </html>
+
+{% endblock %}

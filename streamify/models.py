@@ -1,21 +1,13 @@
 from django.db import models
 import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.forms import IntegerField
+from django.contrib.postgres.fields import ArrayField
 
 CURRENT_YEAR = int(datetime.datetime.now().year)
 
-# Modello rappresentante la classe Utente, i suoi fields sono le credenziali di accesso/registrazione.
-class Utente(models.Model):
-    username = models.CharField(max_length=25, primary_key=True)
-    email = models.CharField(max_length=50)
-    password = models.CharField(max_length=25)
-    
-    def __str__(self):
-        out = "Utente " + self.username + ", avente la e-mail " + self.email + ". La sua password è " + self.password + "."
-        return out
+DEFAULT_GENERIC_VALUE = "/" #Valore di default assegnato ai field che richiedono un default, non meglio specificato.
 
-    class Meta:
-        verbose_name_plural = "Utenti"
 
 class Genere(models.Model):
     name=models.CharField(max_length=50, primary_key=True)
@@ -28,11 +20,9 @@ class Genere(models.Model):
 
 
 class Film(models.Model):
-    id = models.AutoField(primary_key=True)
     titolo = models.CharField(max_length=70)
     generi = models.ManyToManyField(Genere)
     anno_uscita = models.IntegerField(validators=[MinValueValidator(1888), MaxValueValidator(CURRENT_YEAR)])
-    valutazione = models.IntegerField(default=None)
 
     def __str__(self):
         return self.titolo
@@ -41,3 +31,38 @@ class Film(models.Model):
         verbose_name_plural = "Film"
 
 
+# Modello rappresentante la classe Utente, i suoi fields sono le credenziali di accesso/registrazione.
+class Utente(models.Model):
+    username = models.CharField(max_length=25, primary_key=True)
+    email = models.EmailField(max_length=50, default=DEFAULT_GENERIC_VALUE)
+    password = models.CharField(max_length=25, default=DEFAULT_GENERIC_VALUE)
+    nome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
+    cognome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
+    film_guardati = models.ManyToManyField(Film, default=None)
+    
+    def __str__(self):
+        out = "Utente " + self.username + ", avente la e-mail " + self.email + ". La sua password è " + self.password + "."
+        return out
+
+    class Meta:
+        verbose_name_plural = "Utenti"
+
+
+class Recensione(models.Model):
+    voto = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    utente = models.ForeignKey(Utente, on_delete=models.CASCADE, default=DEFAULT_GENERIC_VALUE)
+    film = models.ForeignKey(Film, on_delete=models.CASCADE, default=DEFAULT_GENERIC_VALUE)
+    commento_scritto = models.CharField(max_length=500, default=None)
+
+    def __str__(self):
+        return f"Voto {self.voto} per {self.film}"
+
+    class Meta:
+        verbose_name_plural = "Recensioni"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['utente', 'film'],
+                name='unique_constraint_utente_film'
+            )
+        ]

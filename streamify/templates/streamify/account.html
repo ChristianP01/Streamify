@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block children %}
+
+<html>
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/account.css' %}">
+    </head>
+
+    {% comment %} Source di Chart.js {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <body>
+        {% if logged_user is not None %}
+
+            <div class="container mt-5 mb-5 d-flex justify-content-center">
+                <div class="card rounded">
+                    <div class=" d-block justify-content-center">
+                        <div class="area1 p-3 py-5"> </div>
+                        <div class="area2 p- text-center px-3">
+                            <div class="image mr-3"> <img src="{% static "imgs/christian.png" %}" class="rounded-circle" width="100" />
+                                <h4 class=" name mt-3 ">{{logged_user.username}}</h4>
+
+                                <b>Film guardati: </b> <br><br>
+                                    
+                                    {% for film in lista_film %}
+                                        {{film.titolo}}
+                                        
+                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
+                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
+                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
+                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
+                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
+                                        
+                                        <form action="/streamify/review/{{film.titolo}}/" method="POST">
+                                            {% csrf_token %}
+                                            <input type="submit" name="submit" value="Vota">
+                                    {% endfor %}
+                                        
+                                        <input type="text" value="" name="selected_star" id="result_data_js">
+                                    </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            Effettua il login per visualizzare questa pagina.
+
+        {% endif %}
+
+        <div class="radar">
+            <canvas id="radarChart"></canvas>
+          </div>
+    </body>
+
+    <script>
+
+        {% comment %} Recupero il dizionario dei generi dell'utente {% endcomment %}
+        var generi = JSON.parse('{{generi_dict | safe}}');
+
+        generi_titoli = [];
+        generi_voti = [];
+        for (const [key, value] of Object.entries(generi)) {
+            generi_titoli.push(key);
+            generi_voti.push(value);
+        }
+
+        const data = {
+            labels: generi_titoli,
+            
+            datasets: [{
+              label: 'Indicatore generi',
+              data: generi_voti,
+              fill: true,
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              borderColor: 'rgb(54, 162, 235)',
+              pointBackgroundColor: 'rgb(54, 162, 235)',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: 'rgb(54, 162, 235)'
+            }]
+          };
+
+        const config = {
+            type: 'radar',
+            data: data,
+            options: {
+              elements: {
+                line: {
+                  borderWidth: 3
+                }
+              }
+            },
+          };
+
+        const myChart = new Chart(
+            document.getElementById('radarChart'),
+            config
+        );
+    </script>
+
+    <script>
+        {% comment %} Recupero il valore della stella cliccata e lo inserisco in un input type nascosto {% endcomment %}
+        function rate(star) {
+            value = star.getAttribute("value");
+            var data_container = document.getElementById("result_data_js");
+            data_container.setAttribute("value", value);
+        }  
+
+    </script>
+
+</html>
+
+{% endblock %}

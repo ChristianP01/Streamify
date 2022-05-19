@@ -23,14 +23,6 @@ img.avatar {
   border-radius: 50%;
 }
 
-.logo {
-  position: absolute;
-  right: 0px;
-  bottom: 0px;
-  width: 10%;
-  align-self: center;
-}
-
 .loginbtn {
   width: 100px;
   height: 30px;
@@ -46,12 +38,12 @@ img.avatar {
 }
 
 
-.user_input, .pwd_input  {
-  width: 20%;
-  padding: 8px 20px;
+.user_input, .pwd_input, .nome_input, .cognome_input  {
+  width: 50%;
+  padding: 8px 100px;
   margin: 8px 0;
   display: inline-block;
-  border: 1px solid #ccc;
+  border: 3px solid #ccc;
   box-sizing: border-box;
   border-radius: 15px;
   text-align: center;
@@ -69,8 +61,18 @@ img.avatar {
   opacity: 0.75;
 }
 
-/* Contenuto del pop-up container */
-.modal-content {
+/* Contenuto del pop-up register */
+.modal-content-register {
+  background-color: #fefefe;
+  margin: 5px auto;
+  border: 1px solid #888;
+  width: 55%;
+  height: 85%;
+  border-radius: 25px;
+}
+
+/* Contenuto del pop-up login */
+.modal-content-login {
   background-color: #fefefe;
   margin: 5px auto;
   border: 1px solid #888;

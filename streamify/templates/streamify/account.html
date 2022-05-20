@@ -34,7 +34,9 @@
                                 <b>Film guardati: </b> <br><br>
                                     
                                     {% for film in lista_film %}
-                                            <a href="/streamify/review/{{film.titolo}}">{{film.titolo}}</a> <br><br>
+                                            <a href="/streamify/review/{{film.titolo}}">
+                                                <input type="button" class="film_button" value="{{film.titolo}}"/>
+                                            </a> <br><br>
                                     {% endfor %}
 
                                     {% comment %} <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">

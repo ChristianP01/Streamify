@@ -40,14 +40,14 @@ def logged(request):
 
     try:
         logged_user = Utente.objects.get(username=uname, password=pwd)
-        film_list = Film.objects.all()
         
         request.session["logged_user"] = logged_user.username
 
         messages.success(request, f"Benvenuto {request.session['logged_user']}")
         return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
-            "film_list": film_list
+            "film_list": Film.objects.all(),
+            "query_film": None
         })
 
     except:
@@ -75,7 +75,8 @@ def guardaFilm(request, titolo_film):
                 messages.success(request, f"{titolo_film} guardato con successo!")
                 return render(request,template_name="streamify/catalogo.html", context={
                     "film_list": Film.objects.all(),
-                    "logged_user": logged_user
+                    "logged_user": logged_user,
+                    "query_film": None
                 })
 
     except:
@@ -164,7 +165,7 @@ def review_final(request):
         new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto="Commento_Di_Prova")
         new_rece.save()
 
-        messages.error(request, "Hai recensito correttamente il film!")
+        messages.success(request, "Hai recensito correttamente il film!")
         return render(request, template_name="account.html", context={
             "logged_user": user,
             "lista_film": user.film_guardati.all(),
@@ -174,3 +175,19 @@ def review_final(request):
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")
         return render(request, template_name="home.html")
+
+
+def cercaFilm(request):
+
+    # Non c'è bisogno di controllare l'utente loggato perchè chiunque dovrebbe poter cercare nel catalogo.
+
+    user_input = request.POST["film_search"]
+    logged_user = request.session["logged_user"]
+
+    film_query = Film.objects.filter(titolo__startswith=user_input)
+
+    return render(request,template_name="streamify/catalogo.html", context={
+        "logged_user": logged_user,
+        "film_list": film_query,
+        "query_film": None
+    })

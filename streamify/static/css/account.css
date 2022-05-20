@@ -1,6 +1,6 @@
-body {
-    background-color:#FFEBEE
-}
+/* body {
+    background-color:#ffffff
+} */
 
 .card {
     width:400px;
@@ -24,7 +24,7 @@ body {
 }
 
 .area2 {
-    background-color:#fff;
+    background-color:rgb(210, 245, 245);
     height: 100%;
     border-bottom-left-radius: 14px !important;
     border-bottom-right-radius: 14px !important
@@ -40,11 +40,11 @@ body {
     font-weight:500;
     font-size:16px
 }
-
+/* 
 .list-icons {
     display: inline-flex;
-    color:#C5CAE9
-}
+    color:#0320db
+} */
 
 .list-icons li {
     list-style: none;
@@ -54,10 +54,10 @@ body {
     margin-right: 10px
 }
 
-.list-icons li i {
+/* .list-icons li i {
     font-size: 17px;
-    color: #fff
-}
+    color: rgb(111, 45, 45)
+} */
 
 .radar {
     width: 40%;
@@ -72,12 +72,16 @@ body {
     top: 1%;
 }
 
-.starpng {
-    width: 8%;
-    position: relative;
-    left: 10%;
+.film_button {
+    width: 60%;
+    height: 30px;
+    border:none;
+    border-radius:5px;
+    color:#fff;
+    background-color:#1859c9;
+    cursor:pointer;
 }
 
-.starpng:hover {
-    cursor: pointer;
+.film_button:hover {
+    opacity: 0.75;
 }

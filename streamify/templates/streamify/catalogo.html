@@ -8,13 +8,27 @@
     <title> Catalogo </title>
 
     <head>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/catalogue.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/catalogo.css' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
 
     <body>
+
+        {% for message in messages %}
+            <div class="alert alert-info" role="alert">
+                {{message}}
+            </div>
+        {% endfor %}
+
+
         <a href="/streamify/account/"><img class="userpng" src="{% static "imgs/user.png" %}" alt="Image"></a>
         <a href="/streamify/home/"><img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image"></a>
+
+        <form action="/streamify/cercaFilm/" method="POST">
+            {% csrf_token %}
+            <input type="text" class="film_input" placeholder="Inserisci titolo" name="film_search" required>
+            <input type="submit" class="cerca_film" value="Cerca">
+        </form>
 
         <p class="welcome"> Catalogo </p>
         <br><br><br>
@@ -47,13 +61,6 @@
             {% endfor %}
         </table>
     </body>
-
-    {% comment %} <script>
-        document.getElementById("guarda_ora").onclick = function() {
-            alert("Film guardato con successo! Verrai reindirizzato al catalogo.")
-        };
-    </script> {% endcomment %}
-
 </html>
 
 {% endblock %}

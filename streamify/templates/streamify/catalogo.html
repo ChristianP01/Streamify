@@ -8,13 +8,27 @@
     <title> Catalogo </title>
 
     <head>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/catalogue.css' %}">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/catalogo.css' %}">
     </head>
 
     <body>
+
+        {% for message in messages %}
+        <div class="alert success">
+            <span class="closebtn">&times;</span>  
+            {{message}}
+          </div>
+        {% endfor %}
+
+
         <a href="/streamify/account/"><img class="userpng" src="{% static "imgs/user.png" %}" alt="Image"></a>
         <a href="/streamify/home/"><img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image"></a>
+
+        <form action="/streamify/cercaFilm/" method="POST">
+            {% csrf_token %}
+            <input type="text" class="film_input" placeholder="Inserisci titolo" name="film_search" required>
+            <input type="submit" class="cerca_film" value="Cerca">
+        </form>
 
         <p class="welcome"> Catalogo </p>
         <br><br><br>
@@ -49,11 +63,17 @@
     </body>
 
     <script>
-        document.getElementById("guarda_ora").onclick = function() {
-            alert("Film guardato con successo! Verrai reindirizzato al catalogo.")
-        };
+        var close = document.getElementsByClassName("closebtn");
+        var i;
+        
+        for (i = 0; i < close.length; i++) {
+          close[i].onclick = function(){
+            var div = this.parentElement;
+            div.style.opacity = "0";
+            setTimeout(function(){ div.style.display = "none"; }, 600);
+          }
+        }
     </script>
-
 </html>
 
 {% endblock %}

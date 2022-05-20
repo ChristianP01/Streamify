@@ -1,0 +1,21 @@
+.starpng {
+    width: 5%;
+}
+
+.starpng:hover {
+    cursor: pointer;
+}
+
+.vota_button {
+    width: 100px;
+    height: 30px;
+    border:none;
+    border-radius:5px;
+    color:#fff;
+    background-color:#1859c9;
+    cursor:pointer;
+}
+
+.vota_button:hover {
+    opacity: 0.75;
+}

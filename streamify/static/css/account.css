@@ -1,7 +1,3 @@
-body {
-    background-color:#FFEBEE
-}
-
 .card {
     width:400px;
     height: 500px;
@@ -24,7 +20,7 @@ body {
 }
 
 .area2 {
-    background-color:#fff;
+    background-color:rgb(210, 245, 245);
     height: 100%;
     border-bottom-left-radius: 14px !important;
     border-bottom-right-radius: 14px !important
@@ -41,22 +37,12 @@ body {
     font-size:16px
 }
 
-.list-icons {
-    display: inline-flex;
-    color:#C5CAE9
-}
-
 .list-icons li {
     list-style: none;
     padding: 12px;
     border-radius: 10px;
     width: 49px;
     margin-right: 10px
-}
-
-.list-icons li i {
-    font-size: 17px;
-    color: #fff
 }
 
 .radar {
@@ -72,12 +58,16 @@ body {
     top: 1%;
 }
 
-.starpng {
-    width: 8%;
-    position: relative;
-    left: 10%;
+.film_button {
+    width: 60%;
+    height: 30px;
+    border:none;
+    border-radius:5px;
+    color:#fff;
+    background-color:#1859c9;
+    cursor:pointer;
 }
 
-.starpng:hover {
-    cursor: pointer;
+.film_button:hover {
+    opacity: 0.75;
 }

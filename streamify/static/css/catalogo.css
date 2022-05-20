@@ -7,14 +7,14 @@
 .userpng {
     position: absolute;
     right: 8%;
-    top: 7%;
+    top: 12%;
     width: 2%;
 }
 
 .logoutpng {
     position: absolute;
     right: 4%;
-    top: 7%;
+    top: 12%;
     width: 2%;
 }
 
@@ -50,6 +50,7 @@
 
 .guarda_ora:hover {
     opacity: 0.75;
+    cursor: pointer;
 }
 
 .top_right_panel {
@@ -59,4 +60,36 @@
     padding: 0 20px;
     border: 2px solid black;
     border-radius: 10px;
+}
+
+.film_label {
+    position: absolute;
+    top: 12%;
+    left: 2%;
+}
+
+.film_input {
+    position: absolute;
+    top: 12%;
+    left: 2%;
+    width: 20%;
+    border: 3px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.cerca_film {
+    position: absolute;
+    top: 16%;
+    left: 2%;
+    background-color: #0478D2;
+    padding: 10px 50px;
+    border-radius: 10px;
+    color: white;
+}
+
+.cerca_film:hover {
+    opacity: 0.75;
+    cursor: pointer;
 }

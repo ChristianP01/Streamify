@@ -13,6 +13,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <body>
+
+        {% for message in messages %}
+          <div class="alert success">
+              <span class="closebtn">&times;</span>  
+              {{message}}
+            </div>
+        {% endfor %}
+
+
         {% if logged_user is not None %}
 
             <div class="container mt-5 mb-5 d-flex justify-content-center">
@@ -26,21 +35,11 @@
                                 <b>Film guardati: </b> <br><br>
                                     
                                     {% for film in lista_film %}
-                                        {{film.titolo}}
-                                        
-                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
-                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
-                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
-                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
-                                        <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
-                                        
-                                        <form action="/streamify/review/{{film.titolo}}/" method="POST">
-                                            {% csrf_token %}
-                                            <input type="submit" name="submit" value="Vota">
+                                            <a href="/streamify/review/{{film.titolo}}">
+                                                <input type="button" class="film_button" value="{{film.titolo}}"/>
+                                            </a> <br><br>
                                     {% endfor %}
-                                        
-                                        <input type="text" value="" name="selected_star" id="result_data_js">
-                                    </form>
+
                             </div>
                         </div>
                     </div>
@@ -104,13 +103,16 @@
     </script>
 
     <script>
-        {% comment %} Recupero il valore della stella cliccata e lo inserisco in un input type nascosto {% endcomment %}
-        function rate(star) {
-            value = star.getAttribute("value");
-            var data_container = document.getElementById("result_data_js");
-            data_container.setAttribute("value", value);
-        }  
+      var close = document.getElementsByClassName("closebtn");
+      var i;
 
+      for (i = 0; i < close.length; i++) {
+        close[i].onclick = function(){
+          var div = this.parentElement;
+          div.style.opacity = "0";
+          setTimeout(function(){ div.style.display = "none"; }, 600);
+        }
+      }
     </script>
 
 </html>

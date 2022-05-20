@@ -15,8 +15,9 @@
     <body>
 
         {% for message in messages %}
-            <div class="alert alert-info" role="alert">
-                {{message}}
+          <div class="alert success">
+              <span class="closebtn">&times;</span>  
+              {{message}}
             </div>
         {% endfor %}
 
@@ -39,16 +40,6 @@
                                             </a> <br><br>
                                     {% endfor %}
 
-                                    {% comment %} <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
-                                    <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
-                                    <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
-                                    <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
-                                    <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)"> {% endcomment %}
-                                    
-                                    {% comment %} <form method="POST">
-                                        {% csrf_token %}
-                                        <input type="text" value="" name="selected_star" id="result_data_js">
-                                    </form> {% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -111,14 +102,18 @@
         );
     </script>
 
-    {% comment %} <script>
-        function rate(star) {
-            value = star.getAttribute("value");
-            var data_container = document.getElementById("result_data_js");
-            data_container.setAttribute("value", value);
-        }  
+    <script>
+      var close = document.getElementsByClassName("closebtn");
+      var i;
 
-    </script> {% endcomment %}
+      for (i = 0; i < close.length; i++) {
+        close[i].onclick = function(){
+          var div = this.parentElement;
+          div.style.opacity = "0";
+          setTimeout(function(){ div.style.display = "none"; }, 600);
+        }
+      }
+    </script>
 
 </html>
 

@@ -43,18 +43,18 @@
                 <th>Link</th>
             </tr>
 
-            {% for p in film_list %}
+            {% for film in film_list %}
                 <tr>
-                    <td> {{p.titolo}} </td>
+                    <td> {{film.titolo}} </td>
                     <td>
-                        {% for genere in p.generi.all %}
+                        {% for genere in film.generi.all %}
                             {{genere}}
                         {% endfor %}
                     </td>
-                    <td> {{p.anno_uscita}} </td>
-                    <td> {{p.valutazione}} </td>
+                    <td> {{film.anno_uscita}} </td>
+                    <td> N/A </td>
                     <td>
-                        <form action="/streamify/guarda_film/{{p.titolo}}/" method="GET">
+                        <form action="/streamify/guarda_film/{{film.titolo}}/" method="GET">
                             <button class="guarda_ora" id="guarda_ora">Guardalo!</button>
                         </form>
                     </td>

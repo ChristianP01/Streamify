@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from django.db.models import Avg
 
 def homepage(request):
     return render(request,template_name="streamify/home.html")
@@ -40,14 +41,19 @@ def logged(request):
 
     try:
         logged_user = Utente.objects.get(username=uname, password=pwd)
-        
         request.session["logged_user"] = logged_user.username
+
+        avgs = {}
+        # Dizionario contenente la coppia {titolo_film: voto}
+        for film in Film.objects.all():
+            avgs[film.titolo] = Recensione.objects.filter(film=film).aggregate(Avg('voto'))
 
         messages.success(request, f"Benvenuto {request.session['logged_user']}")
         return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
-            "query_film": None
+            "query_film": None,
+            "avgs": avgs
         })
 
     except:

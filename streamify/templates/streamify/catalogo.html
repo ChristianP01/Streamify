@@ -15,7 +15,7 @@
 
         {% for message in messages %}
         <div class="alert success">
-            <span class="closebtn">&times;</span>  
+            <span class="closebtn">&times;</span>
             {{message}}
           </div>
         {% endfor %}
@@ -27,6 +27,7 @@
         <form action="/streamify/cercaFilm/" method="POST">
             {% csrf_token %}
             <input type="text" class="film_input" placeholder="Inserisci titolo" name="film_search" required>
+            <a href="/streamify/catalogo/"> <input type="button" class="reset" value="Reset"> </a>
             <input type="submit" class="cerca_film" value="Cerca">
         </form>
 
@@ -42,18 +43,24 @@
                 <th>Link</th>
             </tr>
 
-            {% for p in film_list %}
+            {% for film in film_list %}
                 <tr>
-                    <td> {{p.titolo}} </td>
+                    <td> {{film.titolo}} </td>
                     <td>
-                        {% for genere in p.generi.all %}
+                        {% for genere in film.generi.all %}
                             {{genere}}
                         {% endfor %}
                     </td>
-                    <td> {{p.anno_uscita}} </td>
-                    <td> {{p.valutazione}} </td>
+                    <td> {{film.anno_uscita}} </td>
                     <td>
-                        <form action="/streamify/guarda_film/{{p.titolo}}/" method="GET">
+                        {% for k,v in avgs.items %}
+                            {% if k == film.titolo %}
+                                {{v.voto__avg}}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <form action="/streamify/guarda_film/{{film.titolo}}/" method="GET">
                             <button class="guarda_ora" id="guarda_ora">Guardalo!</button>
                         </form>
                     </td>

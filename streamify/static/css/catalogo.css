@@ -93,3 +93,19 @@
     opacity: 0.75;
     cursor: pointer;
 }
+
+.reset {
+    position: absolute;
+    top: 16%;
+    left: 12%;
+    width: 10%;
+    background-color: #0478D2;
+    padding: 10px 50px;
+    border-radius: 10px;
+    color: white;
+}
+
+.reset:hover {
+    opacity: 0.75;
+    cursor: pointer;
+}

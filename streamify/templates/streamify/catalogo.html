@@ -52,7 +52,13 @@
                         {% endfor %}
                     </td>
                     <td> {{film.anno_uscita}} </td>
-                    <td> N/A </td>
+                    <td>
+                        {% for k,v in avgs.items %}
+                            {% if k == film.titolo %}
+                                {{v.voto__avg}}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                     <td>
                         <form action="/streamify/guarda_film/{{film.titolo}}/" method="GET">
                             <button class="guarda_ora" id="guarda_ora">Guardalo!</button>

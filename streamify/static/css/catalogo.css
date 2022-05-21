@@ -36,7 +36,7 @@
 /* Padding tra le colonne */
 .listafilm td {
     font-size: 20px;
-    padding: 0 100px;
+    padding: 0 90px;
     border: 1px solid black;
     border-radius: 10px;
 }

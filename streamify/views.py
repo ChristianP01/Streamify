@@ -160,23 +160,25 @@ def review_final(request):
         film = Film.objects.get(titolo=request.session["film"])
         user = Utente.objects.get(username=request.session["logged_user"])
 
-        if Recensione.objects.get(utente=user, film=film):
-            messages.error(request, "Hai già recensito questo film!")
+        try:
+            if Recensione.objects.get(utente=user, film=film):
+                messages.error(request, "Hai già recensito questo film!")
+                return render(request, template_name="account.html", context={
+                    "logged_user": user,
+                    "lista_film": user.film_guardati.all(),
+                    "generi_dict": json.dumps(request.session["generi"])
+                })
+        
+        except:
+            new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto="Commento_Di_Prova")
+            new_rece.save()
+
+            messages.success(request, "Hai recensito correttamente il film!")
             return render(request, template_name="account.html", context={
                 "logged_user": user,
                 "lista_film": user.film_guardati.all(),
                 "generi_dict": json.dumps(request.session["generi"])
             })
-
-        new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto="Commento_Di_Prova")
-        new_rece.save()
-
-        messages.success(request, "Hai recensito correttamente il film!")
-        return render(request, template_name="account.html", context={
-            "logged_user": user,
-            "lista_film": user.film_guardati.all(),
-            "generi_dict": json.dumps(request.session["generi"])
-        })
 
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")

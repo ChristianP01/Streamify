@@ -55,7 +55,7 @@
                     <td>
                         {% for k,v in avgs.items %}
                             {% if k == film.titolo %}
-                                {{v.voto__avg}}
+                                {{v.voto__avg | floatformat:2}}
                             {% endif %}
                         {% endfor %}
                     </td>

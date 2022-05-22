@@ -1,15 +1,17 @@
-from email import message
 import json
-import pprint
-from re import template
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.views.generic import ListView
 from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
-from django.core import serializers
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
 from django.db.models import Avg
+
+#---------------Carimento recensioni-------------------#
+avgs = {}
+# Dizionario contenente la coppia {titolo_film: voto}
+for film in Film.objects.all():
+    avgs[film.titolo] = Recensione.objects.filter(film=film).aggregate(Avg('voto'))
+#-------------------------------------------------------------#
+
 
 def homepage(request):
     return render(request,template_name="streamify/home.html")
@@ -43,16 +45,10 @@ def logged(request):
         logged_user = Utente.objects.get(username=uname, password=pwd)
         request.session["logged_user"] = logged_user.username
 
-        avgs = {}
-        # Dizionario contenente la coppia {titolo_film: voto}
-        for film in Film.objects.all():
-            avgs[film.titolo] = Recensione.objects.filter(film=film).aggregate(Avg('voto'))
-
         messages.success(request, f"Benvenuto {request.session['logged_user']}")
         return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
-            "query_film": None,
             "avgs": avgs
         })
 
@@ -60,9 +56,23 @@ def logged(request):
         messages.error(request, "Credenziali errate!")
         return render(request,template_name="streamify/home.html")
 
-class mostra_catalogo(ListView):
-    model = Film
-    template_name = "streamify/catalogo.html"
+# class mostra_catalogo(ListView):
+#     model = Film
+#     template_name = "streamify/catalogo.html"
+
+def catalogo(request):
+    # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nel catalogo.
+
+    try:
+        logged_user = request.session["logged_user"]
+    except:
+        logged_user = None
+
+    return render(request,template_name="streamify/catalogo.html", context={
+            "logged_user": logged_user,
+            "film_list": Film.objects.all(),
+            "avgs": avgs
+        })
 
 
 def guardaFilm(request, titolo_film):
@@ -82,7 +92,7 @@ def guardaFilm(request, titolo_film):
                 return render(request,template_name="streamify/catalogo.html", context={
                     "film_list": Film.objects.all(),
                     "logged_user": logged_user,
-                    "query_film": None
+                    "avgs": avgs
                 })
 
     except:
@@ -189,13 +199,18 @@ def cercaFilm(request):
 
     # Non c'è bisogno di controllare l'utente loggato perchè chiunque dovrebbe poter cercare nel catalogo.
 
+    try:
+        logged_user = request.session["logged_user"]
+    except:
+        logged_user = None
+
     user_input = request.POST["film_search"]
-    logged_user = request.session["logged_user"]
+    
 
     film_query = Film.objects.filter(titolo__startswith=user_input)
 
     return render(request,template_name="streamify/catalogo.html", context={
         "logged_user": logged_user,
         "film_list": film_query,
-        "query_film": None
+        "avgs": avgs
     })

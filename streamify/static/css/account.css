@@ -1,4 +1,6 @@
 .card {
+    position: absolute;
+    top: 7%;
     width:400px;
     height: 500px;
     border: none;

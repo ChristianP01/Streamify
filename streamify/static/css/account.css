@@ -71,3 +71,24 @@
 .film_button:hover {
     opacity: 0.75;
 }
+
+.w3-sidebar{height:100%;width:200px;background-color:#fff;position:fixed!important;z-index:1;overflow:auto}
+.w3-bar-block .w3-dropdown-hover,.w3-bar-block .w3-dropdown-click{width:100%}
+.w3-card {box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)}
+.w3-animate-left{position:relative;animation:animateleft 0.4s}
+.w3-bar-item{padding:8px 16px;float:left;width:auto;border:none;display:block;outline:0}
+.w3-button{white-space:normal}
+.w3-large{font-size:18px!important}
+.w3-left{float:left!important}
+.w3-xlarge{font-size:24px!important}
+.w3-container{padding:0.01em 16px}
+
+.sidebar_button {
+    width: 150px;
+    height: 5%;
+    border:none;
+    border-radius:5px;
+    color:#fff;
+    background-color:#1859c9;
+    cursor:pointer;
+}

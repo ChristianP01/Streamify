@@ -14,6 +14,10 @@ for film in Film.objects.all():
 
 
 def homepage(request):
+
+    # Resetto request.session in modo da simulare un logout completo.
+    request.session.clear()
+
     return render(request,template_name="streamify/home.html")
 
 def registrato(request):
@@ -83,17 +87,26 @@ def guardaFilm(request, titolo_film):
         logged_user = request.session["logged_user"]
 
         for film in Film.objects.all():
-            if logged_user is not None and titolo_film == film.titolo:
-                
-                #Update del DB
-                Utente.objects.filter(username=logged_user)[0].film_guardati.add(Film.objects.filter(titolo=titolo_film)[0])
 
-                messages.success(request, f"{titolo_film} guardato con successo!")
-                return render(request,template_name="streamify/catalogo.html", context={
-                    "film_list": Film.objects.all(),
-                    "logged_user": logged_user,
-                    "avgs": avgs
-                })
+                if Film.objects.filter(titolo=titolo_film)[0] not in Utente.objects.filter(username=logged_user)[0].film_guardati.all():
+
+                    #Update del DB
+                    Utente.objects.filter(username=logged_user)[0].film_guardati.add(Film.objects.filter(titolo=titolo_film)[0])
+
+                    messages.success(request, f"{titolo_film} guardato con successo!")
+                    return render(request,template_name="streamify/catalogo.html", context={
+                        "film_list": Film.objects.all(),
+                        "logged_user": logged_user,
+                        "avgs": avgs
+                    })
+                else:
+                    messages.success(request, f"Hai già guardato {titolo_film}!")
+                    return render(request,template_name="streamify/catalogo.html", context={
+                        "film_list": Film.objects.all(),
+                        "logged_user": logged_user,
+                        "avgs": avgs
+                    })
+
 
     except:
 

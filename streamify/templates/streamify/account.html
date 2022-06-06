@@ -36,13 +36,19 @@
                             <div class="image mr-3"> <img src="{% static "imgs/christian.png" %}" class="rounded-circle" width="100" />
                                 <h4 class=" name mt-3 ">{{logged_user.username}}</h4>
 
-                                <b>Film guardati: </b> <br><br>
+                                  <b>Film guardati: </b> <br><br>
                                     
                                     {% for film in lista_film %}
                                             <a href="/streamify/review/{{film.titolo}}">
                                                 <input type="button" class="film_button" value="{{film.titolo}}"/>
                                             </a> <br><br>
                                     {% endfor %}
+
+                                  <br>
+                                  {% comment %} Lista dei film consigliati {% endcomment %}
+                                  
+
+
 
                             </div>
                         </div>

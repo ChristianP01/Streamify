@@ -5,6 +5,7 @@ from streamify.methods import calcolaGeneri, calcolaPercents, calcolaVoti
 from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
 from django.db.models import Avg
+from django.views.decorators.http import require_http_methods
 
 # Contiene la dimensione del dizionario dei generi da considerare come preferiti, su cui applicare il RS.
 RECOM_SYS_NUMS = 2
@@ -16,6 +17,7 @@ for film in Film.objects.all():
     avgs[film.titolo] = Recensione.objects.filter(film=film).aggregate(Avg('voto'))
 #-------------------------------------------------------------#
 
+@require_http_methods("GET")
 def homepage(request):
 
     # Resetto request.session in modo da simulare un logout completo.
@@ -23,6 +25,7 @@ def homepage(request):
 
     return render(request,template_name="streamify/home.html")
 
+@require_http_methods("POST")
 def registrato(request):
     uname = request.POST['uname']
     pwd = request.POST['psw']
@@ -44,6 +47,7 @@ def registrato(request):
     messages.success(request, f"Utente creato con successo! Benvenuto, {uname}!")
     return render(request,template_name="streamify/home.html")
 
+@require_http_methods("POST")
 def logged(request):
     pwd = request.POST['psw']
     uname = request.POST['uname']
@@ -63,6 +67,7 @@ def logged(request):
         messages.error(request, "Credenziali errate!")
         return render(request,template_name="streamify/home.html")
 
+@require_http_methods("POST")
 def catalogo(request):
     # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nel catalogo.
 
@@ -77,6 +82,7 @@ def catalogo(request):
             "avgs": avgs
         })
 
+@require_http_methods(["GET","POST"])
 def guardaFilm(request, titolo_film):
 
     #Se un utente prova a guardare un film senza essere loggato (ad esempio scrivendo direttamente l'URL del film
@@ -109,6 +115,7 @@ def guardaFilm(request, titolo_film):
         messages.error(request, "Effettua il login per guardare il film!")
         return render(request, template_name="home.html")
 
+@require_http_methods(["GET", "POST"])
 def account(request):
 
     # Non posso fare entrare un utente in questa pagina se non è loggato, quindi ritorno None.
@@ -140,22 +147,34 @@ def account(request):
         # di similanza >90. Se è così, consiglio i film che quell'utente avrà guardato in più.
 
         print("Stampa informazioni riguardanti il recommendation system...")
-        
+
         # Dizionario contenente i due generi meglio votati dall'utente
         logged_two_highest = sorted(calcolaVoti(utente, generi).items(), key=lambda x: x[1], reverse=True)\
                                                                                                                     [0:RECOM_SYS_NUMS]
 
-        for other_user in Utente.objects.all():
+        print(logged_two_highest)
+
+        if len(logged_two_highest) < 2:
+            return render(request, template_name="streamify/account.html", context={
+            "logged_user": request.session["logged_user"],
+            "lista_film": utente.film_guardati.all()
+            })
+
+
+        for other_user in Utente.objects.all().exclude(username=utente.username):
+            
             other_two_highest = sorted(calcolaVoti(other_user, calcolaGeneri(other_user)).items(),
                                                                     key=lambda x: x[1],
                                                                     reverse=True)[0:RECOM_SYS_NUMS]
 
-            for i in range(RECOM_SYS_NUMS):
-                if logged_two_highest[i][0] == other_two_highest[i][0]:
-                    similarity = (100-100*( abs(logged_two_highest[i][1]-other_two_highest[i][1]) /5))
-                    if similarity >= 90:
-                        print(f"Genere {logged_two_highest[i][0]} con similanza del {similarity}%")
+            for logged_genre in logged_two_highest:
+                for other_genre in other_two_highest:
 
+                    if logged_genre[0] == other_genre[0]:
+                        similarity = (100-100*( abs(logged_genre[1]-other_genre[1]) /5))
+                        
+                        if similarity >= 90:
+                            print(f"Genere {logged_genre[0]} con similanza del {similarity}% con l'utente {other_user.username}")
 
         #-------------------------------------------------------------------#
 
@@ -170,6 +189,7 @@ def account(request):
         "logged_user": None,
         "lista_film": None
     })
+
 
 def review(request, titolo_film):
 
@@ -222,7 +242,7 @@ def review_final(request):
         messages.error(request, "Effettua il login per lasciare una recensione!")
         return render(request, template_name="home.html")
 
-
+@require_http_methods("POST")
 def cercaFilm(request):
 
     # Non c'è bisogno di controllare l'utente loggato perchè chiunque dovrebbe poter cercare nel catalogo.

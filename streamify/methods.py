@@ -10,41 +10,48 @@ from .models import Genere, Recensione, Utente
 def calcolaGeneri(utente):
     generi = {}
 
-    for film in utente.film_guardati.all():
-        for genere in film.generi.all():
+    try:
+        for film in utente.film_guardati.all():
+            for genere in film.generi.all():
+                if genere.name not in generi:
+                    generi[genere.name] = 1
+                else:
+                    generi[genere.name] += 1
+
+        for genere in Genere.objects.all():
             if genere.name not in generi:
-                generi[genere.name] = 1
-            else:
-                generi[genere.name] += 1
+                generi[genere.name] = 0
 
-    for genere in Genere.objects.all():
-        if genere.name not in generi:
-            generi[genere.name] = 0
-
-    return generi
+        return generi
+        
+    except:
+        return generi
 
 def calcolaVoti(utente, generi):
     voti = {}
+    try:
+        for film in utente.film_guardati.all():
+            try:
+                voto_recensione = int(Recensione.objects.filter(utente=utente, film=film)[0].voto)
+            except:
+                voto_recensione = 0
 
-    for film in utente.film_guardati.all():
-        try:
-            voto_recensione = int(Recensione.objects.filter(utente=utente, film=film)[0].voto)
-        except:
-            voto_recensione = 0
+            # Somma dei voti delle recensioni
+            for genere in film.generi.all():
+                if genere.name not in voti:
+                    voti[genere.name] = voto_recensione
+                else:
+                    voti[genere.name] += voto_recensione
 
-        # Somma dei voti delle recensioni
-        for genere in film.generi.all():
-            if genere.name not in voti:
-                voti[genere.name] = voto_recensione
-            else:
-                voti[genere.name] += voto_recensione
+            # Calcolo media vera e propria
+            for genere in voti:
+                voti[genere] = voti[genere] / generi[genere]
 
-        # Calcolo media vera e propria
-        for genere in voti:
-            voti[genere] = voti[genere] / generi[genere]
-
-    return voti
-        
+        return voti
+    
+    except:
+        return []
+            
 
 def calcolaPercents(utente, generi):
     percents = {}

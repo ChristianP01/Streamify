@@ -120,87 +120,88 @@ def guardaFilm(request, titolo_film):
 def account(request):
 
     # Non posso fare entrare un utente in questa pagina se non è loggato, quindi ritorno None.
-    # try:
+    try:
 
-    # Se l'utente è entrato correttamente, lo cerco nel database al fine di ottenere i film che ha guardato.
-    utente = Utente.objects.filter(username=request.session["logged_user"])[0]
+        # Se l'utente è entrato correttamente, lo cerco nel database al fine di ottenere i film che ha guardato.
+        utente = Utente.objects.filter(username=request.session["logged_user"])[0]
 
-    generi = calcolaGeneri(utente)
+        generi = calcolaGeneri(utente)
 
-    # Mi salvo un riferimento alla lista dei generi, in modo da poterla ricaricare in futuro (review)
-    request.session["generi"] = generi
+        # Mi salvo un riferimento alla lista dei generi, in modo da poterla ricaricare in futuro (review)
+        request.session["generi"] = generi
 
-    #---------------- Recommendation System ------------------#
-    
-    # Comparo il percents dell'utente loggato con quello di tutti gli altri utenti
-    # Funziona così: creo un dizionario col formato {genere: % sul totale}.
-    # Dopo prendo i 2/3 valori più alti del dizionario (rappresenteranno i generi preferiti)
-    # e faccio il reciproco della differenza con ogni utente (1-differenza).
-    # Questo mi permetterà di trovare possibili utenti con gusti simili.
-    # Per ogni coppia (this_user, other_user) guardo solo se la differenza è >90, per avere buone corrispondenze
-    # Se >90, passo a guardare i voti medi a quel genere e se il reciproco della differenza è >90
-    # Consiglio i film in più relativi a quel genere guardati da quell'utente.
-    # P.S. Da utente voglio ricevere consigli solo sui miei generi preferiti.
+        #---------------- Recommendation System ------------------#
+        
+        # Comparo il percents dell'utente loggato con quello di tutti gli altri utenti
+        # Funziona così: creo un dizionario col formato {genere: % sul totale}.
+        # Dopo prendo i 2/3 valori più alti del dizionario (rappresenteranno i generi preferiti)
+        # e faccio il reciproco della differenza con ogni utente (1-differenza).
+        # Questo mi permetterà di trovare possibili utenti con gusti simili.
+        # Per ogni coppia (this_user, other_user) guardo solo se la differenza è >90, per avere buone corrispondenze
+        # Se >90, passo a guardare i voti medi a quel genere e se il reciproco della differenza è >90
+        # Consiglio i film in più relativi a quel genere guardati da quell'utente.
+        # P.S. Da utente voglio ricevere consigli solo sui miei generi preferiti.
 
-    # Nuova logica: Creo un dizionario col formato {genere: voto_medio}, prendo i due valori più alti. 
-    # Essi rappresenteranno i generi preferiti, confronterò quelli dell'utente corrente con quelli di ogni altro utente.
-    # Se ci sarà corrispondenza sul nome del genere (ovvero un gusto in comune), controllo se il voto ha un valore
-    # di similanza >90. Se è così, consiglio i film che quell'utente avrà guardato in più.
+        # Nuova logica: Creo un dizionario col formato {genere: voto_medio}, prendo i due valori più alti. 
+        # Essi rappresenteranno i generi preferiti, confronterò quelli dell'utente corrente con quelli di ogni altro utente.
+        # Se ci sarà corrispondenza sul nome del genere (ovvero un gusto in comune), controllo se il voto ha un valore
+        # di similanza >90. Se è così, consiglio i film che quell'utente avrà guardato in più.
 
-    print("Stampa informazioni riguardanti il recommendation system...")
+        print("Stampa informazioni riguardanti il recommendation system...")
+        recommended_films = []
 
-    # Dizionario contenente i due generi meglio votati dall'utente
-    logged_two_highest = sorted(calcolaVoti(utente, generi).items(), key=lambda x: x[1], reverse=True)\
-                                                                                                                [0:RECOM_SYS_NUMS]
+        # Dizionario contenente i due generi meglio votati dall'utente
+        logged_two_highest = sorted(calcolaVoti(utente, generi).items(), key=lambda x: x[1], reverse=True)\
+                                                                                                                    [0:RECOM_SYS_NUMS]
 
-    print(logged_two_highest)
+        if len(logged_two_highest) < RECOM_SYS_NUMS:
+            return render(request, template_name="streamify/account.html", context={
+            "logged_user": request.session["logged_user"],
+            "lista_film": utente.film_guardati.all(),
+            "recommended_films": None
+            })
 
-    if len(logged_two_highest) < 2:
+
+        for other_user in Utente.objects.all().exclude(username=utente.username):
+            
+            other_two_highest = sorted(calcolaVoti(other_user, calcolaGeneri(other_user)).items(),
+                                                                    key=lambda x: x[1],
+                                                                    reverse=True)[0:RECOM_SYS_NUMS]
+
+            for logged_genre in logged_two_highest:
+                for other_genre in other_two_highest:
+
+                    if logged_genre[0] == other_genre[0]:
+                        similarity = (100-100*( abs(logged_genre[1]-other_genre[1]) /5))
+                        if similarity >= 90:
+                            # Ritorno i film guardati "in più" da other_user --> logged_user
+                            print(f"Genere {logged_genre[0]} con similanza del {similarity}% con l'utente {other_user.username}")
+
+                            # Lista di tutti i film guardati da other_user ma non da logged_user
+                            
+                            for film in other_user.film_guardati.all():
+                                if film not in utente.film_guardati.all() and \
+                                     Genere.objects.filter(name=logged_genre[0])[0] in film.generi.all():
+                                        recommended_films.append(film)
+
+                            print(recommended_films)
+
+        #-------------------------------------------------------------------#
+
+
         return render(request, template_name="streamify/account.html", context={
-        "logged_user": request.session["logged_user"],
-        "lista_film": utente.film_guardati.all()
+            "logged_user": request.session["logged_user"],
+            "lista_film": utente.film_guardati.all(),
+            "generi_dict": json.dumps(generi),
+            "recommended_films": recommended_films
         })
 
-
-    for other_user in Utente.objects.all().exclude(username=utente.username):
-        
-        other_two_highest = sorted(calcolaVoti(other_user, calcolaGeneri(other_user)).items(),
-                                                                key=lambda x: x[1],
-                                                                reverse=True)[0:RECOM_SYS_NUMS]
-
-        for logged_genre in logged_two_highest:
-            for other_genre in other_two_highest:
-
-                if logged_genre[0] == other_genre[0]:
-                    similarity = (100-100*( abs(logged_genre[1]-other_genre[1]) /5))
-                    
-                    if similarity >= 90:
-                        # Ritorno i film guardati "in più" da other_user --> logged_user
-                        print(f"Genere {logged_genre[0]} con similanza del {similarity}% con l'utente {other_user.username}")
-
-                        # Lista di tutti i film guardati da other_user ma non da logged_user
-                        recommended_films = []
-
-                        for film in other_user.film_guardati.all():
-                            if film not in utente.film_guardati.all():
-                                if Genere.objects.filter(name=logged_genre[0])[0] in film.generi.all():
-                                    recommended_films.append(film)
-
-                        print(recommended_films)
-
-    #-------------------------------------------------------------------#
-
-    return render(request, template_name="streamify/account.html", context={
-        "logged_user": request.session["logged_user"],
-        "lista_film": utente.film_guardati.all(),
-        "generi_dict": json.dumps(generi)
+    except:
+        return render(request, template_name="streamify/account.html", context={
+        "logged_user": None,
+        "lista_film": None,
+        "recommended_films": None
     })
-
-    # except:
-    #     return render(request, template_name="streamify/account.html", context={
-    #     "logged_user": None,
-    #     "lista_film": None
-    # })
 
 
 def review(request, titolo_film):

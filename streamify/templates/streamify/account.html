@@ -43,7 +43,11 @@
 
                                   <br>
                                   {% comment %} Lista dei film consigliati {% endcomment %}
-                                  
+                                  <b> Ti consigliamo di guardare: </b> <br><br>
+                                  {% for film in recommended_films %}
+                                      <input type="button" class="recommended_button" value="{{film.titolo}}"/>
+                                    <br><br>
+                                  {% endfor %}
                             </div>
                         </div>
                     </div>

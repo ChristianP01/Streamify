@@ -161,6 +161,8 @@ def account(request):
             "recommended_films": None
             })
 
+        print(logged_two_highest)
+
 
         for other_user in Utente.objects.all().exclude(username=utente.username):
             
@@ -169,13 +171,16 @@ def account(request):
                                                                     reverse=True)[0:RECOM_SYS_NUMS]
 
             for logged_genre in logged_two_highest:
+                
                 for other_genre in other_two_highest:
+
 
                     if logged_genre[0] == other_genre[0]:
                         similarity = (100-100*( abs(logged_genre[1]-other_genre[1]) /5))
-                        if similarity >= 90:
+                        print(similarity)
+                        if similarity >= 80:
                             # Ritorno i film guardati "in più" da other_user --> logged_user
-                            print(f"Genere {logged_genre[0]} con similanza del {similarity}% con l'utente {other_user.username}")
+                            print(f"Genere {logged_genre[0]} con similanza del {round(similarity)}% con l'utente {other_user.username}")
 
                             # Lista di tutti i film guardati da other_user ma non da logged_user
                             

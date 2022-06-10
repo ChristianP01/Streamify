@@ -7,6 +7,7 @@
 
     <head>
         <link rel="stylesheet" type="text/css" href="{% static 'css/account.css' %}">
+        {% comment %} <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> {% endcomment %}
     </head>
 
     {% comment %} Source di Chart.js {% endcomment %}
@@ -32,7 +33,7 @@
                             <div class="image mr-3"> <img src="{% static "imgs/christian.png" %}" class="rounded-circle" width="100" />
                                 <h4 class=" name mt-3 ">{{logged_user.username}}</h4>
 
-                                <b>Film guardati: </b> <br><br>
+                                  <b>Film guardati: </b> <br><br>
                                     
                                     {% for film in lista_film %}
                                             <a href="/streamify/review/{{film.titolo}}">
@@ -40,6 +41,17 @@
                                             </a> <br><br>
                                     {% endfor %}
 
+                                  <br>
+                                  {% comment %} Lista dei film consigliati {% endcomment %}
+                                  {% if recommended_films %}
+                                    <b> Ti consigliamo di guardare: </b> <br><br>
+                                    {% for film in recommended_films %}
+                                        <input type="button" class="recommended_button" value="{{film.titolo}}"/>
+                                      <br><br>
+                                    {% endfor %}
+                                  {% endif %}
+                                  
+                                  
                             </div>
                         </div>
                     </div>
@@ -52,8 +64,8 @@
         {% endif %}
 
         <div class="radar">
-            <canvas id="radarChart"></canvas>
-          </div>
+          <canvas id="radarChart"></canvas>
+        </div>
     </body>
 
     <script>
@@ -114,6 +126,8 @@
         }
       }
     </script>
+
+
 
 </html>
 

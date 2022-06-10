@@ -1,4 +1,6 @@
 .card {
+    position: absolute;
+    top: 7%;
     width:400px;
     height: 500px;
     border: none;
@@ -71,3 +73,18 @@
 .film_button:hover {
     opacity: 0.75;
 }
+
+.recommended_button {
+    width: 60%;
+    height: 30px;
+    border:none;
+    border-radius:5px;
+    color:#fff;
+    background-color:#a87cf3;
+    cursor:pointer;
+}
+
+.recommended_button:hover {
+    opacity: 0.75;
+}
+

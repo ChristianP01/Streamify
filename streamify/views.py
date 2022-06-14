@@ -281,9 +281,10 @@ def cercaFilm(request):
 
     user_input = request.POST["film_search_title"]
     genre_input = request.POST["generi"]
+    min_score = request.POST["min_score"]
+    max_score = request.POST["max_score"]
 
     film_query = Film.objects.filter(titolo__startswith=user_input, generi__name=genre_input)
-
 
     return render(request,template_name="streamify/catalogo.html", context={
         "logged_user": logged_user,

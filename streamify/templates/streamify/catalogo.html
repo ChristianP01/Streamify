@@ -4,6 +4,48 @@
 {% block children %}
 
 <html>
+
+    <style>
+        .filtrogenere {
+            width: 10%;
+            position: absolute;
+            top: 12%;
+            left: 23%;
+            border: 3px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 15px;
+            text-align: center;
+            background-color: #FFFFFF;
+        }
+
+        .min_score {
+            position: absolute;
+            top: 17%;
+            left: 23%;
+            width: 4%;
+        }
+
+        .max_score {
+            position: absolute;
+            top: 17%;
+            left: 28%;
+            width: 4%;
+        }
+        .label_min {
+            position: absolute;
+            top: 20%;
+            left: 23%;
+            width: 4%;
+        }
+
+        .label_max {
+            position: absolute;
+            top: 20%;
+            left: 28%;
+            width: 4%;
+        }
+    </style>
+
     
     <title> Catalogo </title>
 
@@ -27,11 +69,18 @@
         <form action="/streamify/cercaFilm/" method="POST">
             {% csrf_token %}
             <input type="text" class="film_input" placeholder="Inserisci titolo" name="film_search_title">
-                <select id="generi" name="generi" class="filtro_genere">
-                {% for genere in lista_generi %}
-                    <option value={{genere}}>{{genere}}</option>
-                {% endfor %}
-                </select>
+
+            <select id="generi" name="generi" class="filtrogenere">
+            {% for genere in lista_generi %}
+                <option value={{genere}}>{{genere}}</option>
+            {% endfor %}
+            </select>
+
+            <label class="label_min"> Voto minimo: </label>
+            <label class="label_max"> Voto massimo: </label>
+            <input type="number" class="min_score" name="min_score" min="1" max="5"><br><br>
+            <input type="number" class="max_score" name="max_score" min="1" max="5"><br><br>
+
             <a href="/streamify/catalogo/"> <input type="button" class="reset" value="Reset"> </a>
             <input type="submit" class="cerca_film" value="Cerca">
         </form>

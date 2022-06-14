@@ -73,18 +73,7 @@
     top: 12%;
     left: 2%;
     width: 20%;
-    border: 3px solid #ccc;
-    box-sizing: border-box;
-    border-radius: 15px;
-    text-align: center;
-}
-
-.film_genre {
-    position: absolute;
-    top: 15%;
-    left: 2%;
-    width: 20%;
-    border: 3px solid #ccc;
+    border: 3px solid #FFFFFF;
     box-sizing: border-box;
     border-radius: 15px;
     text-align: center;
@@ -121,9 +110,3 @@
     cursor: pointer;
 }
 
-.filtro_genere {
-    width: 10%;
-    position: absolute;
-    top: 16%;
-    left: 18%;
-}

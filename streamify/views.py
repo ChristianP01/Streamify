@@ -1,3 +1,4 @@
+from audioop import avg
 import json
 from django.shortcuts import render
 from django.views.generic import ListView
@@ -15,7 +16,12 @@ RECOM_SYS_NUMS = 2
 avgs = {}
 # Dizionario contenente la coppia {titolo_film: voto}
 for film in Film.objects.all():
-    avgs[film.titolo] = Recensione.objects.filter(film=film).aggregate(Avg('voto'))
+    voto_medio = Recensione.objects.filter(film=film).aggregate(Avg('voto'))["voto__avg"]
+
+    if voto_medio is not None:
+        avgs[film.titolo] = float(voto_medio)
+    else:
+        avgs[film.titolo] = 1.0
 #-------------------------------------------------------------#
 
 #---------------------Lista generi-------------------------#
@@ -155,8 +161,6 @@ def account(request):
         # Essi rappresenteranno i generi preferiti, confronterò quelli dell'utente corrente con quelli di ogni altro utente.
         # Se ci sarà corrispondenza sul nome del genere (ovvero un gusto in comune), controllo se il voto ha un valore
         # di similanza >90. Se è così, consiglio i film che quell'utente avrà guardato in più.
-
-        print("Stampa informazioni riguardanti il recommendation system...")
         recommended_films = []
 
         # Dizionario contenente i due generi meglio votati dall'utente
@@ -169,8 +173,6 @@ def account(request):
             "lista_film": utente.film_guardati.all(),
             "recommended_films": None
             })
-
-        print(logged_two_highest)
 
 
         for other_user in Utente.objects.all().exclude(username=utente.username):
@@ -186,10 +188,8 @@ def account(request):
 
                     if logged_genre[0] == other_genre[0]:
                         similarity = (100-100*( abs(logged_genre[1]-other_genre[1]) /5))
-                        print(similarity)
                         if similarity >= 80:
                             # Ritorno i film guardati "in più" da other_user --> logged_user
-                            print(f"Genere {logged_genre[0]} con similanza del {round(similarity)}% con l'utente {other_user.username}")
 
                             # Lista di tutti i film guardati da other_user ma non da logged_user
                             
@@ -198,7 +198,6 @@ def account(request):
                                      Genere.objects.filter(name=logged_genre[0])[0] in film.generi.all():
                                         recommended_films.append(film)
 
-                            print(recommended_films)
 
         #-------------------------------------------------------------------#
 
@@ -284,11 +283,30 @@ def cercaFilm(request):
     min_score = request.POST["min_score"]
     max_score = request.POST["max_score"]
 
-    film_query = Film.objects.filter(titolo__startswith=user_input, generi__name=genre_input)
+    try:
+        1 + float(min_score)
+        min_score = float(min_score)
+    except:
+        min_score = 1.0
 
+    try:
+        1 + float(max_score)
+        max_score = float(max_score)
+    except:
+        max_score = 5.0
+
+
+    film_query = Film.objects.filter(titolo__startswith=user_input, generi__name=genre_input)
+    
+    film_query_matched = []
+    for film in film_query:
+        if film.titolo in avgs.keys():
+            if avgs[film.titolo] >= min_score and avgs[film.titolo] <= max_score:
+                film_query_matched.append(film)
+                
     return render(request,template_name="streamify/catalogo.html", context={
         "logged_user": logged_user,
-        "film_list": film_query,
+        "film_list": film_query_matched,
         "avgs": avgs,
         "lista_generi": lista_generi
     })

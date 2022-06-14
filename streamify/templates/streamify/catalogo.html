@@ -109,8 +109,8 @@
                     <td>
                         {% for k,v in avgs.items %}
                             {% if k == film.titolo %}
-                                {% if v.voto__avg %}
-                                    {{v.voto__avg | floatformat:2}}
+                                {% if v %}
+                                    {{v | floatformat:2}}
                                 {% else %}
                                     <p> N/A </p>
                                 {% endif %}

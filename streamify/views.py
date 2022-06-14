@@ -18,6 +18,11 @@ for film in Film.objects.all():
     avgs[film.titolo] = Recensione.objects.filter(film=film).aggregate(Avg('voto'))
 #-------------------------------------------------------------#
 
+#---------------------Lista generi-------------------------#
+# Serve al catalogo per rimanere aggiornato sui nuovi generi (lato HTML)
+lista_generi = Genere.objects.all()
+#-------------------------------------------------------------#
+
 @require_http_methods("GET")
 def homepage(request):
 
@@ -61,7 +66,8 @@ def logged(request):
         return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
-            "avgs": avgs
+            "avgs": avgs,
+            "lista_generi": lista_generi
         })
 
     except:
@@ -80,7 +86,8 @@ def catalogo(request):
     return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
-            "avgs": avgs
+            "avgs": avgs,
+            "lista_generi": lista_generi
         })
 
 @require_http_methods(["GET","POST"])
@@ -100,7 +107,8 @@ def guardaFilm(request, titolo_film):
             return render(request,template_name="streamify/catalogo.html", context={
                 "film_list": Film.objects.all(),
                 "logged_user": logged_user,
-                "avgs": avgs
+                "avgs": avgs,
+                "lista_generi": lista_generi
             })
 
         # Se invece l'ha già guardato
@@ -109,7 +117,8 @@ def guardaFilm(request, titolo_film):
             return render(request,template_name="streamify/catalogo.html", context={
                 "film_list": Film.objects.all(),
                 "logged_user": logged_user,
-                "avgs": avgs
+                "avgs": avgs,
+                "lista_generi": lista_generi
             })
 
     except:
@@ -270,13 +279,15 @@ def cercaFilm(request):
     except:
         logged_user = None
 
-    user_input = request.POST["film_search"]
-    
+    user_input = request.POST["film_search_title"]
+    genre_input = request.POST["generi"]
 
-    film_query = Film.objects.filter(titolo__startswith=user_input)
+    film_query = Film.objects.filter(titolo__startswith=user_input, generi__name=genre_input)
+
 
     return render(request,template_name="streamify/catalogo.html", context={
         "logged_user": logged_user,
         "film_list": film_query,
-        "avgs": avgs
+        "avgs": avgs,
+        "lista_generi": lista_generi
     })

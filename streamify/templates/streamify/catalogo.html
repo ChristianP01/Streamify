@@ -23,17 +23,22 @@
 
         <a href="/streamify/account/"><img class="userpng" src="{% static "imgs/user.png" %}" alt="Image"></a>
         <a href="/streamify/home/"><img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image"></a>
-
+        
         <form action="/streamify/cercaFilm/" method="POST">
             {% csrf_token %}
-            <input type="text" class="film_input" placeholder="Inserisci titolo" name="film_search" required>
+            <input type="text" class="film_input" placeholder="Inserisci titolo" name="film_search_title">
+                <select id="generi" name="generi" class="filtro_genere">
+                {% for genere in lista_generi %}
+                    <option value={{genere}}>{{genere}}</option>
+                {% endfor %}
+                </select>
             <a href="/streamify/catalogo/"> <input type="button" class="reset" value="Reset"> </a>
             <input type="submit" class="cerca_film" value="Cerca">
         </form>
 
         <p class="welcome"> Catalogo </p>
         <br><br><br>
-
+        
         <table class="listafilm" name="listafilm">
             <tr>
                 <th>Titolo </th>

@@ -3,7 +3,7 @@
 Questo repository rappresenta il progetto sviluppato per il corso di **Tecnologie Web**.
 Si tratta di un servizio di **streaming**, utilizza **Django** come framework.
 
-Le funzionalità principali implmentate sono:
+Le funzionalità principali implementate sono:
 * Login e registrazione di un utente;
 * Possibilità di "guardare" un film;
 * Possibilità di recensire un film;

@@ -79,6 +79,17 @@
     text-align: center;
 }
 
+.film_genre {
+    position: absolute;
+    top: 15%;
+    left: 2%;
+    width: 20%;
+    border: 3px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 15px;
+    text-align: center;
+}
+
 .cerca_film {
     position: absolute;
     top: 16%;
@@ -108,4 +119,11 @@
 .reset:hover {
     opacity: 0.75;
     cursor: pointer;
+}
+
+.filtro_genere {
+    width: 10%;
+    position: absolute;
+    top: 16%;
+    left: 18%;
 }

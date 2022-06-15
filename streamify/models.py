@@ -55,7 +55,7 @@ class Recensione(models.Model):
     commento_scritto = models.CharField(max_length=500, default=None)
 
     def __str__(self):
-        return f"Voto {self.voto}"
+        return f"Voto {self.voto} per {self.film}"
 
     class Meta:
         verbose_name_plural = "Recensioni"

@@ -22,6 +22,8 @@ for film in Film.objects.all():
         avgs[film.titolo] = float(voto_medio)
     else:
         avgs[film.titolo] = 1.0
+
+print(avgs)
 #-------------------------------------------------------------#
 
 #---------------------Lista generi-------------------------#
@@ -200,7 +202,9 @@ def account(request):
 
         # Salvo i film nella sessione al fine di poterli ritornare in futuro.
         request.session["recommended_films"] = recommended_films
-        print(recommended_films)
+
+        # Rimuoviamo i doppioni (dato che potrebbero essere suggeriti da più utenti).
+        recommended_films = list(set(recommended_films))
 
         #-------------------------------------------------------------------#
 
@@ -219,7 +223,7 @@ def account(request):
         "recommended_films": None
     })
 
-
+@require_http_methods(["GET", "POST"])
 def review(request, titolo_film):
 
     try:
@@ -227,9 +231,12 @@ def review(request, titolo_film):
         film = Film.objects.get(titolo=titolo_film)
         request.session["film"] = film.titolo
 
+        lista_recensioni = Recensione.objects.filter(film=film)
+
         return render(request, template_name="review.html", context={
             "logged_user": user,
-            "film": film
+            "film": film,
+            "lista_recensioni": lista_recensioni
             })
     
     except:
@@ -247,27 +254,28 @@ def review_final(request):
         film = Film.objects.get(titolo=request.session["film"])
         user = Utente.objects.get(username=request.session["logged_user"])
 
-        try:
-            if Recensione.objects.get(utente=user, film=film):
-                messages.error(request, "Hai già recensito questo film!")
-                return render(request, template_name="account.html", context={
-                    "logged_user": user,
-                    "lista_film": user.film_guardati.all(),
-                    "generi_dict": json.dumps(request.session["generi"]),
-                    "recommended_films": request.session["recommended_films"]
-                })
-        
-        except:
+        if len(Recensione.objects.filter(utente=user, film=film)) == 0:
+            messages.success(request, "Hai recensito correttamente il film!")
             new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto="Commento_Di_Prova")
             new_rece.save()
 
-            messages.success(request, "Hai recensito correttamente il film!")
             return render(request, template_name="account.html", context={
-                "logged_user": user,
+                "logged_user": user.username,
                 "lista_film": user.film_guardati.all(),
                 "generi_dict": json.dumps(request.session["generi"]),
                 "recommended_films": request.session["recommended_films"]
             })
+
+
+        else:
+            messages.error(request, "Hai già recensito questo film!")
+            return render(request, template_name="account.html", context={
+                "logged_user": user.username,
+                "lista_film": user.film_guardati.all(),
+                "generi_dict": json.dumps(request.session["generi"]),
+                "recommended_films": request.session["recommended_films"]
+            })
+            
 
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")
@@ -321,7 +329,6 @@ def my_reviews(request):
 
     try:
         logged_user = Utente.objects.filter(username=request.session["logged_user"])[0]
-
 
         return render(request,template_name="streamify/user_reviews.html", context={
             "logged_user": logged_user,

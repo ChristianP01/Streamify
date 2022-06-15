@@ -5,26 +5,57 @@
 
 <html>
 
+    <style>
+        .welcome {
+            text-align: center;
+            font-size: 40px;
+        }
+
+        .recensione {
+            width: 10%;
+            height: 30px;
+            border:none;
+            border-radius:5px;
+            color:#fff;
+            background-color:#1859c9;
+            cursor:pointer;
+        }
+    </style>
+
     <head>
         <link rel="stylesheet" type="text/css" href="{% static 'css/review.css' %}">
     </head>
 
     {% if logged_user is None %}
         Effettua il login per lasciare una recensione per {{film.titolo}}
-    
     {% else %}
 
-    <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
-    <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
-    <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
-    <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
-    <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
+    <center>
+
+        <p class="welcome"> Lascia una recensione a {{film.titolo}} </p> <br>
+
+        <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
+        <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
+        <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
+        <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
+        <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
+
+        <form action="/streamify/review_final/" method="POST">
+            {% csrf_token %}
+            <input type="hidden" value="" name="selected_star" id="result_data_js">
+            <input class="vota_button" type="submit" value="Vota">
+        </form>
+
+        <br><br><br><br>
+
+        {% comment %} Lista recensioni assegnate al film {% endcomment %}
+        {% for recensione in lista_recensioni %}
+                <input class="recensione" type="submit" value="{{recensione}}"> <br><br>
+            
+        {% endfor %}
+    </center>
     
-    <form action="/streamify/review_final/" method="POST">
-        {% csrf_token %}
-        <input type="hidden" value="" name="selected_star" id="result_data_js">
-        <input class="vota_button" type="submit" value="Vota">
-    </form>
+    
 
     {% endif %}
 </html>

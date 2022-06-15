@@ -196,8 +196,11 @@ def account(request):
                             for film in other_user.film_guardati.all():
                                 if film not in utente.film_guardati.all() and \
                                      Genere.objects.filter(name=logged_genre[0])[0] in film.generi.all():
-                                        recommended_films.append(film)
+                                        recommended_films.append(film.titolo)
 
+        # Salvo i film nella sessione al fine di poterli ritornare in futuro.
+        request.session["recommended_films"] = recommended_films
+        print(recommended_films)
 
         #-------------------------------------------------------------------#
 
@@ -250,7 +253,8 @@ def review_final(request):
                 return render(request, template_name="account.html", context={
                     "logged_user": user,
                     "lista_film": user.film_guardati.all(),
-                    "generi_dict": json.dumps(request.session["generi"])
+                    "generi_dict": json.dumps(request.session["generi"]),
+                    "recommended_films": request.session["recommended_films"]
                 })
         
         except:
@@ -261,7 +265,8 @@ def review_final(request):
             return render(request, template_name="account.html", context={
                 "logged_user": user,
                 "lista_film": user.film_guardati.all(),
-                "generi_dict": json.dumps(request.session["generi"])
+                "generi_dict": json.dumps(request.session["generi"]),
+                "recommended_films": request.session["recommended_films"]
             })
 
     except:
@@ -310,3 +315,20 @@ def cercaFilm(request):
         "avgs": avgs,
         "lista_generi": lista_generi
     })
+
+@require_http_methods(["GET","POST"])
+def my_reviews(request):
+
+    try:
+        logged_user = Utente.objects.filter(username=request.session["logged_user"])[0]
+
+
+        return render(request,template_name="streamify/user_reviews.html", context={
+            "logged_user": logged_user,
+            "film_list": logged_user.film_guardati.all(),
+            "lista_recensioni": Recensione.objects.filter(utente=logged_user)
+        })
+
+    except:
+        messages.error(request, "Effettua il login per lasciare una recensione!")
+        return render(request, template_name="home.html")

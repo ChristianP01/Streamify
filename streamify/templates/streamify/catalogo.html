@@ -44,6 +44,17 @@
             left: 28%;
             width: 4%;
         }
+
+        .film_input {
+            position: absolute;
+            top: 12%;
+            left: 2%;
+            width: 20%;
+            border: 3px solid #F34G42;
+            box-sizing: border-box;
+            border-radius: 15px;
+            text-align: center;
+        }
     </style>
 
     
@@ -62,7 +73,6 @@
           </div>
         {% endfor %}
 
-
         <a href="/streamify/account/"><img class="userpng" src="{% static "imgs/user.png" %}" alt="Image"></a>
         <a href="/streamify/home/"><img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image"></a>
         
@@ -71,8 +81,9 @@
             <input type="text" class="film_input" placeholder="Inserisci titolo" name="film_search_title">
 
             <select id="generi" name="generi" class="filtrogenere">
+                <option value=""/>
             {% for genere in lista_generi %}
-                <option value={{genere}}>{{genere}}</option>
+                <option value={{genere}}> {{genere}} </option>
             {% endfor %}
             </select>
 

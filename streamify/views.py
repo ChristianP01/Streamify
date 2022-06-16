@@ -22,8 +22,6 @@ for film in Film.objects.all():
         avgs[film.titolo] = float(voto_medio)
     else:
         avgs[film.titolo] = 1.0
-
-print(avgs)
 #-------------------------------------------------------------#
 
 #---------------------Lista generi-------------------------#
@@ -295,6 +293,7 @@ def cercaFilm(request):
     genre_input = request.POST["generi"]
     min_score = request.POST["min_score"]
     max_score = request.POST["max_score"]
+        
 
     try:
         1 + float(min_score)
@@ -309,7 +308,7 @@ def cercaFilm(request):
         max_score = 5.0
 
 
-    film_query = Film.objects.filter(titolo__startswith=user_input, generi__name=genre_input)
+    film_query = Film.objects.filter(titolo__startswith=user_input, generi__name__startswith=genre_input).distinct()
     
     film_query_matched = []
     for film in film_query:
@@ -339,3 +338,12 @@ def my_reviews(request):
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")
         return render(request, template_name="home.html")
+
+
+@require_http_methods(["GET","POST"])
+def film_sort_up(request):
+    try:
+        logged_user = request.session["logged_user"]
+    except:
+        logged_user = None
+

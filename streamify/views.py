@@ -13,20 +13,20 @@ from django.views.decorators.http import require_http_methods
 RECOM_SYS_NUMS = 2
 
 #---------------Carimento recensioni-------------------#
-avgs = {}
-# Dizionario contenente la coppia {titolo_film: voto}
-for film in Film.objects.all():
-    voto_medio = Recensione.objects.filter(film=film).aggregate(Avg('voto'))["voto__avg"]
+# avgs = {}
+# # Dizionario contenente la coppia {titolo_film: voto}
+# for film in Film.objects.all():
+#     voto_medio = Recensione.objects.filter(film=film).aggregate(Avg('voto'))["voto__avg"]
 
-    if voto_medio is not None:
-        avgs[film.titolo] = float(voto_medio)
-    else:
-        avgs[film.titolo] = 1.0
-#-------------------------------------------------------------#
+#     if voto_medio is not None:
+#         avgs[film.titolo] = float(voto_medio)
+#     else:
+#         avgs[film.titolo] = 1.0
+# #-------------------------------------------------------------#
 
-#---------------------Lista generi-------------------------#
-# Serve al catalogo per rimanere aggiornato sui nuovi generi (lato HTML)
-lista_generi = Genere.objects.all()
+# #---------------------Lista generi-------------------------#
+# # Serve al catalogo per rimanere aggiornato sui nuovi generi (lato HTML)
+# lista_generi = Genere.objects.all()
 #-------------------------------------------------------------#
 
 @require_http_methods("GET")
@@ -293,7 +293,6 @@ def cercaFilm(request):
     genre_input = request.POST["generi"]
     min_score = request.POST["min_score"]
     max_score = request.POST["max_score"]
-        
 
     try:
         1 + float(min_score)

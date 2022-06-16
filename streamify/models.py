@@ -3,6 +3,7 @@ import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.forms import IntegerField
 from django.contrib.postgres.fields import ArrayField
+from django.db.models import Avg
 
 CURRENT_YEAR = int(datetime.datetime.now().year)
 
@@ -23,6 +24,11 @@ class Film(models.Model):
     titolo = models.CharField(max_length=70)
     generi = models.ManyToManyField(Genere)
     anno_uscita = models.IntegerField(validators=[MinValueValidator(1888), MaxValueValidator(CURRENT_YEAR)])
+    trama = models.TextField(max_length=800, null=True)
+
+    #  {{ film.get_mediavoto }} per chiamarlo nell'HTML (NO PARENTESI) 
+    def get_mediavoto(self):
+        Recensione.objects.filter(film=self).aggregate(Avg('voto'))["voto__avg"]
 
     def __str__(self):
         return self.titolo

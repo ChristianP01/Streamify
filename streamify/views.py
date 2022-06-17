@@ -2,7 +2,7 @@ from audioop import avg
 import json
 from django.shortcuts import render
 from django.views.generic import ListView
-from numpy import append
+from numpy import append, sort
 from streamify.methods import calcolaGeneri, calcolaPercents, calcolaVoti
 from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
@@ -22,11 +22,11 @@ RECOM_SYS_NUMS = 2
 #         avgs[film.titolo] = float(voto_medio)
 #     else:
 #         avgs[film.titolo] = 1.0
-# #-------------------------------------------------------------#
+#-------------------------------------------------------------#
 
-# #---------------------Lista generi-------------------------#
-# # Serve al catalogo per rimanere aggiornato sui nuovi generi (lato HTML)
-# lista_generi = Genere.objects.all()
+#---------------------Lista generi-------------------------#
+# Serve al catalogo per rimanere aggiornato sui nuovi generi (lato HTML)
+lista_generi = Genere.objects.all()
 #-------------------------------------------------------------#
 
 @require_http_methods("GET")
@@ -59,6 +59,8 @@ def registrato(request):
     messages.success(request, f"Utente creato con successo! Benvenuto, {uname}!")
     return render(request,template_name="streamify/home.html")
 
+
+# TODO Ripetizione tra logged() e catalogo()
 @require_http_methods("POST")
 def logged(request):
     pwd = request.POST['psw']
@@ -72,7 +74,6 @@ def logged(request):
         return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
-            "avgs": avgs,
             "lista_generi": lista_generi
         })
 
@@ -82,7 +83,7 @@ def logged(request):
 
 @require_http_methods(["GET","POST"])
 def catalogo(request):
-    # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nel catalogo.
+    # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nei filtri del catalogo.
 
     try:
         logged_user = request.session["logged_user"]
@@ -92,7 +93,6 @@ def catalogo(request):
     return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
-            "avgs": avgs,
             "lista_generi": lista_generi
         })
 
@@ -113,7 +113,6 @@ def guardaFilm(request, titolo_film):
             return render(request,template_name="streamify/catalogo.html", context={
                 "film_list": Film.objects.all(),
                 "logged_user": logged_user,
-                "avgs": avgs,
                 "lista_generi": lista_generi
             })
 
@@ -123,7 +122,6 @@ def guardaFilm(request, titolo_film):
             return render(request,template_name="streamify/catalogo.html", context={
                 "film_list": Film.objects.all(),
                 "logged_user": logged_user,
-                "avgs": avgs,
                 "lista_generi": lista_generi
             })
 
@@ -311,14 +309,12 @@ def cercaFilm(request):
     
     film_query_matched = []
     for film in film_query:
-        if film.titolo in avgs.keys():
-            if avgs[film.titolo] >= min_score and avgs[film.titolo] <= max_score:
-                film_query_matched.append(film)
+        if film.get_mediavoto() >= min_score and film.get_mediavoto() <= max_score:
+            film_query_matched.append(film)
                 
     return render(request,template_name="streamify/catalogo.html", context={
         "logged_user": logged_user,
         "film_list": film_query_matched,
-        "avgs": avgs,
         "lista_generi": lista_generi
     })
 
@@ -340,9 +336,21 @@ def my_reviews(request):
 
 
 @require_http_methods(["GET","POST"])
-def film_sort_up(request):
+def film_sort(request, type):
+    # Type = {up | down} in base al tipo di sorting richiesto.
+
     try:
         logged_user = request.session["logged_user"]
     except:
         logged_user = None
 
+    if type == "up":
+        type = True
+    else:
+        type = False
+
+    return render(request,template_name="streamify/catalogo.html", context={
+        "logged_user": logged_user,
+        "film_list": sorted(Film.objects.all(), key= lambda film: film.get_mediavoto(), reverse=type),
+        "lista_generi": lista_generi
+    })

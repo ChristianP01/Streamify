@@ -28,7 +28,12 @@ class Film(models.Model):
 
     #  {{ film.get_mediavoto }} per chiamarlo nell'HTML (NO PARENTESI) 
     def get_mediavoto(self):
-        Recensione.objects.filter(film=self).aggregate(Avg('voto'))["voto__avg"]
+        media_voto = Recensione.objects.filter(film=self).aggregate(Avg('voto'))["voto__avg"]
+        
+        if media_voto:
+            return float(media_voto)
+        else:
+            return 1.0
 
     def __str__(self):
         return self.titolo

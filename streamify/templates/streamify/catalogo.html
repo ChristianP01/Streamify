@@ -55,6 +55,20 @@
             border-radius: 15px;
             text-align: center;
         }
+
+        .sort_down {
+            position: absolute;
+            right: 24.7%;
+            top: 41.3%;
+            width: 1.5%;
+        }
+
+        .sort_up {
+            position: absolute;
+            right: 35%;
+            top: 41.3%;
+            width: 1.5%;
+        }
     </style>
 
     
@@ -75,6 +89,8 @@
 
         <a href="/streamify/account/"><img class="userpng" src="{% static "imgs/user.png" %}" alt="Image"></a>
         <a href="/streamify/home/"><img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image"></a>
+        <a href="/streamify/catalogo_sort/up/"><img class="sort_up" src="{% static "imgs/sort_up.png" %}" alt="Image"></a>
+        <a href="/streamify/catalogo_sort/down/"><img class="sort_down" src="{% static "imgs/sort_down.png" %}" alt="Image"></a>
         
         <form action="/streamify/cercaFilm/" method="POST">
             {% csrf_token %}
@@ -104,7 +120,9 @@
                 <th>Titolo </th>
                 <th>Genere</th>
                 <th>Anno di uscita</th>
-                <th>Valutazione</th>
+                <th>
+                    <a href="/streamify/catalogo_sortup/">Valutazione</a>
+                </th>
                 <th>Link</th>
             </tr>
 
@@ -118,7 +136,8 @@
                     </td>
                     <td> {{film.anno_uscita}} </td>
                     <td>
-                        {% for k,v in avgs.items %}
+                        {{film.get_mediavoto}}
+                        {% comment %} {% for k,v in avgs.items %}
                             {% if k == film.titolo %}
                                 {% if v %}
                                     {{v | floatformat:2}}
@@ -126,7 +145,7 @@
                                     <p> N/A </p>
                                 {% endif %}
                             {% endif %}
-                        {% endfor %}
+                        {% endfor %} {% endcomment %}
                     </td>
                     <td>
                         <form action="/streamify/guarda_film/{{film.titolo}}/" method="GET">

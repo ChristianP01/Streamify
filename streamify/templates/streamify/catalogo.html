@@ -135,15 +135,6 @@
                     <td> {{film.anno_uscita}} </td>
                     <td>
                         {{film.get_mediavoto}}
-                        {% comment %} {% for k,v in avgs.items %}
-                            {% if k == film.titolo %}
-                                {% if v %}
-                                    {{v | floatformat:2}}
-                                {% else %}
-                                    <p> N/A </p>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %} {% endcomment %}
                     </td>
                     <td>
                         <form action="/streamify/guarda_film/{{film.titolo}}/" method="GET">

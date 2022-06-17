@@ -1,7 +1,8 @@
+from audioop import avg
 import json
 from django.shortcuts import render
 from django.views.generic import ListView
-from numpy import append
+from numpy import append, sort
 from streamify.methods import calcolaGeneri, calcolaPercents, calcolaVoti
 from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
@@ -12,10 +13,20 @@ from django.views.decorators.http import require_http_methods
 RECOM_SYS_NUMS = 2
 
 #---------------Carimento recensioni-------------------#
-avgs = {}
-# Dizionario contenente la coppia {titolo_film: voto}
-for film in Film.objects.all():
-    avgs[film.titolo] = Recensione.objects.filter(film=film).aggregate(Avg('voto'))
+# avgs = {}
+# # Dizionario contenente la coppia {titolo_film: voto}
+# for film in Film.objects.all():
+#     voto_medio = Recensione.objects.filter(film=film).aggregate(Avg('voto'))["voto__avg"]
+
+#     if voto_medio is not None:
+#         avgs[film.titolo] = float(voto_medio)
+#     else:
+#         avgs[film.titolo] = 1.0
+#-------------------------------------------------------------#
+
+#---------------------Lista generi-------------------------#
+# Serve al catalogo per rimanere aggiornato sui nuovi generi (lato HTML)
+lista_generi = Genere.objects.all()
 #-------------------------------------------------------------#
 
 @require_http_methods("GET")
@@ -48,6 +59,8 @@ def registrato(request):
     messages.success(request, f"Utente creato con successo! Benvenuto, {uname}!")
     return render(request,template_name="streamify/home.html")
 
+
+# TODO Ripetizione tra logged() e catalogo()
 @require_http_methods("POST")
 def logged(request):
     pwd = request.POST['psw']
@@ -61,7 +74,7 @@ def logged(request):
         return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
-            "avgs": avgs
+            "lista_generi": lista_generi
         })
 
     except:
@@ -70,7 +83,7 @@ def logged(request):
 
 @require_http_methods(["GET","POST"])
 def catalogo(request):
-    # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nel catalogo.
+    # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nei filtri del catalogo.
 
     try:
         logged_user = request.session["logged_user"]
@@ -80,7 +93,7 @@ def catalogo(request):
     return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
-            "avgs": avgs
+            "lista_generi": lista_generi
         })
 
 @require_http_methods(["GET","POST"])
@@ -100,7 +113,7 @@ def guardaFilm(request, titolo_film):
             return render(request,template_name="streamify/catalogo.html", context={
                 "film_list": Film.objects.all(),
                 "logged_user": logged_user,
-                "avgs": avgs
+                "lista_generi": lista_generi
             })
 
         # Se invece l'ha già guardato
@@ -109,7 +122,7 @@ def guardaFilm(request, titolo_film):
             return render(request,template_name="streamify/catalogo.html", context={
                 "film_list": Film.objects.all(),
                 "logged_user": logged_user,
-                "avgs": avgs
+                "lista_generi": lista_generi
             })
 
     except:
@@ -146,8 +159,6 @@ def account(request):
         # Essi rappresenteranno i generi preferiti, confronterò quelli dell'utente corrente con quelli di ogni altro utente.
         # Se ci sarà corrispondenza sul nome del genere (ovvero un gusto in comune), controllo se il voto ha un valore
         # di similanza >90. Se è così, consiglio i film che quell'utente avrà guardato in più.
-
-        print("Stampa informazioni riguardanti il recommendation system...")
         recommended_films = []
 
         # Dizionario contenente i due generi meglio votati dall'utente
@@ -160,8 +171,6 @@ def account(request):
             "lista_film": utente.film_guardati.all(),
             "recommended_films": None
             })
-
-        print(logged_two_highest)
 
 
         for other_user in Utente.objects.all().exclude(username=utente.username):
@@ -177,19 +186,21 @@ def account(request):
 
                     if logged_genre[0] == other_genre[0]:
                         similarity = (100-100*( abs(logged_genre[1]-other_genre[1]) /5))
-                        print(similarity)
                         if similarity >= 80:
                             # Ritorno i film guardati "in più" da other_user --> logged_user
-                            print(f"Genere {logged_genre[0]} con similanza del {round(similarity)}% con l'utente {other_user.username}")
 
                             # Lista di tutti i film guardati da other_user ma non da logged_user
                             
                             for film in other_user.film_guardati.all():
                                 if film not in utente.film_guardati.all() and \
                                      Genere.objects.filter(name=logged_genre[0])[0] in film.generi.all():
-                                        recommended_films.append(film)
+                                        recommended_films.append(film.titolo)
 
-                            print(recommended_films)
+        # Salvo i film nella sessione al fine di poterli ritornare in futuro.
+        request.session["recommended_films"] = recommended_films
+
+        # Rimuoviamo i doppioni (dato che potrebbero essere suggeriti da più utenti).
+        recommended_films = list(set(recommended_films))
 
         #-------------------------------------------------------------------#
 
@@ -208,7 +219,7 @@ def account(request):
         "recommended_films": None
     })
 
-
+@require_http_methods(["GET", "POST"])
 def review(request, titolo_film):
 
     try:
@@ -216,9 +227,12 @@ def review(request, titolo_film):
         film = Film.objects.get(titolo=titolo_film)
         request.session["film"] = film.titolo
 
+        lista_recensioni = Recensione.objects.filter(film=film)
+
         return render(request, template_name="review.html", context={
             "logged_user": user,
-            "film": film
+            "film": film,
+            "lista_recensioni": lista_recensioni
             })
     
     except:
@@ -236,25 +250,28 @@ def review_final(request):
         film = Film.objects.get(titolo=request.session["film"])
         user = Utente.objects.get(username=request.session["logged_user"])
 
-        try:
-            if Recensione.objects.get(utente=user, film=film):
-                messages.error(request, "Hai già recensito questo film!")
-                return render(request, template_name="account.html", context={
-                    "logged_user": user,
-                    "lista_film": user.film_guardati.all(),
-                    "generi_dict": json.dumps(request.session["generi"])
-                })
-        
-        except:
+        if len(Recensione.objects.filter(utente=user, film=film)) == 0:
+            messages.success(request, "Hai recensito correttamente il film!")
             new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto="Commento_Di_Prova")
             new_rece.save()
 
-            messages.success(request, "Hai recensito correttamente il film!")
             return render(request, template_name="account.html", context={
-                "logged_user": user,
+                "logged_user": user.username,
                 "lista_film": user.film_guardati.all(),
-                "generi_dict": json.dumps(request.session["generi"])
+                "generi_dict": json.dumps(request.session["generi"]),
+                "recommended_films": request.session["recommended_films"]
             })
+
+
+        else:
+            messages.error(request, "Hai già recensito questo film!")
+            return render(request, template_name="account.html", context={
+                "logged_user": user.username,
+                "lista_film": user.film_guardati.all(),
+                "generi_dict": json.dumps(request.session["generi"]),
+                "recommended_films": request.session["recommended_films"]
+            })
+            
 
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")
@@ -270,13 +287,70 @@ def cercaFilm(request):
     except:
         logged_user = None
 
-    user_input = request.POST["film_search"]
-    
+    user_input = request.POST["film_search_title"]
+    genre_input = request.POST["generi"]
+    min_score = request.POST["min_score"]
+    max_score = request.POST["max_score"]
 
-    film_query = Film.objects.filter(titolo__startswith=user_input)
+    try:
+        1 + float(min_score)
+        min_score = float(min_score)
+    except:
+        min_score = 1.0
+
+    try:
+        1 + float(max_score)
+        max_score = float(max_score)
+    except:
+        max_score = 5.0
+
+
+    film_query = Film.objects.filter(titolo__startswith=user_input, generi__name__startswith=genre_input).distinct()
+    
+    film_query_matched = []
+    for film in film_query:
+        if film.get_mediavoto() >= min_score and film.get_mediavoto() <= max_score:
+            film_query_matched.append(film)
+                
+    return render(request,template_name="streamify/catalogo.html", context={
+        "logged_user": logged_user,
+        "film_list": film_query_matched,
+        "lista_generi": lista_generi
+    })
+
+@require_http_methods(["GET","POST"])
+def my_reviews(request):
+
+    try:
+        logged_user = Utente.objects.filter(username=request.session["logged_user"])[0]
+
+        return render(request,template_name="streamify/user_reviews.html", context={
+            "logged_user": logged_user,
+            "film_list": logged_user.film_guardati.all(),
+            "lista_recensioni": Recensione.objects.filter(utente=logged_user)
+        })
+
+    except:
+        messages.error(request, "Effettua il login per lasciare una recensione!")
+        return render(request, template_name="home.html")
+
+
+@require_http_methods(["GET","POST"])
+def film_sort(request, type):
+    # Type = {up | down} in base al tipo di sorting richiesto.
+
+    try:
+        logged_user = request.session["logged_user"]
+    except:
+        logged_user = None
+
+    if type == "up":
+        type = True
+    else:
+        type = False
 
     return render(request,template_name="streamify/catalogo.html", context={
         "logged_user": logged_user,
-        "film_list": film_query,
-        "avgs": avgs
+        "film_list": sorted(Film.objects.all(), key= lambda film: film.get_mediavoto(), reverse=type),
+        "lista_generi": lista_generi
     })

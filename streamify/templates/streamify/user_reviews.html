@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block children %}
+
+    <html>
+        <title> Le mie recensioni </title>
+
+        <head>
+            <link rel="stylesheet" type="text/css" href="{% static 'css/user_reviews.css' %}">
+        </head>
+
+        <center>
+
+            <p class="welcome">Le mie recensioni</p> <br><br><br>
+
+            {% for recensione in lista_recensioni%}
+                <input type="button" class="review" value="{{recensione}}"/> <br> <br>
+            {% endfor %}
+        </center>
+
+    </html>
+
+{% endblock %}

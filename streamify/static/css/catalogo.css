@@ -68,17 +68,6 @@
     left: 2%;
 }
 
-.film_input {
-    position: absolute;
-    top: 12%;
-    left: 2%;
-    width: 20%;
-    border: 3px solid #ccc;
-    box-sizing: border-box;
-    border-radius: 15px;
-    text-align: center;
-}
-
 .cerca_film {
     position: absolute;
     top: 16%;
@@ -109,3 +98,4 @@
     opacity: 0.75;
     cursor: pointer;
 }
+

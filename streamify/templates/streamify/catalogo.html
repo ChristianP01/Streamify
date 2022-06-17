@@ -4,6 +4,73 @@
 {% block children %}
 
 <html>
+
+    <style>
+        .filtrogenere {
+            width: 10%;
+            position: absolute;
+            top: 12%;
+            left: 23%;
+            border: 3px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 15px;
+            text-align: center;
+            background-color: #FFFFFF;
+        }
+
+        .min_score {
+            position: absolute;
+            top: 17%;
+            left: 23%;
+            width: 4%;
+        }
+
+        .max_score {
+            position: absolute;
+            top: 17%;
+            left: 28%;
+            width: 4%;
+        }
+        .label_min {
+            position: absolute;
+            top: 20%;
+            left: 23%;
+            width: 4%;
+        }
+
+        .label_max {
+            position: absolute;
+            top: 20%;
+            left: 28%;
+            width: 4%;
+        }
+
+        .film_input {
+            position: absolute;
+            top: 12%;
+            left: 2%;
+            width: 20%;
+            border: 3px solid #F34G42;
+            box-sizing: border-box;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .sort_down {
+            position: absolute;
+            right: 24.7%;
+            top: 41.3%;
+            width: 1.5%;
+        }
+
+        .sort_up {
+            position: absolute;
+            right: 35%;
+            top: 41.3%;
+            width: 1.5%;
+        }
+    </style>
+
     
     <title> Catalogo </title>
 
@@ -20,20 +87,34 @@
           </div>
         {% endfor %}
 
-
         <a href="/streamify/account/"><img class="userpng" src="{% static "imgs/user.png" %}" alt="Image"></a>
         <a href="/streamify/home/"><img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image"></a>
-
+        <a href="/streamify/catalogo_sort/up/"><img class="sort_up" src="{% static "imgs/sort_up.png" %}" alt="Image"></a>
+        <a href="/streamify/catalogo_sort/down/"><img class="sort_down" src="{% static "imgs/sort_down.png" %}" alt="Image"></a>
+        
         <form action="/streamify/cercaFilm/" method="POST">
             {% csrf_token %}
-            <input type="text" class="film_input" placeholder="Inserisci titolo" name="film_search" required>
+            <input type="text" class="film_input" placeholder="Inserisci titolo" name="film_search_title">
+
+            <select id="generi" name="generi" class="filtrogenere">
+                <option value=""/>
+            {% for genere in lista_generi %}
+                <option value={{genere}}> {{genere}} </option>
+            {% endfor %}
+            </select>
+
+            <label class="label_min"> Voto minimo: </label>
+            <label class="label_max"> Voto massimo: </label>
+            <input type="number" class="min_score" name="min_score" min="1" max="5"><br><br>
+            <input type="number" class="max_score" name="max_score" min="1" max="5"><br><br>
+
             <a href="/streamify/catalogo/"> <input type="button" class="reset" value="Reset"> </a>
             <input type="submit" class="cerca_film" value="Cerca">
         </form>
 
         <p class="welcome"> Catalogo </p>
         <br><br><br>
-
+        
         <table class="listafilm" name="listafilm">
             <tr>
                 <th>Titolo </th>
@@ -53,15 +134,7 @@
                     </td>
                     <td> {{film.anno_uscita}} </td>
                     <td>
-                        {% for k,v in avgs.items %}
-                            {% if k == film.titolo %}
-                                {% if v.voto__avg %}
-                                    {{v.voto__avg | floatformat:2}}
-                                {% else %}
-                                    <p> N/A </p>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
+                        {{film.get_mediavoto}}
                     </td>
                     <td>
                         <form action="/streamify/guarda_film/{{film.titolo}}/" method="GET">

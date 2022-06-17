@@ -5,10 +5,10 @@
     <style>
 
         .logo {
-            position: absolute;
-            right: 0px;
-            bottom: 0px;
-            width: 10%;
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            width: 8%;
             align-self: center;
         }
 
@@ -51,7 +51,7 @@
         }
 
         .w3-sidebar{height:100%;width:200px;background-color:#fff;position:fixed!important;z-index:1;overflow:auto}
-        .w3-bar-block .w3-dropdown-hover,.w3-bar-block .w3-dropdown-click{width:100%}
+        .w3-bar-block .w3-dropdown-hover,.w3-bar-block .w3-dropdown-click{width:100%;}
         .w3-card {box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)}
         .w3-animate-left{position:relative;animation:animateleft 0.4s}
         .w3-bar-item{padding:8px 16px;float:left;width:auto;border:none;display:block;outline:0}
@@ -74,7 +74,7 @@
 
     {% comment %} SideBar {% endcomment %}
     <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="leftMenu">
-        <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Close &times;</button>
+        <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Chiudi &times;</button>
         <a href="/streamify/home/" class="w3-bar-item w3-button"><input type="button" class="sidebar_button" value="Homepage"/></a>
         <a href="/streamify/catalogo/" class="w3-bar-item w3-button"><input type="button" class="sidebar_button" value="Catalogo"/></a>
         <a href="/streamify/account/" class="w3-bar-item w3-button"><input type="button" class="sidebar_button" value="Account"/></a>

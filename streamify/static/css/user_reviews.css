@@ -1,0 +1,19 @@
+.review {
+    text-align: center;
+    width: 20%;
+    height: 30px;
+    border:none;
+    border-radius:5px;
+    color:#fff;
+    background-color:#1859c9;
+    cursor:pointer;
+}
+
+.review:hover {
+    opacity: 0.75;
+}
+
+.welcome {
+    text-align: center;
+    font-size: 40px;
+}

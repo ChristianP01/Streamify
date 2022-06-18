@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load replace_titles %}
 
 {% block children %}
 
@@ -99,7 +100,7 @@
             <select id="generi" name="generi" class="filtrogenere">
                 <option value=""/>
             {% for genere in lista_generi %}
-                <option value={{genere}}> {{genere}} </option>
+                <option value={{genere}}> {{genere.name | replace_titles}} </option>
             {% endfor %}
             </select>
 
@@ -126,10 +127,12 @@
 
             {% for film in film_list %}
                 <tr>
-                    <td> {{film.titolo}} </td>
+                    <td>
+                        <a href="/streamify/descr_film/{{film.titolo}}"> {{film.titolo | replace_titles}} </a>
+                    </td>
                     <td>
                         {% for genere in film.generi.all %}
-                            {{genere}}
+                            {{genere.name | replace_titles}}
                         {% endfor %}
                     </td>
                     <td> {{film.anno_uscita}} </td>

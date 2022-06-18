@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load replace_titles %}
 
 {% block children %}
 
@@ -27,12 +28,12 @@
     </head>
 
     {% if logged_user is None %}
-        Effettua il login per lasciare una recensione per {{film.titolo}}
+        Effettua il login per lasciare una recensione per {{film.titolo | replace_titles}}
     {% else %}
 
     <center>
 
-        <p class="welcome"> Lascia una recensione a {{film.titolo}} </p> <br>
+        <p class="welcome"> Lascia una recensione a {{film.titolo | replace_titles}} </p> <br>
 
         <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
         <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">

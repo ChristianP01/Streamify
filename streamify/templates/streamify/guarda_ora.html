@@ -6,7 +6,7 @@
         {% else %}
 
             {% if logged_user is not None %}
-                {{logged_user}}, vuoi guardare {{film.titolo}}?
+                {{logged_user}}, vuoi guardare {{film.titolo | replace_titles}}?
                 <br><br>
 
                 <form action="/streamify/account/" method="POST">
@@ -15,7 +15,7 @@
                 </form>
 
             {% else %}
-                Il film {{film.titolo}} è disponibile nel nostro catalogo, è richiesto il login per guardarlo.
+                Il film {{film.titolo | replace_titles}} è disponibile nel nostro catalogo, è richiesto il login per guardarlo.
             {% endif %}
 
         {% endif %}

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load replace_titles %}
 
 {% block children %}
 
@@ -42,7 +43,7 @@
                                     
                                     {% for film in lista_film %}
                                             <a href="/streamify/review/{{film.titolo}}">
-                                                <input type="button" class="film_button" value="{{film.titolo}}"/>
+                                                <input type="button" class="film_button" value="{{film.titolo | replace_titles}}"/>
                                             </a> <br><br>
                                     {% endfor %}
 
@@ -51,7 +52,7 @@
                                   {% if recommended_films %}
                                     <b> Ti consigliamo di guardare: </b> <br><br>
                                     {% for film in recommended_films %}
-                                        <input type="button" class="recommended_button" value="{{film}}"/>
+                                        <input type="button" class="recommended_button" value="{{film | replace_titles}}"/>
                                       <br><br>
                                     {% endfor %}
                                   {% endif %}

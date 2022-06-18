@@ -12,18 +12,6 @@ from django.views.decorators.http import require_http_methods
 # Contiene la dimensione del dizionario dei generi da considerare come preferiti, su cui applicare il RS.
 RECOM_SYS_NUMS = 2
 
-#---------------Carimento recensioni-------------------#
-# avgs = {}
-# # Dizionario contenente la coppia {titolo_film: voto}
-# for film in Film.objects.all():
-#     voto_medio = Recensione.objects.filter(film=film).aggregate(Avg('voto'))["voto__avg"]
-
-#     if voto_medio is not None:
-#         avgs[film.titolo] = float(voto_medio)
-#     else:
-#         avgs[film.titolo] = 1.0
-#-------------------------------------------------------------#
-
 #---------------------Lista generi-------------------------#
 # Serve al catalogo per rimanere aggiornato sui nuovi generi (lato HTML)
 lista_generi = Genere.objects.all()
@@ -353,4 +341,17 @@ def film_sort(request, type):
         "logged_user": logged_user,
         "film_list": sorted(Film.objects.all(), key= lambda film: film.get_mediavoto(), reverse=type),
         "lista_generi": lista_generi
+    })
+
+@require_http_methods(["GET","POST"])
+def descrizione_film(request, titolo_film):
+
+    try:
+        logged_user = request.session["logged_user"]
+    except:
+        logged_user = None
+
+    return render(request,template_name="streamify/descr_film.html", context={
+        "logged_user": logged_user,
+        "film": Film.objects.filter(titolo=titolo_film)[0]
     })

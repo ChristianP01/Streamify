@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% load replace_titles %}
+
+{% block children %}
+
+<style>
+    head {
+        font-size: 10px;
+    }
+</style>
+
+<html>
+    <title> Descrizione Film </title> 
+
+    <center>
+        <h1> 
+            {{film.titolo | replace_titles}}
+        </h1> <br><br>
+
+        <h3>Generi:</h3>
+        {% for genere in film.generi.all %} 
+            {{genere.name | replace_titles}} <br>
+        {% endfor %} <br><br>
+
+        <h3>Anno di uscita:</h3> <br>
+        {{film.anno_uscita}} <br><br>
+
+        <h3>Trama:</h3> <br>
+        {{film.trama}} <br><br>
+
+        <h3>Media voto:</h3> <br>
+        {{film.get_mediavoto}}    
+    </center>
+        
+</html>
+
+{% endblock %}

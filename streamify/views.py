@@ -155,8 +155,7 @@ def account(request):
 
         if len(logged_two_highest) < RECOM_SYS_NUMS:
             return render(request, template_name="streamify/account.html", context={
-            "logged_user": request.session["logged_user"],
-            "lista_film": utente.film_guardati.all(),
+            "logged_user": utente,
             "recommended_films": None
             })
 
@@ -194,8 +193,7 @@ def account(request):
 
 
         return render(request, template_name="streamify/account.html", context={
-            "logged_user": request.session["logged_user"],
-            "lista_film": utente.film_guardati.all(),
+            "logged_user": utente,
             "generi_dict": json.dumps(generi),
             "recommended_films": recommended_films
         })
@@ -203,7 +201,6 @@ def account(request):
     except:
         return render(request, template_name="streamify/account.html", context={
         "logged_user": None,
-        "lista_film": None,
         "recommended_films": None
     })
 
@@ -244,8 +241,7 @@ def review_final(request):
             new_rece.save()
 
             return render(request, template_name="account.html", context={
-                "logged_user": user.username,
-                "lista_film": user.film_guardati.all(),
+                "logged_user": user,
                 "generi_dict": json.dumps(request.session["generi"]),
                 "recommended_films": request.session["recommended_films"]
             })
@@ -254,8 +250,7 @@ def review_final(request):
         else:
             messages.error(request, "Hai già recensito questo film!")
             return render(request, template_name="account.html", context={
-                "logged_user": user.username,
-                "lista_film": user.film_guardati.all(),
+                "logged_user": user,
                 "generi_dict": json.dumps(request.session["generi"]),
                 "recommended_films": request.session["recommended_films"]
             })
@@ -347,11 +342,35 @@ def film_sort(request, type):
 def descrizione_film(request, titolo_film):
 
     try:
-        logged_user = request.session["logged_user"]
+        logged_user = Utente.objects.filter(username=request.session["logged_user"])[0]
     except:
         logged_user = None
 
     return render(request,template_name="streamify/descr_film.html", context={
-        "logged_user": logged_user,
+        "logged_user": logged_user.username,
         "film": Film.objects.filter(titolo=titolo_film)[0]
+    })
+
+@require_http_methods(["GET","POST"])
+def set_preferito(request, titolo_film, scelta):
+    # Scelta può valere {yes, no}
+    # yes --> verrà inserito tra i preferiti
+    # no --> verrà rimosso dai preferiti
+
+    try:
+        logged_user = Utente.objects.filter(username=request.session["logged_user"])[0]
+
+        if scelta == "yes":
+            logged_user.film_preferiti.add(Film.objects.filter(titolo=titolo_film)[0])
+        else:
+            logged_user.film_preferiti.remove(Film.objects.filter(titolo=titolo_film)[0])
+
+    except:
+        messages.error(request, "Effettua il login per inserire un film tra i preferiti!")
+        return render(request, template_name="home.html")
+
+    return render(request, template_name="account.html", context={
+        "logged_user": logged_user,
+        "generi_dict": json.dumps(request.session["generi"]),
+        "recommended_films": request.session["recommended_films"]
     })

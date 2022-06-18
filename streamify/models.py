@@ -49,10 +49,13 @@ class Utente(models.Model):
     password = models.CharField(max_length=25, default=DEFAULT_GENERIC_VALUE)
     nome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
     cognome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
-    film_guardati = models.ManyToManyField(Film, default=None)
+    
+    # Related name sono nomi che indicano il nome con cui, in altri models, si dovrà accedere a questi parametri.
+    film_guardati = models.ManyToManyField(Film, default=None, related_name="film_guardati")
+    film_preferiti = models.ManyToManyField(Film, default=None, related_name="film_preferiti")
     
     def __str__(self):
-        out = "Utente " + self.username + ", avente la e-mail " + self.email + ". La sua password è " + self.password + "."
+        out = "Utente " + self.username + ", avente e-mail " + self.email + "."
         return out
 
     class Meta:

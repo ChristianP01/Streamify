@@ -232,12 +232,14 @@ def review_final(request):
 
     try:
         value = request.POST["selected_star"]
+        commento_scritto = request.POST["commento_scritto"]
+        print(commento_scritto)
         film = Film.objects.get(titolo=request.session["film"])
         user = Utente.objects.get(username=request.session["logged_user"])
 
         if len(Recensione.objects.filter(utente=user, film=film)) == 0:
             messages.success(request, "Hai recensito correttamente il film!")
-            new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto="Commento_Di_Prova")
+            new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto=commento_scritto)
             new_rece.save()
 
             return render(request, template_name="account.html", context={

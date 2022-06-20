@@ -4,35 +4,59 @@
 
 {% block children %}
 
-<style>
-    head {
-        font-size: 10px;
-    }
-</style>
-
 <html>
     <title> Descrizione Film </title>
 
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/descr_film.css' %}">
+    </head>
+
     <center>
-        <h1> 
-            {{film.titolo | replace_titles}}
-        </h1> <br><br>
+        <h1> <br>
+            <font color="white"> {{film.titolo | replace_titles}} </font>
+        </h1> <br>
 
-        <h3>Generi:</h3>
-        {% for genere in film.generi.all %} 
-            {{genere.name | replace_titles}} <br>
-        {% endfor %} <br><br>
+        <table class="listafilm" name="listafilm">
+            <tr>
+                <th> <h3>Generi:</h3> </th>
+                <th><h3>Anno di uscita:</h3></th>
+                <th><h3>Trama:</h3></th>
+                <th><h3>Media voto:</h3></th>
 
-        <h3>Anno di uscita:</h3> <br>
-        {{film.anno_uscita}} <br><br>
+            <tr>
+                <td>
+                    {% for genere in film.generi.all %} 
+                        {{genere.name | replace_titles}} <br>
+                    {% endfor %}
+                </td>
 
-        <h3>Trama:</h3> <br>
-        {{film.trama}} <br><br>
+                <td>    
+                    {{film.anno_uscita}} 
+                </td>
+                
+                <td style="width: 30%;">    
+                    {{film.trama}} 
+                </td>
 
-        <h3>Media voto:</h3> <br>
-        {{film.get_mediavoto}}    
+                <td>
+                    {{film.get_mediavoto}}
+                </td>
+
+            </tr>
+        </table>
+
+        <div class="container mt-5 mb-5 d-flex justify-content-center">
+            <div class="card rounded">
+                <div class=" d-block justify-content-center">
+                    <div class="area1 p-3 py-5"></div>
+                    <div class="area2 p- text-center px-3"></div>
+                </div>
+            </div>
+        </div>
+
+
     </center>
-        
+    
 </html>
 
 {% endblock %}

@@ -8,6 +8,10 @@ from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
 from django.db.models import Avg
 from django.views.decorators.http import require_http_methods
+from .methods import check_login
+
+#TODO Decoratore @login_required personale
+#TODO Creare app "auth" per gestire l'autenticazione e poi reindirzza a /streamify/home.
 
 # Contiene la dimensione del dizionario dei generi da considerare come preferiti, su cui applicare il RS.
 RECOM_SYS_NUMS = 2
@@ -25,49 +29,49 @@ def homepage(request):
 
     return render(request,template_name="streamify/home.html")
 
-@require_http_methods("POST")
-def registrato(request):
-    uname = request.POST['uname']
-    pwd = request.POST['psw']
-    email = request.POST['email']
-    nome = request.POST['nome']
-    cognome = request.POST['cognome']
+# @require_http_methods("POST")
+# def registrato(request):
+#     uname = request.POST['uname']
+#     pwd = request.POST['psw']
+#     email = request.POST['email']
+#     nome = request.POST['nome']
+#     cognome = request.POST['cognome']
 
-    # Controllo se l'utente esiste già
-    utenti = Utente.objects.all()
-    for utente in utenti:
-        if utente.username == uname:
-            messages.error(request, "Username già in uso!")
-            return render(request,template_name="streamify/home.html")
+#     # Controllo se l'utente esiste già
+#     utenti = Utente.objects.all()
+#     for utente in utenti:
+#         if utente.username == uname:
+#             messages.error(request, "Username già in uso!")
+#             return render(request,template_name="streamify/home.html")
             
-    # Creo l'utente e lo aggiungo al database
-    new_user = Utente(uname, email, pwd, nome, cognome)
-    new_user.save()
+#     # Creo l'utente e lo aggiungo al database
+#     new_user = Utente(uname, email, pwd, nome, cognome)
+#     new_user.save()
 
-    messages.success(request, f"Utente creato con successo! Benvenuto, {uname}!")
-    return render(request,template_name="streamify/home.html")
+#     messages.success(request, f"Utente creato con successo! Benvenuto, {uname}!")
+#     return render(request,template_name="streamify/home.html")
 
 
-# TODO Ripetizione tra logged() e catalogo()
-@require_http_methods("POST")
-def logged(request):
-    pwd = request.POST['psw']
-    uname = request.POST['uname']
+# # TODO Ripetizione tra logged() e catalogo()
+# @require_http_methods("POST")
+# def logged(request):
+#     pwd = request.POST['psw']
+#     uname = request.POST['uname']
 
-    try:
-        logged_user = Utente.objects.get(username=uname, password=pwd)
-        request.session["logged_user"] = logged_user.username
+#     try:
+#         logged_user = Utente.objects.get(username=uname, password=pwd)
+#         request.session["logged_user"] = logged_user.username
 
-        messages.success(request, f"Benvenuto {request.session['logged_user']}")
-        return render(request,template_name="streamify/catalogo.html", context={
-            "logged_user": logged_user,
-            "film_list": Film.objects.all(),
-            "lista_generi": lista_generi
-        })
+#         messages.success(request, f"Benvenuto {request.session['logged_user']}")
+#         return render(request,template_name="streamify/catalogo.html", context={
+#             "logged_user": logged_user,
+#             "film_list": Film.objects.all(),
+#             "lista_generi": lista_generi
+#         })
 
-    except:
-        messages.error(request, "Credenziali errate!")
-        return render(request,template_name="streamify/home.html")
+#     except:
+#         messages.error(request, "Credenziali errate!")
+#         return render(request,template_name="streamify/home.html")
 
 @require_http_methods(["GET","POST"])
 def catalogo(request):
@@ -218,7 +222,7 @@ def review(request, titolo_film):
             "logged_user": user,
             "film": film,
             "lista_recensioni": lista_recensioni
-            })
+        })
     
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")
@@ -232,12 +236,14 @@ def review_final(request):
 
     try:
         value = request.POST["selected_star"]
+        commento_scritto = request.POST["commento_scritto"]
+        print(commento_scritto)
         film = Film.objects.get(titolo=request.session["film"])
         user = Utente.objects.get(username=request.session["logged_user"])
 
         if len(Recensione.objects.filter(utente=user, film=film)) == 0:
             messages.success(request, "Hai recensito correttamente il film!")
-            new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto="Commento_Di_Prova")
+            new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto=commento_scritto)
             new_rece.save()
 
             return render(request, template_name="account.html", context={

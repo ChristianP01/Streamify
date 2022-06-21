@@ -21,9 +21,13 @@
             margin-bottom: 15px;
         }
 
-        .body {
-            background-color: #fff;
-        }
+        {% comment %} body {
+            background: url({% static 'imgs/sfondo.jpg'%}) no-repeat center center fixed;
+            -webkit-background-size:cover;
+            -moz--background-size:cover;
+            -o--background-size:cover;
+            background-size: cover;
+        } {% endcomment %}
         
         .alert.success {
             background-color: #04AA6D;
@@ -70,6 +74,7 @@
             background-color:#1859c9;
             cursor:pointer;
         }
+
     </style>
 
     {% comment %} SideBar {% endcomment %}
@@ -85,9 +90,7 @@
         <div class="w3-container">
         </div>
       </div>
-      {% comment %} Fine SideBar {% endcomment %}
 
-    {% comment %} Qui dentro ogni pagina che estenderà scriverà il suo HTML {% endcomment %}
     {% block children %}
         {% comment %}  {% endcomment %}
     {% endblock %}

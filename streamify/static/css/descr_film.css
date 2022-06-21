@@ -1,44 +1,5 @@
-.review {
-    text-align: center;
-    width: 20%;
-    height: 30px;
-    border:none;
-    border-radius:5px;
-    color:#fff;
-    background-color:#1859c9;
-    cursor:pointer;
-}
-
-.review:hover {
-    opacity: 0.75;
-}
-
-.welcome {
-    text-align: center;
-    color: white;
-    font-size: 40px;
-}
-
-/* Tabella dei film */
-.listarecensioni {
-    text-align: center;
-    border-radius: 10px;
-    border: 3px solid black;
-}
-
-/* Prima riga (grassetto) */
-.listarecensioni th {
-    font-size: 20px;
-    border: 1px solid black;
-    border-radius: 10px;
-}
-
-/* Padding tra le colonne */
-.listarecensioni td {
-    font-size: 20px;
-    padding: 0 90px;
-    border: 1px solid black;
-    border-radius: 10px;
+head {
+    font-size: 10px;
 }
 
 .card {
@@ -81,4 +42,28 @@
     border-radius: 10px;
     width: 49px;
     margin-right: 10px
+}
+
+.listafilm {
+    width: 70%;
+    text-align: center;
+    border-radius: 10px;
+    border: 3px solid black;
+}
+
+/* Prima riga (grassetto) */
+.listafilm th {
+    font-size: 20px;
+    padding: 20 0;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+/* Padding tra le colonne */
+.listafilm td {
+    font-size: 18px;
+    width: 20%;
+    padding: 0 40px;
+    border: 1px solid black;
+    border-radius: 10px;
 }

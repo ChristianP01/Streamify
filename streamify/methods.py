@@ -3,6 +3,8 @@ Questo file dovrebbe fungere da interfaccia stile Java, l'idea è quella di sepa
 da quella che mi serve in Python puro.
 """
 
+from os import uname
+from turtle import home
 from .models import Genere, Recensione, Utente
 
 # Creo il dizionario con la sintassi {genere: numero_di_film_guardati_di_quel_genere}
@@ -61,3 +63,18 @@ def calcolaPercents(utente, generi):
         percents[k] = int(v/num_films*100)
 
     return percents
+
+
+def check_login(funz_view):
+    """Re-implementazione di @login_required, dovuta alla poca personalizzazione disponibile."""
+    
+
+    def wrapper(req, *args):
+        try:
+            logged_user = Utente.objects.filter(username=req.session['logged_user'])[0].username
+            return funz_view(req, logged_user)
+        except:
+            from .views import homepage
+            print("ANON")
+            return homepage(req, None)
+    return wrapper

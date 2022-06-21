@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'streamify',
+    'my_auth',
     'crispy_forms',
     'django_truncate'
 ]

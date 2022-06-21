@@ -7,14 +7,7 @@ from streamify.models import Utente
 class TestNewUser(TestCase):
 
     def setUp(self):
-        test_user = Utente.objects.create(
-            username = "TestUser",
-            nome = "Test",
-            cognome = "User",
-            password = "Test",
-            email = "test@test.com"
-        )
-
+        """Testa il corretto login di un utente (esistente)"""
         c = Client()
         response = c.post('/auth/accedi/', {'uname': 'ChristianP01', 'psw': 'gg'})
         print(response)

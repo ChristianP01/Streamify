@@ -14,7 +14,7 @@ def registrati(request):
     for utente in utenti:
         if utente.username == uname:
             messages.error(request, "Username già in uso!")
-            return render(request,template_name="streamify/home.html")
+            return render(request,template_name="streamify/home.html", status=409)
             
     # Creo l'utente e lo aggiungo al database
     new_user = Utente(uname, email, pwd, nome, cognome)
@@ -41,4 +41,4 @@ def logged(request):
 
     except:
         messages.error(request, "Credenziali errate!")
-        return render(request,template_name="streamify/home.html")
+        return render(request,template_name="streamify/home.html", status=401)

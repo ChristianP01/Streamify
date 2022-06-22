@@ -163,7 +163,7 @@ def account(request):
         return render(request, template_name="streamify/account.html", context={
         "logged_user": None,
         "recommended_films": None
-    })
+    }, status=401)
 
 @require_http_methods(["GET", "POST"])
 def review(request, titolo_film):

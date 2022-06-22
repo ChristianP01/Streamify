@@ -118,7 +118,7 @@ def account(request):
             return render(request, template_name="streamify/account.html", context={
             "logged_user": utente,
             "recommended_films": None
-            })
+            }, status=204)
 
 
         for other_user in Utente.objects.all().exclude(username=utente.username):
@@ -157,7 +157,7 @@ def account(request):
             "logged_user": utente,
             "generi_dict": json.dumps(generi),
             "recommended_films": recommended_films
-        })
+        }, status=200)
 
     except:
         return render(request, template_name="streamify/account.html", context={

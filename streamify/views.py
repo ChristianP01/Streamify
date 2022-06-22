@@ -72,11 +72,11 @@ def guardaFilm(request, titolo_film):
                 "film_list": Film.objects.all(),
                 "logged_user": logged_user,
                 "lista_generi": lista_generi
-            })
+            }, status=409)
 
     except:
         messages.error(request, "Effettua il login per guardare il film!")
-        return render(request, template_name="home.html")
+        return render(request, template_name="home.html", status=401)
 
 @require_http_methods(["GET", "POST"])
 def account(request):

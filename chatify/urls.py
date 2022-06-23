@@ -4,6 +4,5 @@ from . import views
 app_name = "chatify"
 
 urlpatterns = [
-    path("chatws/", views.chatws, name="chatws"),
-    path("<str:room>/", views.chatroom,name="chatroom")
+    path("chat/<str:room>/", views.chatroom,name="chatroom")
 ]

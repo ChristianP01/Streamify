@@ -8,9 +8,6 @@
     <h1 id="header">{{msg}}</h1>
   </div>
 
-
-    <p> Chatlog: </p>
-
     <div class="container mt-3" id="chatlog">
 
       <!--
@@ -20,8 +17,8 @@
     </div>
 
     <br><br>
-    <label for="uname">Username:</label>
-    <input type="text" name="uname" id="username"> <br> <br>
+    <input type="hidden" value={{logged_user}} id="username">
+    
     <label for="msg">Messaggio:</label>
     <input type="text" name="msg" id="msg"> <br> <br>
 
@@ -29,11 +26,10 @@
 
 </center>
 
-
 <script>
 
 
-var socket = new WebSocket('ws://127.0.0.1:8000/chatify/chatws/' + document.querySelector("#header").innerHTML + '/');
+var socket = new WebSocket('ws://127.0.0.1:8000/chatify/chat/' + document.querySelector("#header").innerHTML + '/');
 
 var roomUsersColors = {};
 
@@ -48,7 +44,7 @@ socket.onmessage = function(event){
   var chatMsg = document.createElement("div");
   chatMsg.className = "media border p-3"; 
   var img = document.createElement("img");
-  img.src = "http://127.0.0.1:8000/streamify/static/imgs/avatar_pic.png";
+  img.src = "/static/imgs/avatar_pic.png";
   img.alt = data["user"];
   img.className = "mr-3 mt-3 rounded-circle"
   img.style = "width:60px;filter:hue-rotate("+ roomUsersColors[data["user"]] +"deg);";

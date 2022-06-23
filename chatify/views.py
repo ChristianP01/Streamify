@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render
 from streamify.models import Utente
 
@@ -12,4 +13,5 @@ def chatroom(request, room):
         }, status=200)
 
     except:
+        messages.error(request, "Effettua il login per chattare!")
         return render(request, "streamify/home.html", status=401)

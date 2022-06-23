@@ -261,7 +261,7 @@ def cercaFilm(request):
         "logged_user": logged_user,
         "film_list": film_query_matched,
         "lista_generi": lista_generi
-    })
+    }, status=200)
 
 @require_http_methods(["GET","POST"])
 def my_reviews(request):

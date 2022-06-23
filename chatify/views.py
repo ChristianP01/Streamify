@@ -6,6 +6,10 @@ def chatroom(request, room):
 
     try:
         logged_user = Utente.objects.get(username=request.session["logged_user"])
+        
+        # Controllo se l'utente loggato ha guardato il film, prima di entrare nella chat.
+        # Room contiene il titolo del film
+        logged_user.film_guardati.get(titolo=room)
 
         return render(request, "chatify/chatpage2.html", context={
             "msg": room,

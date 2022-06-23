@@ -47,7 +47,7 @@
             class="close" title="Close Modal">&times;</span>
 
             <!-- Contenuto del Modal -->
-            <form class="modal-content-login animate" action="/streamify/logged/" method="POST">
+            <form class="modal-content-login animate" action="/auth/accedi/" method="POST">
                 {% csrf_token %}
                 <div class="popup_container">
                     <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">
@@ -72,7 +72,7 @@
             class="close" title="Close Modal">&times;</span>
 
             <!-- Contenuto del Modal -->
-            <form class="modal-content-register animate" action="/streamify/registrato/" method="POST">
+            <form class="modal-content-register animate" action="/auth/registrati/" method="POST">
                 {% csrf_token %}
                 <div class="popup_container" id="container_register">
                     <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">

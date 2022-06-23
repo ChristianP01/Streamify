@@ -29,49 +29,6 @@ def homepage(request):
 
     return render(request,template_name="streamify/home.html")
 
-# @require_http_methods("POST")
-# def registrato(request):
-#     uname = request.POST['uname']
-#     pwd = request.POST['psw']
-#     email = request.POST['email']
-#     nome = request.POST['nome']
-#     cognome = request.POST['cognome']
-
-#     # Controllo se l'utente esiste già
-#     utenti = Utente.objects.all()
-#     for utente in utenti:
-#         if utente.username == uname:
-#             messages.error(request, "Username già in uso!")
-#             return render(request,template_name="streamify/home.html")
-            
-#     # Creo l'utente e lo aggiungo al database
-#     new_user = Utente(uname, email, pwd, nome, cognome)
-#     new_user.save()
-
-#     messages.success(request, f"Utente creato con successo! Benvenuto, {uname}!")
-#     return render(request,template_name="streamify/home.html")
-
-
-# # TODO Ripetizione tra logged() e catalogo()
-# @require_http_methods("POST")
-# def logged(request):
-#     pwd = request.POST['psw']
-#     uname = request.POST['uname']
-
-#     try:
-#         logged_user = Utente.objects.get(username=uname, password=pwd)
-#         request.session["logged_user"] = logged_user.username
-
-#         messages.success(request, f"Benvenuto {request.session['logged_user']}")
-#         return render(request,template_name="streamify/catalogo.html", context={
-#             "logged_user": logged_user,
-#             "film_list": Film.objects.all(),
-#             "lista_generi": lista_generi
-#         })
-
-#     except:
-#         messages.error(request, "Credenziali errate!")
-#         return render(request,template_name="streamify/home.html")
 
 @require_http_methods(["GET","POST"])
 def catalogo(request):
@@ -115,11 +72,11 @@ def guardaFilm(request, titolo_film):
                 "film_list": Film.objects.all(),
                 "logged_user": logged_user,
                 "lista_generi": lista_generi
-            })
+            }, status=409)
 
     except:
         messages.error(request, "Effettua il login per guardare il film!")
-        return render(request, template_name="home.html")
+        return render(request, template_name="home.html", status=401)
 
 @require_http_methods(["GET", "POST"])
 def account(request):
@@ -161,7 +118,7 @@ def account(request):
             return render(request, template_name="streamify/account.html", context={
             "logged_user": utente,
             "recommended_films": None
-            })
+            }, status=204)
 
 
         for other_user in Utente.objects.all().exclude(username=utente.username):
@@ -200,13 +157,13 @@ def account(request):
             "logged_user": utente,
             "generi_dict": json.dumps(generi),
             "recommended_films": recommended_films
-        })
+        }, status=200)
 
     except:
         return render(request, template_name="streamify/account.html", context={
         "logged_user": None,
         "recommended_films": None
-    })
+    }, status=401)
 
 @require_http_methods(["GET", "POST"])
 def review(request, titolo_film):
@@ -222,14 +179,14 @@ def review(request, titolo_film):
             "logged_user": user,
             "film": film,
             "lista_recensioni": lista_recensioni
-        })
+        }, status=200)
     
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")
         return render(request, template_name="home.html", context={
             "logged_user": None,
             "lista_film": None
-        })
+        }, status=401)
         
 
 def review_final(request):
@@ -237,7 +194,6 @@ def review_final(request):
     try:
         value = request.POST["selected_star"]
         commento_scritto = request.POST["commento_scritto"]
-        print(commento_scritto)
         film = Film.objects.get(titolo=request.session["film"])
         user = Utente.objects.get(username=request.session["logged_user"])
 
@@ -250,7 +206,7 @@ def review_final(request):
                 "logged_user": user,
                 "generi_dict": json.dumps(request.session["generi"]),
                 "recommended_films": request.session["recommended_films"]
-            })
+            }, status=200)
 
 
         else:
@@ -259,12 +215,12 @@ def review_final(request):
                 "logged_user": user,
                 "generi_dict": json.dumps(request.session["generi"]),
                 "recommended_films": request.session["recommended_films"]
-            })
+            }, status=409)
             
 
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")
-        return render(request, template_name="home.html")
+        return render(request, template_name="home.html", status=401)
 
 @require_http_methods(["POST"])
 def cercaFilm(request):
@@ -305,7 +261,7 @@ def cercaFilm(request):
         "logged_user": logged_user,
         "film_list": film_query_matched,
         "lista_generi": lista_generi
-    })
+    }, status=200)
 
 @require_http_methods(["GET","POST"])
 def my_reviews(request):
@@ -317,15 +273,15 @@ def my_reviews(request):
             "logged_user": logged_user,
             "film_list": logged_user.film_guardati.all(),
             "lista_recensioni": Recensione.objects.filter(utente=logged_user)
-        })
+        }, status=200)
 
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")
-        return render(request, template_name="home.html")
+        return render(request, template_name="home.html", status=401)
 
 
 @require_http_methods(["GET","POST"])
-def film_sort(request, type):
+def film_sort(request, sort_type):
     # Type = {up | down} in base al tipo di sorting richiesto.
 
     try:
@@ -333,29 +289,23 @@ def film_sort(request, type):
     except:
         logged_user = None
 
-    if type == "up":
-        type = True
+    if sort_type == "up":
+        sort_type = True
     else:
-        type = False
+        sort_type = False
 
     return render(request,template_name="streamify/catalogo.html", context={
         "logged_user": logged_user,
-        "film_list": sorted(Film.objects.all(), key= lambda film: film.get_mediavoto(), reverse=type),
+        "film_list": sorted(Film.objects.all(), key= lambda film: film.get_mediavoto(), reverse=sort_type),
         "lista_generi": lista_generi
-    })
+    }, status=200)
 
 @require_http_methods(["GET","POST"])
 def descrizione_film(request, titolo_film):
 
-    try:
-        logged_user = Utente.objects.filter(username=request.session["logged_user"])[0]
-    except:
-        logged_user = None
-
     return render(request,template_name="streamify/descr_film.html", context={
-        "logged_user": logged_user.username,
         "film": Film.objects.filter(titolo=titolo_film)[0]
-    })
+    }, status=200)
 
 @require_http_methods(["GET","POST"])
 def set_preferito(request, titolo_film, scelta):
@@ -371,12 +321,14 @@ def set_preferito(request, titolo_film, scelta):
         else:
             logged_user.film_preferiti.remove(Film.objects.filter(titolo=titolo_film)[0])
 
+        return render(request, template_name="account.html", context={
+            "logged_user": logged_user,
+            "generi_dict": json.dumps(request.session["generi"]),
+            "recommended_films": request.session["recommended_films"]
+        }, status=200)
+
     except:
         messages.error(request, "Effettua il login per inserire un film tra i preferiti!")
-        return render(request, template_name="home.html")
+        return render(request, template_name="home.html", status=401)
 
-    return render(request, template_name="account.html", context={
-        "logged_user": logged_user,
-        "generi_dict": json.dumps(request.session["generi"]),
-        "recommended_films": request.session["recommended_films"]
-    })
+    

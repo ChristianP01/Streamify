@@ -57,7 +57,6 @@ class TestCercaFilmAnonymous(TestCase):
 
         self.client = Client()
         session = self.client.session
-        session['logged_user'] = None
         session.save()
 
         data = {

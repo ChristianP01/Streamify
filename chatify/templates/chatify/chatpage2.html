@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
+{% load replace_titles %}
 {% block title %} Chat Page {% endblock %}
 
 {% block children %}
 <center>
   <div class="jumbotron">
-    <h1 id="header">{{msg}}</h1>
+    <input type="hidden" id="header" value={{msg}}>
+    <h1>{{msg | replace_titles}}</h1>
   </div>
 
     <div class="container mt-3" id="chatlog">
@@ -18,7 +20,7 @@
 
     <br><br>
     <input type="hidden" value={{logged_user}} id="username">
-    
+
     <label for="msg">Messaggio:</label>
     <input type="text" name="msg" id="msg"> <br> <br>
 
@@ -29,7 +31,7 @@
 <script>
 
 
-var socket = new WebSocket('ws://127.0.0.1:8000/chatify/chat/' + document.querySelector("#header").innerHTML + '/');
+var socket = new WebSocket('ws://127.0.0.1:8000/chatify/chat/' + document.querySelector("#header").value + '/');
 
 var roomUsersColors = {};
 

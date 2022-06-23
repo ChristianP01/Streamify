@@ -11,7 +11,6 @@ from django.views.decorators.http import require_http_methods
 from .methods import check_login
 
 #TODO Decoratore @login_required personale
-#TODO Creare app "auth" per gestire l'autenticazione e poi reindirzza a /streamify/home.
 
 # Contiene la dimensione del dizionario dei generi da considerare come preferiti, su cui applicare il RS.
 RECOM_SYS_NUMS = 2

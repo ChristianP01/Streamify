@@ -1,10 +1,5 @@
-from urllib import request
-from django.http import HttpRequest, HttpResponse
 from django.test import Client, TestCase
-from pyrsistent import v
-from my_auth.views import logged
-from streamify.models import Film, Genere, Recensione, Utente
-
+from streamify.models import Film, Genere, Utente
 
 class TestCercaFilmLogged(TestCase):
 
@@ -30,13 +25,44 @@ class TestCercaFilmLogged(TestCase):
         session['logged_user'] = test_user.username
         session.save()
 
+        #---------------------------Ricerca 1------------------------------#
+
         data = {
             'film_search_title' : test_film.titolo,
             'generi' : '',
             'min_score' : 3,
             'max_score' : ''
         }
+        self.response = self.client.post('/streamify/cercaFilm/', data)
 
+        #---------------------------Ricerca 2------------------------------#
+
+        data = {
+            'film_search_title' : test_film.titolo,
+            'generi' : '',
+            'min_score' : '',
+            'max_score' : ''
+        }
+        self.response = self.client.post('/streamify/cercaFilm/', data)
+
+        #---------------------------Ricerca 3------------------------------#
+
+        data = {
+            'film_search_title' : test_film.titolo,
+            'generi' : '',
+            'min_score' : '',
+            'max_score' : 3
+        }
+        self.response = self.client.post('/streamify/cercaFilm/', data)
+
+        #---------------------------Ricerca 4------------------------------#
+
+        data = {
+            'film_search_title' : '',
+            'generi' : '',
+            'min_score' : 2,
+            'max_score' : 4
+        }
         self.response = self.client.post('/streamify/cercaFilm/', data)
 
     def test_cercafilm_success(self):

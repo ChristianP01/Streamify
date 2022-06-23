@@ -1,10 +1,5 @@
-from urllib import request, response
-from django.http import HttpRequest, HttpResponse
 from django.test import Client, TestCase
-from django.urls import reverse
-from my_auth.views import logged
 from streamify.models import Film, Genere, Utente
-
 
 class TestGuardafilmSuccess(TestCase):
 

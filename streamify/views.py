@@ -273,15 +273,15 @@ def my_reviews(request):
             "logged_user": logged_user,
             "film_list": logged_user.film_guardati.all(),
             "lista_recensioni": Recensione.objects.filter(utente=logged_user)
-        })
+        }, status=200)
 
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")
-        return render(request, template_name="home.html")
+        return render(request, template_name="home.html", status=401)
 
 
 @require_http_methods(["GET","POST"])
-def film_sort(request, type):
+def film_sort(request, sort_type):
     # Type = {up | down} in base al tipo di sorting richiesto.
 
     try:
@@ -289,29 +289,23 @@ def film_sort(request, type):
     except:
         logged_user = None
 
-    if type == "up":
-        type = True
+    if sort_type == "up":
+        sort_type = True
     else:
-        type = False
+        sort_type = False
 
     return render(request,template_name="streamify/catalogo.html", context={
         "logged_user": logged_user,
-        "film_list": sorted(Film.objects.all(), key= lambda film: film.get_mediavoto(), reverse=type),
+        "film_list": sorted(Film.objects.all(), key= lambda film: film.get_mediavoto(), reverse=sort_type),
         "lista_generi": lista_generi
-    })
+    }, status=200)
 
 @require_http_methods(["GET","POST"])
 def descrizione_film(request, titolo_film):
 
-    try:
-        logged_user = Utente.objects.filter(username=request.session["logged_user"])[0]
-    except:
-        logged_user = None
-
     return render(request,template_name="streamify/descr_film.html", context={
-        "logged_user": logged_user.username,
         "film": Film.objects.filter(titolo=titolo_film)[0]
-    })
+    }, status=200)
 
 @require_http_methods(["GET","POST"])
 def set_preferito(request, titolo_film, scelta):
@@ -327,12 +321,14 @@ def set_preferito(request, titolo_film, scelta):
         else:
             logged_user.film_preferiti.remove(Film.objects.filter(titolo=titolo_film)[0])
 
+        return render(request, template_name="account.html", context={
+            "logged_user": logged_user,
+            "generi_dict": json.dumps(request.session["generi"]),
+            "recommended_films": request.session["recommended_films"]
+        }, status=200)
+
     except:
         messages.error(request, "Effettua il login per inserire un film tra i preferiti!")
-        return render(request, template_name="home.html")
+        return render(request, template_name="home.html", status=401)
 
-    return render(request, template_name="account.html", context={
-        "logged_user": logged_user,
-        "generi_dict": json.dumps(request.session["generi"]),
-        "recommended_films": request.session["recommended_films"]
-    })
+    

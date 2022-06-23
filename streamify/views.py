@@ -179,14 +179,14 @@ def review(request, titolo_film):
             "logged_user": user,
             "film": film,
             "lista_recensioni": lista_recensioni
-        })
+        }, status=200)
     
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")
         return render(request, template_name="home.html", context={
             "logged_user": None,
             "lista_film": None
-        })
+        }, status=401)
         
 
 def review_final(request):
@@ -194,7 +194,6 @@ def review_final(request):
     try:
         value = request.POST["selected_star"]
         commento_scritto = request.POST["commento_scritto"]
-        print(commento_scritto)
         film = Film.objects.get(titolo=request.session["film"])
         user = Utente.objects.get(username=request.session["logged_user"])
 
@@ -207,7 +206,7 @@ def review_final(request):
                 "logged_user": user,
                 "generi_dict": json.dumps(request.session["generi"]),
                 "recommended_films": request.session["recommended_films"]
-            })
+            }, status=200)
 
 
         else:
@@ -216,12 +215,12 @@ def review_final(request):
                 "logged_user": user,
                 "generi_dict": json.dumps(request.session["generi"]),
                 "recommended_films": request.session["recommended_films"]
-            })
+            }, status=409)
             
 
     except:
         messages.error(request, "Effettua il login per lasciare una recensione!")
-        return render(request, template_name="home.html")
+        return render(request, template_name="home.html", status=401)
 
 @require_http_methods(["POST"])
 def cercaFilm(request):

@@ -49,9 +49,21 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'streamify',
     'my_auth',
+    'chatify',
     'crispy_forms',
-    'django_truncate'
+    'django_truncate',
+    'channels'
 ]
+
+WSGI_APPLICATION = 'ProgettoTW.wsgi.application'
+ASGI_APPLICATION = 'ProgettoTW.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -86,7 +98,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ProgettoTW.wsgi.application'
 
 
 # Database

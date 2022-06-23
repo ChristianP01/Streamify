@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Chat Page {% endblock %}
+
+{% block children %}
+<center>
+  <div class="jumbotron">
+    <h1 id="header">{{msg}}</h1>
+  </div>
+
+
+    <p> Chatlog: </p>
+
+    <div class="container mt-3" id="chatlog">
+
+      <!--
+        https://www.w3schools.com/bootstrap4/bootstrap_media_objects.asp
+      -->
+
+    </div>
+
+    <br><br>
+    <label for="uname">Username:</label>
+    <input type="text" name="uname" id="username"> <br> <br>
+    <label for="msg">Messaggio:</label>
+    <input type="text" name="msg" id="msg"> <br> <br>
+
+    <button onclick="btnClick()">Chatta</button>
+
+</center>
+
+
+<script>
+
+
+var socket = new WebSocket('ws://127.0.0.1:8000/chatify/chatws/' + document.querySelector("#header").innerHTML + '/');
+
+var roomUsersColors = {};
+
+socket.onmessage = function(event){
+
+  var container = document.querySelector("#chatlog");
+  var data = JSON.parse(event.data);
+
+  if(roomUsersColors[data["user"]]==undefined)
+    roomUsersColors[data["user"]] = Math.random() * 360;
+
+  var chatMsg = document.createElement("div");
+  chatMsg.className = "media border p-3"; 
+  var img = document.createElement("img");
+  img.src = "http://127.0.0.1:8000/streamify/static/imgs/avatar_pic.png";
+  img.alt = data["user"];
+  img.className = "mr-3 mt-3 rounded-circle"
+  img.style = "width:60px;filter:hue-rotate("+ roomUsersColors[data["user"]] +"deg);";
+  var innerDiv = document.createElement("div");
+  innerDiv.className = "media-body";
+
+  var ts = new Date();
+  innerDiv.innerHTML =    "<h4>" + data["user"]+ " <small><i>" + 
+                              ts.getHours()+":"+ts.getMinutes()+":"+ts.getSeconds() + " </i></small></h4>" + 
+                              "<p>" + data["msg"] + "</p>";
+
+  chatMsg.appendChild(img);
+  chatMsg.appendChild(innerDiv);
+  container.appendChild(chatMsg);
+
+}
+
+function btnClick() {
+
+    var obj = new Object();
+    obj.user = document.querySelector('#username').value;
+    obj.msg = document.querySelector('#msg').value;
+    var string = JSON.stringify(obj);
+    socket.send(string);
+    document.querySelector('#username').disabled = true
+    document.querySelector('#msg').value = "";
+
+  }
+
+</script>
+
+{% endblock %}

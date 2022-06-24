@@ -31,14 +31,14 @@ def homepage(request):
 
 @require_http_methods(["GET","POST"])
 def catalogo(request):
-    # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nei filtri del catalogo.
+    # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nei filtri del catalogo.s
 
     try:
         logged_user = Utente.objects.get(username=request.session["logged_user"])
     except:
         logged_user = None
 
-    return render(request,template_name="streamify/new_table.html", context={
+    return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
             "lista_generi": lista_generi

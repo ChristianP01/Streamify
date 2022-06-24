@@ -29,7 +29,7 @@ def logged(request):
     uname = request.POST['uname']
 
     try:
-        logged_user = Utente.objects.get(username=uname, password=pwd)
+        logged_user = Utente.objects.filter(username=uname, password=pwd)[0]
         request.session["logged_user"] = logged_user.username
 
         messages.success(request, f"Benvenuto {request.session['logged_user']}")
@@ -37,7 +37,7 @@ def logged(request):
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
             "lista_generi": Genere.objects.all()
-        })
+        }, status=200)
 
     except:
         messages.error(request, "Credenziali errate!")

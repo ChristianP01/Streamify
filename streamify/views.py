@@ -50,12 +50,12 @@ def guardaFilm(request, titolo_film):
     #Se un utente prova a guardare un film senza essere loggato (ad esempio scrivendo direttamente l'URL del film
     # oppure i cookie della sessione scadono, ritorno None come utente per avvisare l'utente di effettuare il login.)
     try:
-        logged_user = request.session["logged_user"]
+        logged_user = Utente.objects.get(username=request.session["logged_user"])
 
-        if Film.objects.filter(titolo=titolo_film)[0] not in Utente.objects.filter(username=logged_user)[0].film_guardati.all():
+        if Film.objects.get(titolo=titolo_film) not in logged_user.film_guardati.all():
 
             #Update del DB se l'utente non ha ancora guardato il film
-            Utente.objects.filter(username=logged_user)[0].film_guardati.add(Film.objects.filter(titolo=titolo_film)[0])
+            logged_user.film_guardati.add(Film.objects.get(titolo=titolo_film))
 
             messages.success(request, f"{titolo_film} guardato con successo!")
             return render(request,template_name="streamify/catalogo.html", context={
@@ -84,7 +84,7 @@ def account(request):
     try:
 
         # Se l'utente è entrato correttamente, lo cerco nel database al fine di ottenere i film che ha guardato.
-        utente = Utente.objects.filter(username=request.session["logged_user"])[0]
+        utente = Utente.objects.get(username=request.session["logged_user"])
 
         generi = calcolaGeneri(utente)
 
@@ -140,7 +140,7 @@ def account(request):
                             
                             for film in other_user.film_guardati.all():
                                 if film not in utente.film_guardati.all() and \
-                                     Genere.objects.filter(name=logged_genre[0])[0] in film.generi.all():
+                                     Genere.objects.get(name=logged_genre[0]) in film.generi.all():
                                         recommended_films.append(film.titolo)
 
         # Salvo i film nella sessione al fine di poterli ritornare in futuro.
@@ -266,7 +266,7 @@ def cercaFilm(request):
 def my_reviews(request):
 
     try:
-        logged_user = Utente.objects.filter(username=request.session["logged_user"])[0]
+        logged_user = Utente.objects.get(username=request.session["logged_user"])
 
         return render(request,template_name="streamify/user_reviews.html", context={
             "logged_user": logged_user,
@@ -303,7 +303,7 @@ def film_sort(request, sort_type):
 def descrizione_film(request, titolo_film):
 
     return render(request,template_name="streamify/descr_film.html", context={
-        "film": Film.objects.filter(titolo=titolo_film)[0]
+        "film": Film.objects.get(titolo=titolo_film)
     }, status=200)
 
 @require_http_methods(["GET","POST"])
@@ -313,12 +313,12 @@ def set_preferito(request, titolo_film, scelta):
     # no --> verrà rimosso dai preferiti
 
     try:
-        logged_user = Utente.objects.filter(username=request.session["logged_user"])[0]
+        logged_user = Utente.objects.get(username=request.session["logged_user"])
 
         if scelta == "yes":
-            logged_user.film_preferiti.add(Film.objects.filter(titolo=titolo_film)[0])
+            logged_user.film_preferiti.add(Film.objects.get(titolo=titolo_film))
         else:
-            logged_user.film_preferiti.remove(Film.objects.filter(titolo=titolo_film)[0])
+            logged_user.film_preferiti.remove(Film.objects.get(titolo=titolo_film))
 
         return render(request, template_name="account.html", context={
             "logged_user": logged_user,

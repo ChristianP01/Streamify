@@ -302,7 +302,7 @@ def film_sort(request, sort_type):
 @require_http_methods(["GET","POST"])
 def descrizione_film(request, titolo_film):
 
-    return render(request,template_name="streamify/descr_film.html", context={
+    return render(request,template_name="streamify/new_descr.html", context={
         "film": Film.objects.get(titolo=titolo_film)
     }, status=200)
 

@@ -282,7 +282,7 @@ def my_reviews(request):
 @require_http_methods(["GET","POST"])
 def film_sort(request, sort_type):
     # Type = {up | down} in base al tipo di sorting richiesto.
-
+    
     try:
         logged_user = request.session["logged_user"]
     except:

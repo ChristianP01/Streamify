@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+{% load replace_titles %}
+
+{% block children %}
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <title>Chat</title>
+        <link href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' rel='stylesheet'>
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet'>
+        <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+        <style>
+            ::-webkit-scrollbar {
+            width: 8px;
+            }
+            
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1; 
+            }
+                
+            ::-webkit-scrollbar-thumb {
+                background: #888; 
+            }
+            
+            ::-webkit-scrollbar-thumb:hover {
+                background: #555; 
+            }
+
+            {% comment %} border: 1px solid gray;
+                border-radius: 10px; {% endcomment %}
+            
+            .no-box-shadow{box-shadow: none}.no-box-shadow:focus{box-shadow: none}.day{font-size: 9px}.heart{border: 1px soild green !important;border-color: green !important;border-radius: 22px}.heart-icon{color: green}.comment-text{font-size: 12px}.delete{font-size: 13px;cursor: pointer}</style>
+        
+        </head>
+        
+        <body className='snippet-body'>
+            <br><br>
+            <input type="hidden" id="header" value={{msg}}>
+            <center>
+                <h1>{{msg | replace_titles}}</h1>
+            </center>
+            <input type="hidden" value={{logged_user}} id="username">
+
+            <div class="container mt-5 mb-5" style>
+                <div class="d-flex justify-content-center row">
+                    <div class="col-md-8">
+                        <div class="d-flex flex-row align-items-center add-comment p-2 bg-white rounded">
+                            <input type="text" class="form-control border-0 no-box-shadow ml-1" placeholder="Invia un messaggio agli altri utenti..." id="msg">
+                        </div>
+                        <div class="p-3 bg-white mt-2 rounded">
+                            <div class="d-flex justify-content-between"></div>
+                            <div class="comment-text text-justify mt-2" id="chatlog"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                var socket = new WebSocket('ws://127.0.0.1:8000/chatify/chat/' + document.querySelector("#header").value + '/');
+                
+                var roomUsersColors = {};
+                
+                socket.onmessage = function(event){
+                
+                  var container = document.querySelector("#chatlog");
+                  var data = JSON.parse(event.data);
+                
+                  if(roomUsersColors[data["user"]]==undefined)
+                    roomUsersColors[data["user"]] = Math.random() * 360;
+                
+                  var chatMsg = document.createElement("div");
+                  chatMsg.className = "media border p-3";
+                  var img = document.createElement("img");
+                  img.src = "/static/imgs/avatar_pic.png";
+                  img.alt = data["user"];
+                  img.className = "mr-3 mt-3 rounded-circle"
+                  img.style = "width:60px;filter:hue-rotate("+ roomUsersColors[data["user"]] +"deg);";
+                  var innerDiv = document.createElement("div");
+                  innerDiv.className = "comment-text text-justify mt-2"
+                
+                  var ts = new Date();
+                  var seconds = ts.getSeconds()
+                  if (seconds < 10) {seconds = "0"+seconds;}
+                  
+                  innerDiv.innerHTML =    "<h4>" + data["user"]+ " <small><i>" + 
+                                              ts.getHours()+":"+ts.getMinutes()+":"+ seconds + " </i></small></h4>" + 
+                                              "<p>" + data["msg"] + "</p>";
+
+                  chatMsg.appendChild(img);
+                  chatMsg.appendChild(innerDiv);
+                  container.appendChild(chatMsg);
+
+                  var span_username = document.getElementById("span_username");
+                  var span_timestamp = document.getElementById("span_timestamp");
+                  
+                  span_username.textContent = data["user"]
+                  span_timestamp.textContent = ts.getHours()+":"+ts.getMinutes()+":"+ts.getSeconds()
+                
+                }
+
+                const msg_sent = document.getElementById('msg');
+                msg_sent.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        btnClick();
+                    }
+                });
+                
+                function btnClick() {
+                    var obj = new Object();
+                    obj.user = document.querySelector('#username').value;
+                    obj.msg = document.querySelector('#msg').value;
+                    var string = JSON.stringify(obj);
+                    socket.send(string);
+                    document.querySelector('#username').disabled = true
+                    document.querySelector('#msg').value = "";
+                
+                }
+            </script>
+        <script type='text/javascript' src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
+    </body>
+</html>
+
+{% endblock %}

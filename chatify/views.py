@@ -11,7 +11,7 @@ def chatroom(request, room):
         # Room contiene il titolo del film
         logged_user.film_guardati.get(titolo=room)
 
-        return render(request, "chatify/chatpage2.html", context={
+        return render(request, "chatify/chat_page.html", context={
             "msg": room,
             "logged_user": logged_user.username
         }, status=200)

@@ -74,25 +74,24 @@
         }
 
     </style>
-
     <body>
         
-    <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="leftMenu">
-        <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Chiudi &times;</button>
-        <a href="/streamify/home/" class="w3-bar-item w3-button"><input type="button" class="sidebar_button" value="Homepage"/></a>
-        <a href="/streamify/catalogo/" class="w3-bar-item w3-button"><input type="button" class="sidebar_button" value="Catalogo"/></a>
-        <a href="/streamify/account/" class="w3-bar-item w3-button"><input type="button" class="sidebar_button" value="Account"/></a>
-      </div>
-
-      <div class="w3-teal">
-        <button class="w3-button w3-teal w3-xlarge w3-left" onclick="openLeftMenu()">&#9776;</button>
-        <div class="w3-container">
+        <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="leftMenu">
+            <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Chiudi &times;</button>
+            <a href="/streamify/home/" class="w3-bar-item w3-button"><input type="button" class="sidebar_button" value="Homepage"/></a>
+            <a href="/streamify/catalogo/" class="w3-bar-item w3-button"><input type="button" class="sidebar_button" value="Catalogo"/></a>
+            <a href="/streamify/account/" class="w3-bar-item w3-button"><input type="button" class="sidebar_button" value="Account"/></a>
         </div>
-      </div>
 
-        {% block children %}
-        {% endblock %}
-        <img src="{% static "imgs/logo.png" %}" alt="Logo" class="logo">
+        <div class="w3-teal">
+            <button class="w3-button w3-teal w3-xlarge w3-left" onclick="openLeftMenu()">&#9776;</button>
+            <div class="w3-container">
+            </div>
+        </div>
+
+            {% block children %}
+            {% endblock %}
+            <img src="{% static "imgs/logo.png" %}" alt="Logo" class="logo">
       
     </body>
 </html>

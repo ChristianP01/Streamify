@@ -258,24 +258,28 @@
                   </div>
 
                   <div class="id">
+
                     <div class="input-icons" id="email_div">
                       <legend for="email">Email</legend>
                       <div class="icon-center">
                           <input class="input" type="email" id="email" name="email" required>
                       </div>
-                  </div>
+                    </div>
+
                     <div class="input-icons">
                       <legend for="username">Username</legend>
                       <div class="icon-center">
                           <input class="input" name="username" type="text" id="username" required>
                       </div>
                     </div>
+
                       <div class="input-icons">
                           <legend for="password">Password</legend>
                           <div class="icon-center">
                               <input class="input" name="password" type="password" id="password" required>
                           </div>
                       </div>
+
                   </div>
                   <div class="buttons">
                     <button class="btn blue-btn"><p id="submit">Crea account</p></button>
@@ -285,7 +289,6 @@
                 </div>
               </div>
             </div>
-          
     </body>
 
     <script>
@@ -293,9 +296,9 @@
 
         if (document.getElementById("submit").innerHTML == "Crea account" ) {
 
-          document.getElementById("first").value = "s"
-          document.getElementById("last"). value ="s"
-          document.getElementById("email").value = "s@s.com"
+          document.getElementById("first").value = "s";
+          document.getElementById("last"). value ="s";
+          document.getElementById("email").value = "s@s.com";
 
           document.getElementById("form").action = "/auth/accedi/"
           document.getElementById("name_div").style.display = 'none';
@@ -307,14 +310,14 @@
 
         else {
 
-          document.getElementById("first").value = ""
-          document.getElementById("last"). value =""
-          document.getElementById("email").value = ""
+          document.getElementById("first").value = "";
+          document.getElementById("last"). value ="";
+          document.getElementById("email").value = "";
 
-          document.getElementById("form").action = "/auth/registrati/"
+          document.getElementById("form").action = "/auth/registrati/";
           document.getElementById("name_div").style.display = 'inline';
           document.getElementById("surname_div").style.display = 'inline';
-          document.getElementById("email_div").style.display = 'inline';
+          document.getElementById("email_div").style.display = 'block';
           document.getElementById("submit").innerHTML="Crea account";
           document.getElementById("switch").innerHTML="Già registrato?";
         }

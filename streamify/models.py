@@ -69,7 +69,7 @@ class Recensione(models.Model):
     commento_scritto = models.CharField(max_length=500, default=None)
 
     def __str__(self):
-        return f"Voto {self.voto} per {self.film.titolo.replace('_', ' ')}\n\n{self.commento_scritto}"
+        return f"{self.utente.username}: Voto {self.voto} per {self.film.titolo.replace('_', ' ')}\n\n{self.commento_scritto}"
 
     class Meta:
         verbose_name_plural = "Recensioni"

@@ -38,7 +38,7 @@ def catalogo(request):
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
             "lista_generi": lista_generi
-        })
+        }, status=200)
 
 @require_http_methods(["GET","POST"])
 def guardaFilm(request, titolo_film):

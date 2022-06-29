@@ -1,10 +1,5 @@
-from urllib import request
-from django.http import HttpRequest, HttpResponse
 from django.test import Client, TestCase
-from pyrsistent import v
-from my_auth.views import logged
 from streamify.models import Film, Genere, Recensione, Utente
-
 
 class TestAccountSuccess(TestCase):
 

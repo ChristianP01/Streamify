@@ -13,8 +13,8 @@ class TestLoginSuccess(TestCase):
             cognome='test')
         
         creds = {
-            'uname': 'testUser',
-            'psw': 'testUser'}
+            'username': 'testUser',
+            'password': 'testUser'}
 
         self.client = Client()
         self.response = self.client.post('/auth/accedi/', creds)
@@ -37,8 +37,8 @@ class TestLoginFail(TestCase):
             cognome='test')
         
         creds = {
-            'uname': 'wrongUser',
-            'psw': 'wrongPwd'}
+            'username': 'wrongUser',
+            'password': 'wrongPwd'}
 
         self.client = Client()
         self.response = self.client.post('/auth/accedi/', creds)

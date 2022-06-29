@@ -1,8 +1,4 @@
-from urllib import request
-from django.http import HttpRequest, HttpResponse
-from django.test import Client, TestCase
-from my_auth.views import logged
-from streamify.models import Utente
+from django.test import TestCase
 from streamify.templatetags.replace_titles import replace_titles
 
 class TestLoginSuccess(TestCase):

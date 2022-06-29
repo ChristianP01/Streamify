@@ -1,7 +1,4 @@
-from urllib import request
-from django.http import HttpRequest, HttpResponse
 from django.test import Client, TestCase
-from my_auth.views import logged
 from streamify.models import Utente
 
 class TestRegisterSuccess(TestCase):
@@ -9,8 +6,8 @@ class TestRegisterSuccess(TestCase):
     def setUp(self):
 
         creds = {
-            'uname' :'testUser',
-            'psw' : 'testUser',
+            'username' :'testUser',
+            'password' : 'testUser',
             'email' : 'test@test.it',
             'nome' : 'Test',
             'cognome' : 'test'}
@@ -35,8 +32,8 @@ class TestRegisterFail(TestCase):
             cognome='test')
 
         creds = {
-            'uname' :'testUser',
-            'psw' : 'testUser',
+            'username' :'testUser',
+            'password' : 'testUser',
             'email' : 'test@test.it',
             'nome' : 'Test',
             'cognome' : 'test'}

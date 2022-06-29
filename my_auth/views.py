@@ -13,14 +13,14 @@ def registrati(request):
     utenti = Utente.objects.all()
     for utente in utenti:
         if utente.username == username:
-            messages.error(request, "Username già in uso!")
+            messages.add_message(request, messages.ERROR, "Username già in uso!")
             return render(request,template_name="streamify/home.html", status=409)
             
     # Creo l'utente e lo aggiungo al database
     new_user = Utente(username, email, pwd, nome, cognome)
     new_user.save()
 
-    messages.success(request, f"Utente creato con successo! Benvenuto, {username}!")
+    messages.add_message(request, messages.SUCCESS, f"Utente creato con successo! Benvenuto, {new_user.username}!")
     return render(request,template_name="streamify/home.html")
 
 
@@ -32,7 +32,7 @@ def logged(request):
         logged_user = Utente.objects.filter(username=username, password=pwd)[0]
         request.session["logged_user"] = logged_user.username
 
-        messages.success(request, f"Benvenuto {request.session['logged_user']}")
+        messages.add_message(request, messages.SUCCESS, f"Benvenuto {request.session['logged_user']}")
         return render(request,template_name="streamify/catalogo.html", context={
             "logged_user": logged_user,
             "film_list": Film.objects.all(),
@@ -40,5 +40,5 @@ def logged(request):
         }, status=200)
 
     except:
-        messages.error(request, "Credenziali errate!")
+        messages.add_message(request, messages.ERROR, "Credenziali errate!")
         return render(request,template_name="streamify/home.html", status=401)

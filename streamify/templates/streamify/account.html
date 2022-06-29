@@ -23,61 +23,52 @@
               {{message}}
             </div>
         {% endfor %}
+          <div class="container mt-5 mb-5 d-flex justify-content-center">
+              <div class="card rounded">
+                  <div class=" d-block justify-content-center">
+                      <div class="area1 p-3 py-5"> </div>
+                      <div class="area2 p- text-center px-3">
+                          <div class="image mr-3"> <img src="{% static "imgs/christian.png" %}" class="rounded-circle" width="100" />
+                              <h4 class=" name mt-3 ">{{logged_user.username}}</h4>
 
+                                <a href="/streamify/my_reviews/">
+                                  <input type="button" class="options" value="Le mie recensioni">
+                                </a> <br><br>
 
-        {% if logged_user is not None %}
+                                <b>Film guardati: </b> <br><br>
+                                  
+                                  {% for film in logged_user.film_guardati.all %}
+                                    <a href="/streamify/review/{{film.titolo}}">
+                                        <input type="button" class="film_button" value="{{film.titolo | replace_titles}}"/>
+                                      </a>
 
-            <div class="container mt-5 mb-5 d-flex justify-content-center">
-                <div class="card rounded">
-                    <div class=" d-block justify-content-center">
-                        <div class="area1 p-3 py-5"> </div>
-                        <div class="area2 p- text-center px-3">
-                            <div class="image mr-3"> <img src="{% static "imgs/christian.png" %}" class="rounded-circle" width="100" />
-                                <h4 class=" name mt-3 ">{{logged_user.username}}</h4>
-
-                                  <a href="/streamify/my_reviews/">
-                                    <input type="button" class="options" value="Le mie recensioni">
-                                  </a> <br><br>
-
-                                  <b>Film guardati: </b> <br><br>
-                                    
-                                    {% for film in logged_user.film_guardati.all %}
-                                      <a href="/streamify/review/{{film.titolo}}">
-                                          <input type="button" class="film_button" value="{{film.titolo | replace_titles}}"/>
+                                      {% if film in logged_user.film_preferiti.all %}
+                                        <a href="/streamify/set_preferito/{{film.titolo}}/no" >
+                                          <img class="starpng" src="{% static "imgs/star_film_yes.png" %}" width="35"/>
                                         </a>
+                                      {% else %}
+                                        <a href="/streamify/set_preferito/{{film.titolo}}/yes">
+                                          <img class="starpng" src="{% static "imgs/star_film_no.png" %}" width="35"/>
+                                        </a>
+                                      {% endif %} <br><br>
+                                  {% endfor %}
 
-                                        {% if film in logged_user.film_preferiti.all %}
-                                          <a href="/streamify/set_preferito/{{film.titolo}}/no" >
-                                            <img class="starpng" src="{% static "imgs/star_film_yes.png" %}" width="35"/>
-                                          </a>
-                                        {% else %}
-                                          <a href="/streamify/set_preferito/{{film.titolo}}/yes">
-                                            <img class="starpng" src="{% static "imgs/star_film_no.png" %}" width="35"/>
-                                          </a>
-                                        {% endif %} <br><br>
-                                    {% endfor %}
-
-                                  <br>
-                                  {% comment %} Lista dei film consigliati {% endcomment %}
-                                  {% if recommended_films %}
-                                    <b> Ti consigliamo di guardare: </b> <br><br>
-                                    {% for film in recommended_films %}
-                                        <input type="button" class="recommended_button" value="{{film | replace_titles}}"/>
-                                      <br><br>
-                                    {% endfor %}
-                                  {% endif %}
-                                  
-                                  
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        {% else %}
-            Effettua il login per visualizzare questa pagina.
-
-        {% endif %}
+                                <br>
+                                {% comment %} Lista dei film consigliati {% endcomment %}
+                                {% if recommended_films %}
+                                  <b> Ti consigliamo di guardare: </b> <br><br>
+                                  {% for film in recommended_films %}
+                                      <input type="button" class="recommended_button" value="{{film | replace_titles}}"/>
+                                    <br><br>
+                                  {% endfor %}
+                                {% endif %}
+                                
+                                
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
 
         <div class="radar">
           <canvas id="radarChart"></canvas>

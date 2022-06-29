@@ -1,14 +1,10 @@
-from audioop import avg
 import json
 from django.shortcuts import render
-from django.views.generic import ListView
-from numpy import append, sort
-from streamify.methods import calcolaGeneri, calcolaPercents, calcolaVoti
+from streamify.methods import calcolaGeneri, calcolaVoti
 from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
-from django.db.models import Avg
 from django.views.decorators.http import require_http_methods
-from .methods import check_login
+
 
 #TODO Decoratore @login_required personale
 
@@ -31,7 +27,7 @@ def homepage(request):
 
 @require_http_methods(["GET","POST"])
 def catalogo(request):
-    # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nei filtri del catalogo.s
+    # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nei filtri del catalogo
 
     try:
         logged_user = Utente.objects.get(username=request.session["logged_user"])
@@ -57,7 +53,7 @@ def guardaFilm(request, titolo_film):
             #Update del DB se l'utente non ha ancora guardato il film
             logged_user.film_guardati.add(Film.objects.get(titolo=titolo_film))
 
-            messages.success(request, f"{titolo_film} guardato con successo!")
+            messages.add_message(request, messages.SUCCESS, f"{titolo_film} guardato con successo!")
             return render(request,template_name="streamify/catalogo.html", context={
                 "film_list": Film.objects.all(),
                 "logged_user": logged_user,
@@ -66,7 +62,7 @@ def guardaFilm(request, titolo_film):
 
         # Se invece l'ha già guardato
         else:
-            messages.success(request, f"Hai già guardato {titolo_film}!")
+            messages.add_message(request, messages.WARNING, f"Hai già guardato {titolo_film}!")
             return render(request,template_name="streamify/catalogo.html", context={
                 "film_list": Film.objects.all(),
                 "logged_user": logged_user,
@@ -74,7 +70,7 @@ def guardaFilm(request, titolo_film):
             }, status=409)
 
     except:
-        messages.error(request, "Effettua il login per guardare il film!")
+        messages.add_message(request, messages.ERROR, "Effettua il login per guardare il film!")
         return render(request, template_name="home.html", status=401)
 
 @require_http_methods(["GET", "POST"])
@@ -159,9 +155,9 @@ def account(request):
         }, status=200)
 
     except:
-        return render(request, template_name="streamify/account.html", context={
-        "logged_user": None,
-        "recommended_films": None
+        messages.add_message(request, messages.ERROR, "Effettua il login per visitare il tuo account!")
+        return render(request, template_name="streamify/home.html", context={
+        "logged_user": None
     }, status=401)
 
 @require_http_methods(["GET", "POST"])
@@ -181,7 +177,7 @@ def review(request, titolo_film):
         }, status=200)
     
     except:
-        messages.error(request, "Effettua il login per lasciare una recensione!")
+        messages.add_message(request, messages.ERROR, "Effettua il login per lasciare una recensione!")
         return render(request, template_name="home.html", context={
             "logged_user": None,
             "lista_film": None
@@ -197,10 +193,10 @@ def review_final(request):
         user = Utente.objects.get(username=request.session["logged_user"])
 
         if len(Recensione.objects.filter(utente=user, film=film)) == 0:
-            messages.success(request, "Hai recensito correttamente il film!")
             new_rece = Recensione(voto=value, utente=user, film=film, commento_scritto=commento_scritto)
             new_rece.save()
 
+            messages.add_message(request, messages.SUCCESS, "Hai recensito correttamente il film!")
             return render(request, template_name="account.html", context={
                 "logged_user": user,
                 "generi_dict": json.dumps(request.session["generi"]),
@@ -209,7 +205,7 @@ def review_final(request):
 
 
         else:
-            messages.error(request, "Hai già recensito questo film!")
+            messages.add_message(request, messages.WARNING, "Hai già recensito questo film!")
             return render(request, template_name="account.html", context={
                 "logged_user": user,
                 "generi_dict": json.dumps(request.session["generi"]),
@@ -218,7 +214,7 @@ def review_final(request):
             
 
     except:
-        messages.error(request, "Effettua il login per lasciare una recensione!")
+        messages.add_message(request, messages.ERROR, "Effettua il login per lasciare una recensione!")
         return render(request, template_name="home.html", status=401)
 
 @require_http_methods(["POST"])
@@ -275,7 +271,7 @@ def my_reviews(request):
         }, status=200)
 
     except:
-        messages.error(request, "Effettua il login per lasciare una recensione!")
+        messages.add_message(request, messages.ERROR, "Effettua il login per lasciare una recensione!")
         return render(request, template_name="home.html", status=401)
 
 
@@ -327,7 +323,7 @@ def set_preferito(request, titolo_film, scelta):
         }, status=200)
 
     except:
-        messages.error(request, "Effettua il login per inserire un film tra i preferiti!")
+        messages.add_message(request, messages.ERROR, "Effettua il login per inserire un film tra i preferiti!")
         return render(request, template_name="home.html", status=401)
 
     

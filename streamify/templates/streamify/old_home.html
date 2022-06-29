@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block children %}
+
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+
+    <body>
+        {% for message in messages %}
+            <div class="alert alert-info" role="alert" id="alert">
+                <span class="closebtn">&times;</span> 
+                {{message}}
+            </div>
+        {% endfor %}
+
+        <!-- Scritta benvenuto -->
+        <p class="welcome_label">
+            Benvenuto su Streamify!
+        </p>
+
+        <div class="box_home">
+            <p> Sei già iscritto? Esegui il login attraverso il bottone qui sotto </p>
+            <button onclick="document.getElementById('form_login').style.display='block'" class="button_home">Login</button>
+            <p> <br><br><br> </p>
+
+            <p> Per iscriverti, clicca qui! </p> 
+            <button onclick="document.getElementById('form_register').style.display='block'" class="button_home">Registrati</button>
+            <p> <br><br><br> </p>
+            
+            <form action="/streamify/catalogo/">
+                <p> Dai un'occhiata al catalogo in modalità guest! </p>
+                <button class="button_home">Entra</button>
+            </form>
+            <br><br>
+        </div>
+
+        <!--Modal login-->
+        <div id="form_login" class="modal">
+            
+            <!-- X in alto a destra -->
+            <span onclick="document.getElementById('form_login').style.display='none'"
+            class="close" title="Close Modal">&times;</span>
+
+            <!-- Contenuto del Modal -->
+            <form class="modal-content-login animate" action="/auth/accedi/" method="POST">
+                {% csrf_token %}
+                <div class="popup_container">
+                    <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">
+                        <br><br>
+                    <label for="uname"><b>Username</b></label>
+                    <input type="text" class="user_input" placeholder="Enter Username" name="uname" required>
+                        <br>
+                    <label for="psw"><b>Password</b></label>
+                    <input type="password" class="pwd_input" placeholder="Enter Password" name="psw" required>
+                        <br><br>
+                    <button type="submit" class="loginbtn">Login</button>
+                    <br><br>
+                </div>
+            </form>
+        </div> 
+
+        <!-- Modal register -->
+        <div id="form_register" class="modal">
+            
+            <!-- X in alto a destra -->
+            <span onclick="document.getElementById('form_register').style.display='none'"
+            class="close" title="Close Modal">&times;</span>
+
+            <!-- Contenuto del Modal -->
+            <form class="modal-content-register animate" action="/auth/registrati/" method="POST">
+                {% csrf_token %}
+                <div class="popup_container" id="container_register">
+                    <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">
+
+                        <br><br>
+
+                        <label for="uname"><b>Username</b></label>
+                        <input type="text" class="user_input" placeholder="Inserisci username" name="uname" required>
+    
+                            <br>
+    
+                        <label for="nome"><b>Nome</b></label>
+                        <input type="text" class="nome_input" placeholder="Inserisci nome" name="nome" required>
+    
+                            <br>
+    
+                        <label for="cognome"><b>Cognome</b></label>
+                        <input type="text" class="cognome_input" placeholder="Inserisci cognome" name="cognome" required>
+    
+                            <br>
+    
+                        <label for="psw"><b>Password</b></label>
+                        <input type="password" class="pwd_input" placeholder="Enter Password" name="psw" required>
+                        
+                            <br>
+
+                        <label for="email"><b>Email</b></label>
+                        <input type="email" class="user_input" placeholder="Enter Email" name="email" required>
+
+                            <br>
+
+                    <button type="submit" class="loginbtn">Registrati</button>
+                    <br><br>
+                </div>
+            </form>
+        </div> 
+    </body>
+
+    <script>
+        // Esci dal popup se clicchi fuori dalla finestra
+        var modal = document.getElementById('form_login')
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            window.setTimeout(function() {
+                
+                $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                    $(this).remove();
+                });
+            }, 5000);
+        });
+    </script>
+
+</html>
+
+{% endblock %}

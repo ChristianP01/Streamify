@@ -1,127 +1,347 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block children %}
-
+<!doctype html>
 <html>
     <head>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+      <meta charset='utf-8'>
+      <meta name='viewport' content='width=device-width, initial-scale=1'>
+      <title>Streamify</title>
+        
+        <style>
+          ::-webkit-scrollbar {
+            width: 8px;
+          }
 
-    <body>
+          ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+          }
+          
+          ::-webkit-scrollbar-thumb {
+            background: #888; 
+          }
+        
+          ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+          }
+          
+          @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
-        {% for message in messages %}
-            <div class="alert alert-info" role="alert">
-                {{message}}
-            </div>
-        {% endfor %}
+          * {
+            margin: 0;
+            padding: 0;
+          }
 
-        <!-- Scritta benvenuto -->
-        <p class="welcome_label">
-            Benvenuto su Streamify!
-        </p>
+          body {
+            font-family: "Poppins", sans-serif;
+            background-color: rgb(95, 95, 106);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+            color: white;
+          }
 
-        <div class="box_home">
-            <p> Sei già iscritto? Esegui il login attraverso il bottone qui sotto </p>
-            <button onclick="document.getElementById('form_login').style.display='block'" class="button_home">Login</button>
-            <p> <br><br><br> </p>
+          .container {
+            min-width: 80%;
+            min-height: 80%;
+            border-radius: 23px;
+            box-shadow: 0px 12px 24px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            background-color: rgba(170, 235, 223, 0.8);
+            position: relative;
+          }
 
-            <p> Per iscriverti, clicca qui! </p> 
-            <button onclick="document.getElementById('form_register').style.display='block'" class="button_home">Registrati</button>
-            <p> <br><br><br> </p>
-            
-            <form action="/streamify/catalogo/">
-                <p> Dai un'occhiata al catalogo in modalità guest! </p>
-                <button class="button_home">Entra</button>
-            </form>
-            <br><br>
+          .container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(140, 147, 223);
+            box-shadow: 10em 0 7em 5em rgb(140, 147, 223);
+            transform: skew(45deg);
+            z-index: -1;
+          }
+
+          .container::before {
+            content: "";
+            background: url("https://images.pexels.com/photos/2559941/pexels-photo-2559941.jpeg") center center/cover no-repeat;
+            filter: hue-rotate(15deg);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+          }
+
+          ul {
+            display: flex;
+            margin-left: 2em;
+          }
+
+          li {
+            list-style: none;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            padding-left: 5em;
+            position: relative;
+          }
+
+          .blue {
+            color: rgb(0, 128, 255);
+          }
+
+          .gray {
+            color: gray;
+          }
+
+          .blue-logo {
+            width: 23px;
+            height: 23px;
+            border-radius: 50%;
+            background-color: rgb(0, 128, 255);
+            cursor: pointer;
+            position: absolute;
+            left: 20%;
+          }
+
+          .hero {
+            padding-top: 2em;
+            padding-left: 4em;
+          }
+
+          legend {
+            color: gray;
+            font-size: 12px;
+          }
+
+          .form {
+            width: 40%;
+            margin-top: 1em;
+          }
+
+          .input-icons {
+            background-color: rgba(128, 128, 128, 0.1);
+            padding: 8px 1em;
+            margin-bottom: 0.5em;
+            margin-right: 0.5em;
+            border-radius: 18px;
+            position: relative;
+            border: 2px solid transparent;
+          }
+
+          .input-icons:hover {
+            border: 2px solid rgb(0, 128, 255);
+          }
+
+          .icon-center {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+
+          .name {
+            display: flex;
+          }
+
+          .id {
+            width: 100%;
+          }
+
+          .input {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: white;
+            width: 100%;
+            margin-right: 1em;
+          }
+
+          .footer {
+            position: absolute;
+            right: 3%;
+            bottom: 3%;
+            font-size: 3em;
+            cursor: pointer;
+          }
+
+          .btn {
+            padding: 0.7em 2em;
+            color: white;
+            border-radius: 23px;
+            font-size: 1em;
+            margin: 1em 0.5em;
+            border: none;
+            cursor: pointer;
+          }
+
+          .gray-btn {
+            background-color: gray;
+          }
+
+          .blue-btn {
+            background-color: rgb(0, 128, 255);
+          }
+
+          .buttons {
+            display: flex;
+            justify-content: space-around;
+          }
+
+          @media only screen and (max-width: 900px) {
+            .form {
+              width: 90%;
+            }
+
+            li {
+              padding-left: 1em;
+            }
+
+            .blue-logo {
+              left: -10%;
+            }
+
+            .footer {
+              display: none;
+            }
+
+            .container::after {
+              width: 180vw;
+              left: -150%;
+            }
+
+            .btn {
+              padding: 0.5em 1em;
+              font-size: 0.95em;
+            }
+
+            .hero {
+              padding: 1em 1em;
+              margin: auto;
+            }
+
+            .form {
+              margin: 1em auto;
+            }
+        </style>
+      </head>
+
+      <body className='snippet-body'>
+        <div class="container">
+          <div class="nav">
+            <ul>
+              <li><span class="blue-logo"></span> Streamify <span class="blue">.</span></li>
+              <a href="/streamify/catalogo/"> <li class="gray">Entra come guest</li> </a>
+            </ul>
         </div>
-
-        <!--Modal login-->
-        <div id="form_login" class="modal">
-            
-            <!-- X in alto a destra -->
-            <span onclick="document.getElementById('form_login').style.display='none'"
-            class="close" title="Close Modal">&times;</span>
-
-            <!-- Contenuto del Modal -->
-            <form class="modal-content-login animate" action="/auth/accedi/" method="POST">
-                {% csrf_token %}
-                <div class="popup_container">
-                    <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">
-                        <br><br>
-                    <label for="uname"><b>Username</b></label>
-                    <input type="text" class="user_input" placeholder="Enter Username" name="uname" required>
-                        <br>
-                    <label for="psw"><b>Password</b></label>
-                    <input type="password" class="pwd_input" placeholder="Enter Password" name="psw" required>
-                        <br><br>
-                    <button type="submit" class="loginbtn">Login</button>
-                    <br><br>
+        
+        <form action="/auth/registrati/" method="POST" id="form">
+          {% csrf_token %}
+          
+          <div class="popup_messages">
+            {% for message in messages %}
+              {% if message.tags == "error" %}
+                <div class="alert alert-danger" role="alert">
+                  {{message}}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            </form>
-        </div> 
-
-        <!-- Modal register -->
-        <div id="form_register" class="modal">
-            
-            <!-- X in alto a destra -->
-            <span onclick="document.getElementById('form_register').style.display='none'"
-            class="close" title="Close Modal">&times;</span>
-
-            <!-- Contenuto del Modal -->
-            <form class="modal-content-register animate" action="/auth/registrati/" method="POST">
-                {% csrf_token %}
-                <div class="popup_container" id="container_register">
-                    <img src="{% static "imgs/avatar_pic.png" %}" alt="Avatar" class="avatar">
-
-                        <br><br>
-
-                        <label for="uname"><b>Username</b></label>
-                        <input type="text" class="user_input" placeholder="Inserisci username" name="uname" required>
-    
-                            <br>
-    
-                        <label for="nome"><b>Nome</b></label>
-                        <input type="text" class="nome_input" placeholder="Inserisci nome" name="nome" required>
-    
-                            <br>
-    
-                        <label for="cognome"><b>Cognome</b></label>
-                        <input type="text" class="cognome_input" placeholder="Inserisci cognome" name="cognome" required>
-    
-                            <br>
-    
-                        <label for="psw"><b>Password</b></label>
-                        <input type="password" class="pwd_input" placeholder="Enter Password" name="psw" required>
-                        
-                            <br>
-
-                        <label for="email"><b>Email</b></label>
-                        <input type="email" class="user_input" placeholder="Enter Email" name="email" required>
-
-                            <br>
-
-                    <button type="submit" class="loginbtn">Registrati</button>
-                    <br><br>
+              {% else %}
+                <div class="alert alert-{{ message.tags }}">
+                  {{message}}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            </form>
-        </div> 
+              {% endif %}
+            {% endfor %}
+          </div>
+          
+          <div class="hero">
+              <div class="text"><h1>Crea il tuo account <span class="blue">.</span></h1> </div>
+              <div class="form">
+                  <div class="name">
+
+                      <div class="input-icons" id="name_div">
+                          <legend for="first">Nome</legend>
+                          <div class="icon-center">
+                              <input class="input" type="text" id="first" name="nome" required>
+                          </div>
+                      </div>
+                      
+                      <div class="input-icons" id="surname_div">
+                          <legend for="last">Cognome</legend>
+                          <div class="icon-center">
+                              <input class="input" type="text" id="last" name="cognome" required>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="id">
+
+                    <div class="input-icons" id="email_div">
+                      <legend for="email">Email</legend>
+                      <div class="icon-center">
+                          <input class="input" type="email" id="email" name="email" required>
+                      </div>
+                    </div>
+
+                    <div class="input-icons">
+                      <legend for="username">Username</legend>
+                      <div class="icon-center">
+                          <input class="input" name="username" type="text" id="username" required>
+                      </div>
+                    </div>
+
+                      <div class="input-icons">
+                          <legend for="password">Password</legend>
+                          <div class="icon-center">
+                              <input class="input" name="password" type="password" id="password" required>
+                          </div>
+                      </div>
+
+                  </div>
+                  <div class="buttons">
+                    <button class="btn blue-btn"><p id="submit">Crea account</p></button>
+                  </form>
+                      <button class="btn gray-btn" onclick="login()"><p id="switch">Già registrato?</p></button>
+                  </div>
+                </div>
+              </div>
+            </div>
     </body>
 
     <script>
-        // Esci dal popup se clicchi fuori dalla finestra
-        var modal = document.getElementById('form_login')
+      function login() {
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
+        if (document.getElementById("submit").innerHTML == "Crea account" ) {
+
+          document.getElementById("first").value = "s";
+          document.getElementById("last"). value ="s";
+          document.getElementById("email").value = "s@s.com";
+
+          document.getElementById("form").action = "/auth/accedi/"
+          document.getElementById("name_div").style.display = 'none';
+          document.getElementById("surname_div").style.display = 'none';
+          document.getElementById("email_div").style.display = 'none';
+          document.getElementById("submit").innerHTML="Login"
+          document.getElementById("switch").innerHTML="Crea un nuovo account";
         }
+
+        else {
+
+          document.getElementById("first").value = "";
+          document.getElementById("last"). value ="";
+          document.getElementById("email").value = "";
+
+          document.getElementById("form").action = "/auth/registrati/";
+          document.getElementById("name_div").style.display = 'inline';
+          document.getElementById("surname_div").style.display = 'inline';
+          document.getElementById("email_div").style.display = 'block';
+          document.getElementById("submit").innerHTML="Crea account";
+          document.getElementById("switch").innerHTML="Già registrato?";
+        }
+        
+      }
     </script>
 
 </html>
-
-{% endblock %}

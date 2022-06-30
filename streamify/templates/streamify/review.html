@@ -36,105 +36,38 @@
                 padding: 0;
                 box-sizing: border-box;
                 font-family: 'poppins', sans-serif;
-            } 
-            
-            .button_link{
-                text-decoration: none;
-                display: inline-block;
-                position: relative;
-                padding: 15px 15px;
-                text-transform: uppercase;
-                color: #ddd;
-                background: #1C2833;
-                font-size: 10px;
-                margin: 8px;
-                letter-spacing: 0.7em;
-                border-radius: 15px;
-            }
-
-            .button_link p{
-                position: absolute;
-                display: block;
-                background: #FF5722;
-            }
-
-            .button_link p:nth-child(1){
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                height: 2px;
-                transform: scaleX(0);
-                transform-origin: right;
-                transition: transform 0.1s;
-            }
-
-            .button_link:hover p:nth-child(1){
-                transform: scaleX(1);
-                transform-origin: left;
-                transition: transform 0.1s;
-            }
-            
-            .button_link p:nth-child(2){
-                right: 0;
-                bottom: 0;
-                width: 2px;
-                height: 100%;
-                transform: scaleY(0);
-                transform-origin: top;
-                transition: transform 0.1s;
-            }
-
-            .button_link:hover p:nth-child(2){
-                transform: scaleY(1);
-                transform-origin: bottom;
-                transition: transform 0.1s;
-                transition-delay: 0.1s;
-            }
-            
-            .button_link p:nth-child(3){
-                top: 0;
-                right: 0;
-                width: 100%;
-                height: 2px;
-                transform: scaleX(0);
-                transform-origin: left;
-                transition: transform 0.1s;
-            }
-
-            .button_link:hover p:nth-child(3){
-                transform: scaleX(1);
-                transform-origin: right;
-                transition: transform 0.1s;
-                transition-delay: 0.1s;
-            }
-            
-            .button_link p:nth-child(4){
-                top: 0;
-                left: 0;
-                width: 2px;
-                height: 100%;
-                transform: scaleY(0);
-                transform-origin: bottom;
-            }
-
-            .button_link:hover p:nth-child(4){
-                transform: scaleY(1);
-                transform-origin: top;
-                transition: transform 0.1s;
-                transition-delay: 0.1s;
-            }
-
-            .button_link:hover{
-                transition: 0.7s;
-                transition-delay: 0.1s;
-                background: #FF5722;
             }
 
             .starpng {
-                width: 5%;
+                filter: grayscale(100%);
             }
             
             .starpng:hover {
+                cursor: pointer;
+                filter: none;
+            }
+
+            td {
+                padding: 0 0;
+            }
+
+            table {
+                width: 25%;
+            }
+
+            .vota_button{
+                width: 200px;
+                height: 48px;
+                border: none;
+                left: 43.5%;
+                border-radius: 30px;
+                position: absolute;
+                background-color: #126ef9;
+                color: #fff
+            }
+
+            .vota_button:hover {
+                opacity: 0.75;
                 cursor: pointer;
             }
 
@@ -200,27 +133,46 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            </div>
-            <br><br>
-            <center>
-                <p class="welcome"> Lascia una recensione a {{film.titolo | replace_titles}} </p>
+                <br><br>
         
-                <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
-                <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
-                <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
-                <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
-                <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
+                <center>
+                    <p class="welcome"> Lascia una recensione a {{film.titolo | replace_titles}} </p> <br>
                 
-                <form action="/streamify/review_final/" method="POST">
-                    {% csrf_token %}
-                    <input type="text" class="commento_scritto" name="commento_scritto" size="50"> 
-                    <input type="hidden" value="" name="selected_star" id="result_data_js">
-                    <input class="vota_button" type="submit" value="Vota">
-                </form>
-            </center>
+                    <table>
+                        <td><img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)"></td>
+                        <td><img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)"></td>
+                        <td><img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)"></td>
+                        <td><img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)"></td>
+                        <td><img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)"></td>
+                    </table>
 
+                    <br><br>
+                    
+                    <form action="/streamify/review_final/" method="POST">
+                        {% csrf_token %}
+                        <input type="text" class="commento_scritto" name="commento_scritto" size="50"> 
+                        <input type="hidden" value="" name="selected_star" id="result_data_js"><br><br><br>
+                        <input class="vota_button" type="submit" value="Vota">
+                    </form>
+                </center>
+            </div>
         </div>
-
     </body>
 </html>
+
+<script>
+    function rate(star) {
+        value = star.getAttribute("value");
+        var data_container = document.getElementById("result_data_js");
+        data_container.setAttribute("value", value);
+        var stars = document.getElementsByClassName("starpng");
+        
+        Array.from(stars).forEach((single_star) => {
+            single_star.style.filter="grayscale(100%)";
+        });
+        
+        star.style.filter="none";
+    }
+
+</script> 
 {% endblock %}

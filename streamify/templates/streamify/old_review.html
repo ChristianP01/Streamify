@@ -31,33 +31,33 @@
         Effettua il login per lasciare una recensione per {{film.titolo | replace_titles}}
     {% else %}
 
-    <center>
+    <body>
+        <center>
 
-        <p class="welcome"> Lascia una recensione a {{film.titolo | replace_titles}} </p> <br>
+            <p class="welcome"> Lascia una recensione a {{film.titolo | replace_titles}} </p> <br>
 
-        <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
-        <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
-        <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
-        <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
-        <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
+            <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
+            <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
+            <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
+            <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
+            <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
 
-        <br><br>
-        
-        <form action="/streamify/review_final/" method="POST">
-            {% csrf_token %}
-            <input type="text" class="commento_scritto" name="commento_scritto" size="50"> 
-            <input type="hidden" value="" name="selected_star" id="result_data_js">
-            <input class="vota_button" type="submit" value="Vota">
-        </form>
+            <br><br>
+            
+            <form action="/streamify/review_final/" method="POST">
+                {% csrf_token %}
+                <input type="text" class="commento_scritto" name="commento_scritto" size="50"> 
+                <input type="hidden" value="" name="selected_star" id="result_data_js">
+                <input class="vota_button" type="submit" value="Vota">
+            </form>
 
-        <br><br><br><br>
+            <br><br><br><br>
 
-        {% comment %} Lista recensioni assegnate al film {% endcomment %}
-        {% for recensione in lista_recensioni %}
-                <input class="recensione" type="submit" value="{{recensione}}"> <br><br>
-        {% endfor %}
-    </center>
-
+            {% for recensione in lista_recensioni %}
+                    <input class="recensione" type="submit" value="{{recensione}}"> <br><br>
+            {% endfor %}
+        </center>
+    </body>
     {% endif %}
 </html>
 

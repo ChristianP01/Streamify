@@ -130,6 +130,14 @@
                 background: #FF5722;
             }
 
+            .starpng {
+                width: 5%;
+            }
+            
+            .starpng:hover {
+                cursor: pointer;
+            }
+
         </style>
 
         <center> <h1> Recensioni di {{film.titolo}} </h1> </center>
@@ -193,7 +201,26 @@
                     </tbody>
                 </table>
             </div>
+            <br><br>
+            <center>
+                <p class="welcome"> Lascia una recensione a {{film.titolo | replace_titles}} </p>
+        
+                <img class="starpng" src="{% static "imgs/star.png" %}" value="1" alt="Image" onclick="rate(this)">
+                <img class="starpng" src="{% static "imgs/star.png" %}" value="2" alt="Image" onclick="rate(this)">
+                <img class="starpng" src="{% static "imgs/star.png" %}" value="3" alt="Image" onclick="rate(this)">
+                <img class="starpng" src="{% static "imgs/star.png" %}" value="4" alt="Image" onclick="rate(this)">
+                <img class="starpng" src="{% static "imgs/star.png" %}" value="5" alt="Image" onclick="rate(this)">
+                
+                <form action="/streamify/review_final/" method="POST">
+                    {% csrf_token %}
+                    <input type="text" class="commento_scritto" name="commento_scritto" size="50"> 
+                    <input type="hidden" value="" name="selected_star" id="result_data_js">
+                    <input class="vota_button" type="submit" value="Vota">
+                </form>
+            </center>
+
         </div>
+
     </body>
 </html>
 {% endblock %}

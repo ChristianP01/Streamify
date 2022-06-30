@@ -130,6 +130,74 @@
                                     background: #FF5722;
                                 }
 
+                                .filtrogenere {
+                                    width: 10%;
+                                    position: absolute;
+                                    top: 25%;
+                                    left: 5.5%;
+                                    border: 3px solid #ccc;
+                                    box-sizing: border-box;
+                                    border-radius: 15px;
+                                    text-align: center;
+                                    background-color: #FFFFFF;
+                                }
+                        
+                                .min_score {
+                                    position: absolute;
+                                    top: 42%;
+                                    left: 5%;
+                                    width: 4%;
+                                }
+                        
+                                .max_score {
+                                    position: absolute;
+                                    top: 42%;
+                                    left: 11%;
+                                    width: 4%;
+                                }
+                                .label_min {
+                                    position: absolute;
+                                    top: 35%;
+                                    left: 5%;
+                                    width: 4%;
+                                }
+                        
+                                .label_max {
+                                    position: absolute;
+                                    top: 35%;
+                                    left: 11%;
+                                    width: 4%;
+                                }
+                        
+                                .film_input {
+                                    position: absolute;
+                                    top: 14%;
+                                    left: 1.4%;
+                                    width: 18%;
+                                    border: 3px solid #F34G42;
+                                    box-sizing: border-box;
+                                    border-radius: 15px;
+                                    text-align: center;
+                                }
+
+                                .label_genere {
+                                    position: absolute;
+                                    top: 20%;
+                                    left: 6%;
+                                }
+
+                                .cerca_film {
+                                    position: absolute;
+                                    top: 52%;
+                                    left: 11%;
+                                }
+
+                                .reset {
+                                    position: absolute;
+                                    top: 52%;
+                                    left: 5%;
+                                }
+
                             </style>
                                 </head>
 
@@ -216,6 +284,28 @@
             </table>
         </div>
     </div>
+
+    <form action="/streamify/cercaFilm/" method="POST">
+        {% csrf_token %}
+        <input type="text" class="film_input" placeholder="Inserisci titolo" name="film_search_title">
+
+        <select id="generi" name="generi" class="filtrogenere">
+            <option value=""/>
+        {% for genere in lista_generi %}
+            <option value={{genere}}> {{genere.name | replace_titles}} </option>
+        {% endfor %}
+        </select>
+
+        <label class="label_min"> Voto minimo: </label>
+        <label class="label_max"> Voto massimo: </label>
+        <label class="label_genere"> Scegli un genere: </label>
+        <input type="number" class="min_score" name="min_score" min="1" max="5"><br><br>
+        <input type="number" class="max_score" name="max_score" min="1" max="5"><br><br>
+
+        <a href="/streamify/catalogo/"> <input type="button" class="reset" value="Reset"> </a>
+        <input type="submit" class="cerca_film" value="Cerca">
+        </form>
+
 <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js'></script>
 
 </body>

@@ -5,7 +5,6 @@ from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
 
-
 #TODO Decoratore @login_required personale
 
 # Contiene la dimensione del dizionario dei generi da considerare come preferiti, su cui applicare il RS.

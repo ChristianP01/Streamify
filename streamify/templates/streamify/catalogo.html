@@ -211,6 +211,34 @@
                                     color: #fff;
                                 }
 
+                                .sort_down {
+                                    position: absolute;
+                                    left: 40.5%;
+                                    top: 17%;
+                                    width: 1.5%;
+                                }
+                        
+                                .sort_up {
+                                    position: absolute;
+                                    left: 50%;
+                                    top: 17%;
+                                    width: 1.5%;
+                                }
+
+                                .userpng {
+                                    position: absolute;
+                                    right: 8%;
+                                    top: 3%;
+                                    width: 2%;
+                                }
+                                
+                                .logoutpng {
+                                    position: absolute;
+                                    right: 4%;
+                                    top: 3%;
+                                    width: 2%;
+                                }
+
                             </style>
                                 </head>
 
@@ -318,6 +346,11 @@
         <a href="/streamify/catalogo/"> <input type="button" class="reset" value="Reset"> </a>
         <input type="submit" class="cerca_film" value="Cerca">
         </form>
+
+        <a href="/streamify/account/"><img class="userpng" src="{% static "imgs/user.png" %}" alt="Image"></a>
+        <a href="/streamify/home/"><img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image"></a>
+        <a href="/streamify/catalogo_sort/up/"><img class="sort_up" src="{% static "imgs/up-arrow.png" %}" alt="Image"></a>
+        <a href="/streamify/catalogo_sort/down/"><img class="sort_down" src="{% static "imgs/down-arrow.png" %}" alt="Image"></a>
 
 <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js'></script>
 

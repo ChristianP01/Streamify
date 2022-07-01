@@ -75,23 +75,9 @@ def account(request):
         # Le salvo nel dizionario di sessione, siccome sarà usata in altre views
         request.session["generi"] = generi
 
-        #---------------- Recommendation System ------------------#
-        
-        # Comparo il percents dell'utente loggato con quello di tutti gli altri utenti
-        # Funziona così: creo un dizionario col formato {genere: % sul totale}.
-        # Dopo prendo i 2/3 valori più alti del dizionario (rappresenteranno i generi preferiti)
-        # e faccio il reciproco della differenza con ogni utente (1-differenza).
-        # Questo mi permetterà di trovare possibili utenti con gusti simili.
-        # Per ogni coppia (this_user, other_user) guardo solo se la differenza è >90, per avere buone corrispondenze
-        # Se >90, passo a guardare i voti medi a quel genere e se il reciproco della differenza è >90
-        # Consiglio i film in più relativi a quel genere guardati da quell'utente.
-        # P.S. Da utente voglio ricevere consigli solo sui miei generi preferiti.
-
-        # Nuova logica: Creo un dizionario col formato {genere: voto_medio}, prendo i due valori più alti. 
-        # Essi rappresenteranno i generi preferiti, confronterò quelli dell'utente corrente con quelli di ogni altro utente.
-        # Se ci sarà corrispondenza sul nome del genere (ovvero un gusto in comune), controllo se il voto ha un valore
-        # di similanza >90. Se è così, consiglio i film che quell'utente avrà guardato in più.
+        # Lista contenente i film suggeriti dal recommendation system
         recommended_films = []
+
 
         # Dizionario contenente i due generi meglio votati dall'utente
         logged_two_highest = sorted(calcolaVoti(utente, generi).items(), key=lambda x: x[1], reverse=True)\
@@ -142,6 +128,7 @@ def account(request):
         return render(request, template_name="streamify/home.html", context={
         "logged_user": None
     }, status=401)
+    
 
 @require_http_methods(["GET", "POST"])
 def review(request, titolo_film):
@@ -203,8 +190,6 @@ def review_final(request):
 @require_http_methods(["POST"])
 def cercaFilm(request):
 
-    # Non c'è bisogno di controllare l'utente loggato perchè chiunque dovrebbe poter cercare nel catalogo.
-    # Quello che faccio qui è assegnargli un valore di default da ritornare al render
     try:
         logged_user = request.session["logged_user"]
     except:
@@ -227,9 +212,9 @@ def cercaFilm(request):
     except:
         max_score = 5.0
 
-
     film_query = Film.objects.filter(titolo__startswith=user_input, generi__name__startswith=genre_input).distinct()
     
+    # Ho bisogno di un'altra lista perchè non posso rimuovere elementi da un QuerySet.
     film_query_matched = []
     for film in film_query:
         if film.get_mediavoto() >= min_score and film.get_mediavoto() <= max_score:
@@ -248,7 +233,6 @@ def my_reviews(request):
         logged_user = Utente.objects.get(username=request.session["logged_user"])
 
         return render(request,template_name="streamify/user_reviews.html", context={
-            "logged_user": logged_user,
             "film_list": logged_user.film_guardati.all(),
             "lista_recensioni": Recensione.objects.filter(utente=logged_user)
         }, status=200)
@@ -260,7 +244,7 @@ def my_reviews(request):
 
 @require_http_methods(["GET","POST"])
 def film_sort(request, sort_type):
-    # Type = {up | down} in base al tipo di sorting richiesto.
+    # sort_type = {up | down} in base al tipo di sorting richiesto.
     
     try:
         logged_user = request.session["logged_user"]

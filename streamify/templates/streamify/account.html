@@ -9,69 +9,77 @@
     <title> Account </title>
 
     <head>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/account.css' %}">
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <link rel="stylesheet" type="text/css" href="{% static 'css/account.css' %}">
     </head>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <body>
 
+      <div class="popup_messages">
         {% for message in messages %}
-          <div class="alert success">
-              <span class="closebtn">&times;</span>  
+          {% if message.tags == "error" %}
+            <div class="alert alert-danger" role="alert">
               {{message}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+          {% else %}
+            <div class="alert alert-{{ message.tags }}">
+              {{message}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endif %}
         {% endfor %}
-          <div class="container mt-5 mb-5 d-flex justify-content-center">
-              <div class="card rounded">
-                  <div class=" d-block justify-content-center">
-                      <div class="area1 p-3 py-5"> </div>
-                      <div class="area2 p- text-center px-3">
-                          <div class="image mr-3"> <img src="{% static "imgs/christian.png" %}" class="rounded-circle" width="100" />
-                              <h4 class=" name mt-3 ">{{logged_user.username}}</h4>
+      </div>  
 
-                                <a href="/streamify/my_reviews/">
-                                  <input type="button" class="options" value="Le mie recensioni">
-                                </a> <br><br>
+      <div class="container mt-5 mb-5 d-flex justify-content-center">
+          <div class="card rounded">
+              <div class=" d-block justify-content-center">
+                  <div class="area1 p-3 py-5"> </div>
+                  <div class="area2 p- text-center px-3">
+                      <div class="image mr-3"> <img src="{% static "imgs/christian.png" %}" class="rounded-circle" width="100" />
+                          <h4 class=" name mt-3 ">{{logged_user.username}}</h4>
 
-                                <b>Film guardati: </b> <br><br>
-                                  
-                                  {% for film in logged_user.film_guardati.all %}
-                                    <a href="/streamify/review/{{film.titolo}}">
-                                        <input type="button" class="film_button" value="{{film.titolo | replace_titles}}"/>
-                                      </a>
+                            <a href="/streamify/my_reviews/">
+                              <input type="button" class="options" value="Le mie recensioni">
+                            </a> <br><br>
 
-                                      {% if film in logged_user.film_preferiti.all %}
-                                        <a href="/streamify/set_preferito/{{film.titolo}}/no" >
-                                          <img class="starpng" src="{% static "imgs/star_film_yes.png" %}" width="35"/>
-                                        </a>
-                                      {% else %}
-                                        <a href="/streamify/set_preferito/{{film.titolo}}/yes">
-                                          <img class="starpng" src="{% static "imgs/star_film_no.png" %}" width="35"/>
-                                        </a>
-                                      {% endif %} <br><br>
-                                  {% endfor %}
+                            <b>Film guardati: </b> <br><br>
+                              
+                              {% for film in logged_user.film_guardati.all %}
+                                <a href="/streamify/review/{{film.titolo}}">
+                                    <input type="button" class="film_button" value="{{film.titolo | replace_titles}}"/>
+                                  </a>
 
-                                <br>
-                                {% comment %} Lista dei film consigliati {% endcomment %}
-                                {% if recommended_films %}
-                                  <b> Ti consigliamo di guardare: </b> <br><br>
-                                  {% for film in recommended_films %}
-                                      <input type="button" class="recommended_button" value="{{film | replace_titles}}"/>
-                                    <br><br>
-                                  {% endfor %}
-                                {% endif %}
-                                
-                                
-                          </div>
+                                  {% if film in logged_user.film_preferiti.all %}
+                                    <a href="/streamify/set_preferito/{{film.titolo}}/no" >
+                                      <img class="starpng" src="{% static "imgs/star_film_yes.png" %}" width="35"/>
+                                    </a>
+                                  {% else %}
+                                    <a href="/streamify/set_preferito/{{film.titolo}}/yes">
+                                      <img class="starpng" src="{% static "imgs/star_film_no.png" %}" width="35"/>
+                                    </a>
+                                  {% endif %} <br><br>
+                              {% endfor %}
+
+                            <br>
+                            {% comment %} Lista dei film consigliati {% endcomment %}
+                            {% if recommended_films %}
+                              <b> Ti consigliamo di guardare: </b> <br><br>
+                              {% for film in recommended_films %}
+                                  <input type="button" class="recommended_button" value="{{film | replace_titles}}"/>
+                                <br><br>
+                              {% endfor %}
+                            {% endif %}
                       </div>
                   </div>
               </div>
           </div>
+      </div>
 
-        <div class="radar">
-          <canvas id="radarChart"></canvas>
-        </div>
+      <div class="radar">
+        <canvas id="radarChart"></canvas>
+      </div>
     </body>
 
     <script>
@@ -132,9 +140,6 @@
         }
       }
     </script>
-
-
-
 </html>
 
 {% endblock %}

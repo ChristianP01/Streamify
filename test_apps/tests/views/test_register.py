@@ -68,4 +68,3 @@ class TestRegisterFailConflictEmail(TestCase):
         
     def test_register_fail_conflict_email(self):
         self.assertEqual(self.response.status_code, 409)
-

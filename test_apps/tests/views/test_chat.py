@@ -74,8 +74,7 @@ class TestChatFilmNotWatched(TestCase):
         session = self.client.session
         session["logged_user"] = test_user.username
         session.save()
-
-        self.client = Client()
+        
         self.response = self.client.get('/chatify/chat/Spiderman/')
         
     def test_chat_film_not_watched(self):

@@ -3,8 +3,6 @@ Questo file dovrebbe fungere da interfaccia stile Java, l'idea è quella di sepa
 da quella che mi serve in Python puro.
 """
 
-from os import uname
-from turtle import home
 from .models import Genere, Recensione, Utente
 
 # Creo il dizionario con la sintassi {genere: numero_di_film_guardati_di_quel_genere}
@@ -34,7 +32,7 @@ def calcolaVoti(utente, generi):
     try:
         for film in utente.film_guardati.all():
             try:
-                voto_recensione = int(Recensione.objects.filter(utente=utente, film=film)[0].voto)
+                voto_recensione = int(Recensione.objects.get(utente=utente, film=film).voto)
             except:
                 voto_recensione = 0
 
@@ -45,9 +43,9 @@ def calcolaVoti(utente, generi):
                 else:
                     voti[genere.name] += voto_recensione
 
-            # Calcolo media vera e propria
-            for genere in voti:
-                voti[genere] = voti[genere] / generi[genere]
+        # Calcolo media vera e propria
+        for genere in voti:
+            voti[genere] = voti[genere] / generi[genere]
 
         return voti
     
@@ -55,14 +53,14 @@ def calcolaVoti(utente, generi):
         return []
             
 
-def calcolaPercents(utente, generi):
-    percents = {}
-    num_films = utente.film_guardati.all().count()
+# def calcolaPercents(utente, generi):
+#     percents = {}
+#     num_films = utente.film_guardati.all().count()
 
-    for k,v in generi.items():
-        percents[k] = int(v/num_films*100)
+#     for k,v in generi.items():
+#         percents[k] = int(v/num_films*100)
 
-    return percents
+#     return percents
 
 
 def check_login(funz_view):
@@ -71,7 +69,7 @@ def check_login(funz_view):
 
     def wrapper(req, *args):
         try:
-            logged_user = Utente.objects.filter(username=req.session['logged_user'])[0].username
+            logged_user = Utente.objects.get(username=req.session['logged_user']).username
             return funz_view(req, logged_user)
         except:
             from .views import homepage

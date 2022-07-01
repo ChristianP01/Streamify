@@ -60,34 +60,26 @@ class TestAccountRecommendedSystem(TestCase):
         gen1 = Genere.objects.create(name="Azione")
         gen2 = Genere.objects.create(name="Avventura")
         gen3 = Genere.objects.create(name="Horror")
-        gen4 = Genere.objects.create(name="Romantico")
+        gen4 = Genere.objects.create(name="Fantascienza")
         gen5 = Genere.objects.create(name="Comico")
         #------------------------------------------------------#
         
         #--------------Generazione film------------------#
         test_film1 = Film.objects.create(
-            titolo='Spiderman',
-            anno_uscita='2022',
-            trama='Trama...')
-        test_film1.generi.set((gen1, gen2))
-
-        test_film2 = Film.objects.create(
             titolo='Stranger Things',
             anno_uscita='2022',
             trama='Trama...')
+        test_film1.generi.set((gen2, gen3, gen4))
+
+        test_film2 = Film.objects.create(
+            titolo='La Casa di Carta',
+            anno_uscita='2018',
+            trama='Trama...')
         test_film2.generi.set((gen1, gen2))
 
-        test_film3 = Film.objects.create(
-            titolo='Attacco Dei Giganti',
-            anno_uscita='2022',
-            trama='Trama...')
-        test_film3.generi.set((gen1, gen2))
-
         test_user.film_guardati.add(test_film1)
-        test_user.film_guardati.add(test_film2)
         other_user.film_guardati.add(test_film1)
         other_user.film_guardati.add(test_film2)
-        other_user.film_guardati.add(test_film3)
         #-------------------------------------------------------#
 
         #--------------Generazione recensioni------------------#
@@ -96,13 +88,6 @@ class TestAccountRecommendedSystem(TestCase):
             utente=test_user,
             voto=4,
             commento_scritto='Commento...')
-
-        rece2 = Recensione.objects.create(
-            film=test_film2,
-            utente=test_user,
-            voto=2,
-            commento_scritto='Commento...'
-        )
 
         rece3 = Recensione.objects.create(
             film=test_film1,
@@ -113,14 +98,7 @@ class TestAccountRecommendedSystem(TestCase):
         rece4 = Recensione.objects.create(
             film=test_film2,
             utente=other_user,
-            voto=2,
-            commento_scritto='Commento...'
-        )
-
-        rece5 = Recensione.objects.create(
-            film=test_film3,
-            utente=other_user,
-            voto=2,
+            voto=5,
             commento_scritto='Commento...'
         )
         #-------------------------------------------------------#

@@ -15,6 +15,10 @@ def registrati(request):
         if utente.username == username:
             messages.add_message(request, messages.ERROR, "Username già in uso!")
             return render(request,template_name="streamify/home.html", status=409)
+
+        if utente.email == email:
+            messages.add_message(request, messages.ERROR, "Email già in uso!")
+            return render(request,template_name="streamify/home.html", status=409)
             
     # Creo l'utente e lo aggiungo al database
     new_user = Utente(username, email, pwd, nome, cognome)

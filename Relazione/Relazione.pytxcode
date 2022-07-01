@@ -1,3 +1,33 @@
+=>PYTHONTEX#py#default#default#0#code#####180#
+		class TestChatFilmNotWatched(TestCase):
+		
+		def setUp(self):
+		
+		example\_genere = Genere.objects.create()
+		
+		test_film = Film.objects.create(
+		titolo='Spiderman',
+		anno_uscita='2022',
+		trama='Trama...')
+		test_film.generi.set((example_genere,))
+		
+		test_user = Utente.objects.create(
+		username='testUser',
+		password='testUser',
+		email='test@test.it',
+		nome='Test',
+		cognome='test')
+		
+		self.client = Client()
+		session = self.client.session
+		session["logged_user"] = test_user.username
+		session.save()
+		
+		self.client = Client()
+		self.response = self.client.get('/chatify/chat/Spiderman/')
+		
+		def test_chat_film_not_watched(self):
+		self.assertEqual(self.response.status_code, 401)
 =>PYTHONTEX:SETTINGS#
 version=0.18
 outputdir=pythontex-files-Relazione

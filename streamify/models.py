@@ -26,7 +26,6 @@ class Film(models.Model):
     anno_uscita = models.IntegerField(validators=[MinValueValidator(1888), MaxValueValidator(CURRENT_YEAR)])
     trama = models.TextField(max_length=800, null=True)
 
-    #  {{ film.get_mediavoto }} per chiamarlo nell'HTML (NO PARENTESI) 
     def get_mediavoto(self):
         media_voto = Recensione.objects.filter(film=self).aggregate(Avg('voto'))["voto__avg"]
         
@@ -45,7 +44,7 @@ class Film(models.Model):
 # Modello rappresentante la classe Utente, i suoi fields sono le credenziali di accesso/registrazione.
 class Utente(models.Model):
     username = models.CharField(max_length=25, primary_key=True)
-    email = models.EmailField(max_length=50, default=DEFAULT_GENERIC_VALUE)
+    email = models.EmailField(max_length=50, default=DEFAULT_GENERIC_VALUE, unique=True)
     password = models.CharField(max_length=25, default=DEFAULT_GENERIC_VALUE)
     nome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
     cognome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)

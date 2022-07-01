@@ -24,9 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%+--ntkl1nw_7oese$wh&am(bz9o34n5jwt+j)6cq=0wa_+iv$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1'
+]
 
 #Alla chiusura, la sessione cadrà e l'utente loggato verrà "sloggato"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -52,7 +55,8 @@ INSTALLED_APPS = [
     'chatify',
     'crispy_forms',
     'django_truncate',
-    'channels'
+    'channels',
+    'django_extensions'
 ]
 
 WSGI_APPLICATION = 'ProgettoTW.wsgi.application'

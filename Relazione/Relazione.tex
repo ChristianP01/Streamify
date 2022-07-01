@@ -5,6 +5,7 @@
 \usepackage{hyperref}
 \AtBeginDocument{\AtBeginShipoutNext{\AtBeginShipoutDiscard}}
 
+
 \begin{document} \noindent
 	\title{\Huge \textbf{Progetto Tecnologie Web}}
 	\author{\textit{Preti Christian}}
@@ -101,10 +102,91 @@
 	
 	$100 - {100 * |VotoGenereU1-VotoGenereU2| \over 5}$ \\ \\
 	
-	\noindent In questo esempio, all'utente U1 verranno suggeriti con una precisione del 98\% i film di genere 'Azione' guardati da U2 (ma ovviamente non U1) e allo stesso modo con la precisione del 96\% i film di genere 'Avventura'.
+	\noindent In questo esempio, all'utente U1 verranno suggeriti con una precisione del 98\% i film di genere \textit{Azione} guardati da U2 (ma ovviamente non da U1) e allo stesso modo con la precisione del 96\% i film di genere \textit{Avventura}. \\
 	
 	
 	
+	\noindent \textbf{Gestione delle sessioni}: L'utente loggato è stato gestito attraverso l'uso di \textbf{session}, ovvero un dizionario Python facente parte del parametro \textit{request}, in cui è possibile salvare valori relativi alla sessione corrente.
+	Le sessioni possono poi essere personalizzate in base alle proprie preferenze attraverso vari parametri, personalmente ho fatto uso dei seguenti, impostati nel file \textit{settings.py}:
+	\begin{verbatim}
+		SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+		SESSION_COOKIE_AGE = 180
+	\end{verbatim}
+	
+	\noindent Con \textit{age} si intende la durata della validità, in secondi, della sessione, prima che il sito chieda di nuovo all'utente di effettuare l'accesso. \\ \\
+	
+	\noindent \textbf{Tipi di utenti}: Gli utenti, all'interno del sito, sono di 3 tipi:
+	\begin{itemize}
+		\item \textbf{Anonimo}: L'utente \textit{anonimo} è un utente coi permessi di base. Gli è concesso entrare nel catalogo attraverso il pulsante \textit{Entra come guest}, può solamente sfogliare il catalogo dei film e consultarne i dettagli, come titolo, valutazione media, anno di uscita...
+		 
+		\item \textbf{Loggato}: Un utente \textit{loggato} ha invece la possibilità di guardare un film, attraverso un pulsante presente difianco al film, nel catalogo. Ha la possibilità di consultare la propria pagina \textit{Il mio account}, per avere la lista dei film da egli guardati, le recensioni lasciate e i film suggeriti dal recommendation system. Sempre in questa pagina è presente anche il grafico reso disponibile da Chart.js, che mostra in modo user-friendly i generi preferiti.
+		\item \textbf{Admin}: L'utente \textit{admin} è inteso come l'amministratore/gestore del sito. Ha il permesso di aggiungere, modificare ed eliminare utenti, film e generi. 
+		
+		\item \textbf{Template tags}: Un template tag è una sorta di funzione applicabile ad un template. Nel mio caso ne ho implementata solamente una, chiamata \textit{replace\_titles}, la sua funzione è quella di prendere in input il titolo di un film, che avrà dei \_ al posto dei whitespace (per comodità nei link, quando passato come parametro GET), e sostituirà quest'ultimi con dei whitespace appropriati, si tratta quindi solamente di un workaround \textit{grafico}.
+	\end{itemize}
+	\pagebreak
+	
+	
+	
+	\noindent \centerline {\Huge \textbf{Modelli}} \\
+	
+	\noindent All'interno del progetto sono presenti 4 entità:
+	
+	\begin{itemize}
+		\item \textbf{Utente}: Un \textit{utente} è definito dai seguenti \textit{fields}:
+		\begin{itemize}
+			\item \textbf{username}
+			\item \textbf{email}
+			\item \textbf{password}
+			\item \textbf{nome}
+			\item \textbf{cognome} \\
+		\end{itemize}
+		
+		\item \textbf{Film}:
+		\begin{itemize}
+			\item \textbf{titolo}
+			\item \textbf{generi}
+			\item \textbf{anno\_uscita}
+			\item \textbf{trama} \\
+		\end{itemize}
+		
+		
+		\item \textbf{Genere}:
+		\begin{itemize}
+			\item \textbf{name}: Rappresenta il nome del genere, e.g \textit{Azione, avventura...} \\
+		\end{itemize}
+		
+		
+		
+		\item \textbf{Recensione}:
+		\begin{itemize}
+			\item \textbf{voto}: Rappresenta il voto numerico della recensione, con range 1$\sim$5.
+			\item \textbf{film}: \textit{Foreign Key} che specifica il film recensito.
+			\item \textbf{utente}: \textit{Foreign Key} che specifica l'utente autore della recensione.
+			\item \textbf{commento\_scritto}: Commento scritto opzionale.
+		\end{itemize}
+	\end{itemize}
+	\pagebreak
+	
+	
+	\noindent \centerline {\Huge \textbf{Testing}} \\
+	
+	\noindent Come specifica nel paragrafo riguardo alla divisione in app, i test sono stati separati dal resto delle applicazioni, questo ha permesso di facilitare la loro gestione, permettendomi di raggrupparli tutti sotto la stessa app. Dentro il path ./test\_apps/tests, possiamo trovare varie directory. \\Ho deciso di separare anche qui i test al fine di tenerli ordinati e poter, su richiesta, eseguire test riguardanti un preciso/solo alcuni argomenti. \\
+	Per i test mi sono affidato a \textit{Django Unit Test Framework}, che sfrutta nativamente \textit{unittest}.
+	I test totali sono 33. \\
+	Sono presenti più test per ogni singola view, dato che è stato testato ogni possibile aspetto di ogni view, ovvero il caso di \textit{success}, \textit{fail} e \textit{conflict}. \\ \\
+	Per orientarmi durante la scrittura di un test, è stato utile assegnare lo status code manualmente ad ogni render delle view:
+	\begin{itemize}
+		\item Se l'utente effettua l'accesso con successo, lo status code sarà 200 (\textbf{Successo}).
+		\item Se l'utente inserisce credenziali errate, lo status code sarà 401 (\textbf{Unauthorized}).
+		\item Se l'utente si registra con username o email già in uso, lo status code sarà 409 (\textbf{Conflitto}).
+	\end{itemize}
+	\pagebreak
+	
+	
+	\noindent \centerline {\Huge \textbf{Schemi}} \\ \\ \\
+	\centering \includegraphics[width=11cm, ]{Immagini/uml_schema_streamify.png} \\
+	\centering Schema UML
 	
 	
 	

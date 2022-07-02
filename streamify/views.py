@@ -4,6 +4,7 @@ from streamify.methods import calcolaGeneri, calcolaVoti
 from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 
 # Contiene la dimensione del dizionario dei generi da considerare come preferiti, su cui applicare il RS.
 RECOM_SYS_NUMS = 3
@@ -64,12 +65,13 @@ def guardaFilm(request, titolo_film):
         return render(request, template_name="home.html", status=401)
 
 @require_http_methods(["GET", "POST"])
+@login_required
 def account(request):
-    
-    try:
 
-        utente = Utente.objects.get(username=request.session["logged_user"])
-        
+    utente = request.user
+
+    if utente:
+    
         generi = calcolaGeneri(utente)
 
         # Le salvo nel dizionario di sessione, siccome sarà usata in altre views
@@ -82,12 +84,13 @@ def account(request):
         # Dizionario contenente i due generi meglio votati dall'utente
         logged_two_highest = sorted(calcolaVoti(utente, generi).items(), key=lambda x: x[1], reverse=True)\
                                                                                                                     [0:RECOM_SYS_NUMS]
-
+        
         if len(logged_two_highest) < RECOM_SYS_NUMS:
             return render(request, template_name="streamify/account.html", context={
             "logged_user": utente,
+            "generi_dict": json.dumps(generi),
             "recommended_films": None
-            }, status=204)
+            }, status=206)
 
 
         for other_user in Utente.objects.all().exclude(username=utente.username):
@@ -106,7 +109,7 @@ def account(request):
                             # Ritorno i film guardati "in più" da other_user --> logged_user
                             for film in other_user.film_guardati.all():
                                 if film not in utente.film_guardati.all() and \
-                                     Genere.objects.get(name=logged_genre[0]) in film.generi.all():
+                                        Genere.objects.get(name=logged_genre[0]) in film.generi.all():
                                         recommended_films.append(film.titolo)
 
         # Salvo i film nella sessione al fine di poterli ritornare in futuro.
@@ -123,7 +126,7 @@ def account(request):
             "recommended_films": recommended_films
         }, status=200)
 
-    except:
+    else:
         messages.add_message(request, messages.ERROR, "Effettua il login per visitare il tuo account!")
         return render(request, template_name="streamify/home.html", context={
         "logged_user": None

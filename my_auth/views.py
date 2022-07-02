@@ -29,7 +29,7 @@ def registrati(request):
         nome=nome,
         cognome=cognome
     )
-    
+
     new_user.set_password(pwd)
     new_user.save()
 
@@ -40,12 +40,11 @@ def registrati(request):
 def logged(request):
     pwd = request.POST['password']
     username = request.POST['username']
+    logged_user = authenticate(username=username, password=pwd)
+    
+    if logged_user is not None:
+        login(request, logged_user)
 
-    try:
-        logged_user = authenticate(username=username, password=pwd)
-        if logged_user is not None:
-                login(request, logged_user)
-                print("SUCCESSOOOO")
         request.session["logged_user"] = logged_user.username
 
         messages.add_message(request, messages.SUCCESS, f"Benvenuto {request.session['logged_user']}")
@@ -55,6 +54,6 @@ def logged(request):
             "lista_generi": Genere.objects.all()
         }, status=200)
 
-    except:
+    else:
         messages.add_message(request, messages.ERROR, "Credenziali errate!")
         return render(request,template_name="streamify/home.html", status=401)

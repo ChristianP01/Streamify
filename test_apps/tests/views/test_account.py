@@ -20,7 +20,7 @@ class TestAccountSuccess(TestCase):
         self.response = self.client.post('/streamify/account/')
 
     def test_account_success(self):
-        self.assertEqual(self.response.status_code, 204)
+        self.assertEqual(self.response.status_code, 206)
 
 
 class TestAccountFail(TestCase):

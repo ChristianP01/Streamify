@@ -1,8 +1,8 @@
 from django.db import models
 import datetime
+from django.utils.timezone import now
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.forms import IntegerField
-from django.contrib.postgres.fields import ArrayField
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db.models import Avg
 
 CURRENT_YEAR = int(datetime.datetime.now().year)
@@ -18,6 +18,30 @@ class Genere(models.Model):
 
     class Meta:
         verbose_name_plural = "Generi"
+
+
+class UserManager(BaseUserManager):
+
+  def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
+    if not email:
+        raise ValueError('Users must have an email address')
+    now = datetime.datetime.now()
+    email = self.normalize_email(email)
+    user = self.model(
+        email=email,
+        is_staff=is_staff, 
+        is_active=True,
+        is_superuser=is_superuser, 
+        last_login=now,
+        date_joined=now, 
+        **extra_fields
+    )
+    user.set_password(password)
+    user.save(using=self._db)
+    return user
+
+  def create_user(self, email, password):
+    return self._create_user(email, password, False, False)
 
 
 class Film(models.Model):
@@ -42,12 +66,23 @@ class Film(models.Model):
 
 
 # Modello rappresentante la classe Utente, i suoi fields sono le credenziali di accesso/registrazione.
-class Utente(models.Model):
+class Utente(AbstractBaseUser):
     username = models.CharField(max_length=25, primary_key=True)
     email = models.EmailField(max_length=50, default=DEFAULT_GENERIC_VALUE, unique=True)
     password = models.CharField(max_length=25, default=DEFAULT_GENERIC_VALUE)
     nome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
     cognome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    last_login = models.DateTimeField(null=True, blank=True)
+    date_joined = models.DateTimeField(default=now())
+
+    USERNAME_FIELD = 'username'
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = [ 'password', 'nome', 'cognome' ]
+
+    objects = UserManager()
     
     # Related name sono nomi che indicano il nome con cui, in altri models, si dovrà accedere a questi parametri.
     film_guardati = models.ManyToManyField(Film, default=None, related_name="film_guardati")

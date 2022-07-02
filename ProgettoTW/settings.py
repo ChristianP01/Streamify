@@ -114,6 +114,9 @@ DATABASES = {
     }
 }
 
+# Modello che verrà usato come utente
+AUTH_USER_MODEL = 'streamify.Utente'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

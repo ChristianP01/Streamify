@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from streamify.models import Utente, Film, Genere
 from django.contrib import messages
+from django.contrib.auth import login, authenticate
 
 def registrati(request):
     username = request.POST['username']
@@ -21,7 +22,15 @@ def registrati(request):
             return render(request,template_name="streamify/home.html", status=409)
             
     # Creo l'utente e lo aggiungo al database
-    new_user = Utente(username, email, pwd, nome, cognome)
+    new_user = Utente.objects.create(
+        username=username,
+        email=email,
+        password=pwd,
+        nome=nome,
+        cognome=cognome
+    )
+    
+    new_user.set_password(pwd)
     new_user.save()
 
     messages.add_message(request, messages.SUCCESS, f"Utente creato con successo! Benvenuto, {new_user.username}!")
@@ -33,7 +42,10 @@ def logged(request):
     username = request.POST['username']
 
     try:
-        logged_user = Utente.objects.filter(username=username, password=pwd)[0]
+        logged_user = authenticate(username=username, password=pwd)
+        if logged_user is not None:
+                login(request, logged_user)
+                print("SUCCESSOOOO")
         request.session["logged_user"] = logged_user.username
 
         messages.add_message(request, messages.SUCCESS, f"Benvenuto {request.session['logged_user']}")

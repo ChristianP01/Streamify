@@ -31,6 +31,9 @@ class TestRegisterFailConflictUsername(TestCase):
             nome='Test',
             cognome='test')
 
+        test_user.set_password('testUser')
+        test_user.save()
+
         creds = {
             'username' :'testUser',
             'password' : 'anotherPsw',

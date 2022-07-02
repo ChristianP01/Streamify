@@ -11,6 +11,9 @@ class TestLoginSuccess(TestCase):
             email='test@test.it',
             nome='Test',
             cognome='test')
+
+        test_user.set_password('testUser')
+        test_user.save()
         
         creds = {
             'username': 'testUser',
@@ -35,6 +38,9 @@ class TestLoginFail(TestCase):
             email='test@test.it',
             nome='Test',
             cognome='test')
+
+        test_user.set_password('testUser')
+        test_user.save()
         
         creds = {
             'username': 'wrongUser',

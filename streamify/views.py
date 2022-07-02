@@ -31,7 +31,6 @@ def catalogo(request):
         }, status=200)
 
 
-
 @require_http_methods(["GET","POST"])
 @login_required
 def guardaFilm(request, titolo_film):
@@ -87,6 +86,7 @@ def account(request):
         }, status=206)
 
 
+    # Struttura logged_genre/other_genre --> ['nome_genere': 'voto_genere']
     for other_user in Utente.objects.all().exclude(username=utente.username):
         
         other_two_highest = sorted(calcolaVoti(other_user, calcolaGeneri(other_user)).items(),

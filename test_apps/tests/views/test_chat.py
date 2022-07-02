@@ -21,34 +21,16 @@ class TestChatSuccess(TestCase):
             cognome='test')
         test_user.film_guardati.add(test_film)
 
+        test_user.set_password('testUser')
+        test_user.save()
+
         self.client = Client()
-        session = self.client.session
-        session["logged_user"] = test_user.username
-        session.save()
+        self.client.login(username='testUser', password='testUser')
 
         self.response = self.client.get('/chatify/chat/Spiderman/')
         
     def test_chat_success(self):
         self.assertEqual(self.response.status_code, 200)
-
-
-class TestChatAnonymous(TestCase):
-
-    def setUp(self):
-
-        example_genere = Genere.objects.create()
-
-        test_film = Film.objects.create(
-            titolo='Spiderman',
-            anno_uscita='2022',
-            trama='Trama...')
-        test_film.generi.set((example_genere,))
-
-        self.client = Client()
-        self.response = self.client.get('/chatify/chat/Spiderman/')
-        
-    def test_chat_success(self):
-        self.assertEqual(self.response.status_code, 401)
 
 
 class TestChatFilmNotWatched(TestCase):
@@ -70,10 +52,11 @@ class TestChatFilmNotWatched(TestCase):
             nome='Test',
             cognome='test')
 
+        test_user.set_password('testUser')
+        test_user.save()
+
         self.client = Client()
-        session = self.client.session
-        session["logged_user"] = test_user.username
-        session.save()
+        self.client.login(username='testUser', password='testUser')
         
         self.response = self.client.get('/chatify/chat/Spiderman/')
         

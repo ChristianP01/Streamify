@@ -21,14 +21,18 @@ class TestReviewFinalSuccess(TestCase):
             nome='Test',
             cognome='test')
         test_user.film_guardati.add(test_film)
+
+        test_user.set_password('testUser')
+        test_user.save()
         
         self.client = Client()
         session = self.client.session
-        session['logged_user'] = test_user.username
         session['film'] = test_film.titolo
         session['generi'] = '...'
         session['recommended_films'] = '...'
         session.save()
+        self.client.login(username='testUser', password='testUser')
+
 
         data = {
             'selected_star': 3,
@@ -39,37 +43,6 @@ class TestReviewFinalSuccess(TestCase):
 
     def test_review_final_success(self):
         self.assertEqual(self.response.status_code, 200)
-
-
-class TestReviewFinalFail(TestCase):
-
-    def setUp(self):
-
-        example_genere = Genere.objects.create()   
-
-        test_film = Film.objects.create(
-            titolo='Spiderman',
-            anno_uscita='2022',
-            trama='Trama...')
-        test_film.generi.set((example_genere,))
-        
-        self.client = Client()
-        session = self.client.session
-        session['logged_user'] = None
-        session['film'] = 'Spiderman'
-        session['generi'] = '...'
-        session['recommended_films'] = '...'
-        session.save()
-
-        data = {
-            'selected_star': 3,
-            'commento_scritto': 'Commento...'
-        }
-
-        self.response = self.client.post('/streamify/review_final/', data)
-
-    def test_review_final_fail(self):
-        self.assertEqual(self.response.status_code, 401)
 
 
 class TestReviewFinalGiaLasciata(TestCase):
@@ -91,14 +64,17 @@ class TestReviewFinalGiaLasciata(TestCase):
             nome='Test',
             cognome='test')
         test_user.film_guardati.add(test_film)
+
+        test_user.set_password('testUser')
+        test_user.save()
         
         self.client = Client()
         session = self.client.session
-        session['logged_user'] = test_user.username
         session['film'] = 'Spiderman'
         session['generi'] = '...'
         session['recommended_films'] = '...'
         session.save()
+        self.client.login(username='testUser', password='testUser')
 
         data = {
             'selected_star': 3,

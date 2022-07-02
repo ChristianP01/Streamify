@@ -11,31 +11,17 @@ class TestAccountSuccess(TestCase):
             email='test@test.it',
             nome='Test',
             cognome='test')
+
+        test_user.set_password('testUser')
+        test_user.save()
         
         self.client = Client()
-        session = self.client.session
-        session['logged_user'] = test_user.username
-        session.save()
+        self.client.login(username='testUser', password='testUser')
 
         self.response = self.client.post('/streamify/account/')
 
     def test_account_success(self):
         self.assertEqual(self.response.status_code, 206)
-
-
-class TestAccountFail(TestCase):
-
-    def setUp(self):
-
-        self.client = Client()
-        session = self.client.session
-        session['logged_user'] = None
-        session.save()
-
-        self.response = self.client.post('/streamify/account/')
-
-    def test_account_fail(self):
-        self.assertEqual(self.response.status_code, 401)
 
 
 class TestAccountRecommendedSystem(TestCase):
@@ -49,12 +35,18 @@ class TestAccountRecommendedSystem(TestCase):
             nome='Test',
             cognome='test')
 
+        test_user.set_password('testUser')
+        test_user.save()
+
         other_user = Utente.objects.create(
             username='otherUser',
             password='otherUser',
             email='othertest@test.it',
             nome='Other',
             cognome='test')
+
+        other_user.set_password('testUser')
+        other_user.save()
 
         #---------------Generazione generi---------------#
         gen1 = Genere.objects.create(name="Azione")
@@ -104,9 +96,7 @@ class TestAccountRecommendedSystem(TestCase):
         #-------------------------------------------------------#
 
         self.client = Client()
-        session = self.client.session
-        session['logged_user'] = test_user.username
-        session.save()
+        self.client.login(username='testUser', password='testUser')
 
         self.response = self.client.post('/streamify/account/')
 

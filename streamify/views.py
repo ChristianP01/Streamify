@@ -5,7 +5,6 @@ from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
 
 # Contiene la dimensione del dizionario dei generi da considerare come preferiti, su cui applicare il RS.
 RECOM_SYS_NUMS = 3
@@ -30,6 +29,8 @@ def catalogo(request):
             "film_list": Film.objects.all(),
             "lista_generi": Genere.objects.all()
         }, status=200)
+
+
 
 @require_http_methods(["GET","POST"])
 @login_required

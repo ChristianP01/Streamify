@@ -67,7 +67,7 @@
                             {% if recommended_films %}
                               <b> Ti consigliamo di guardare: </b> <br><br>
                               {% for film in recommended_films %}
-                                  <input type="button" class="recommended_button" value="{{film | replace_titles}}"/>
+                                  <input type="button" class="recommended_button" value="{{film.0 | replace_titles}} al {{film.1}}%"/>
                                 <br><br>
                               {% endfor %}
                             {% endif %}

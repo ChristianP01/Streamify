@@ -79,10 +79,12 @@ def account(request):
                                                                                                                 [0:RECOM_SYS_NUMS]
     
     if len(logged_two_highest) < RECOM_SYS_NUMS:
+        request.session['recommended_films'] = []
+
         return render(request, template_name="streamify/account.html", context={
         "logged_user": utente,
         "generi_dict": json.dumps(generi),
-        "recommended_films": None
+        "recommended_films": request.session['recommended_films']
         }, status=206)
 
 
@@ -104,13 +106,13 @@ def account(request):
                         for film in other_user.film_guardati.all():
                             if film not in utente.film_guardati.all() and \
                                     Genere.objects.get(name=logged_genre[0]) in film.generi.all():
-                                    recommended_films.append(film.titolo)
+                                    recommended_films.append((film.titolo, int(similarity)))
+
+    # Rimuovo i doppioni (dato che potrebbero essere suggeriti da più utenti).
+    recommended_films = list(set(recommended_films))
 
     # Salvo i film nella sessione al fine di poterli ritornare in futuro.
     request.session["recommended_films"] = recommended_films
-
-    # Rimuoviamo i doppioni (dato che potrebbero essere suggeriti da più utenti).
-    recommended_films = list(set(recommended_films))
 
     #-------------------------------------------------------------------#
 

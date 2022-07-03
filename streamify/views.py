@@ -258,3 +258,22 @@ def set_preferito(request, titolo_film, scelta):
         "generi_dict": json.dumps(request.session["generi"]),
         "recommended_films": request.session["recommended_films"]
     }, status=200)
+
+
+@login_required
+def update_db(request):
+
+    titolo_film = request.GET['titolo_film']
+    nuovo_voto = request.GET['nuovo_voto']
+    nuovo_commento = request.GET['nuovo_commento']
+
+    rece_updated = Recensione.objects.get(film=Film.objects.get(titolo=titolo_film), utente=request.user)
+    rece_updated.voto = nuovo_voto
+    rece_updated.commento_scritto = nuovo_commento
+    rece_updated.save()
+
+    return render(request, template_name="account.html", context={
+        "logged_user": request.user,
+        "generi_dict": json.dumps(request.session["generi"]),
+        "recommended_films": request.session["recommended_films"]
+    }, status=200)

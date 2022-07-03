@@ -71,7 +71,7 @@ def account(request):
     request.session["generi"] = generi
 
     # Lista contenente i film suggeriti dal recommendation system
-    recommended_films = []
+    recommended_films = {}
 
 
     # Dizionario contenente i due generi meglio votati dall'utente
@@ -79,7 +79,7 @@ def account(request):
                                                                                                                 [0:RECOM_SYS_NUMS]
     
     if len(logged_two_highest) < RECOM_SYS_NUMS:
-        request.session['recommended_films'] = []
+        request.session['recommended_films'] = {}
 
         return render(request, template_name="streamify/account.html", context={
         "logged_user": utente,
@@ -106,10 +106,10 @@ def account(request):
                         for film in other_user.film_guardati.all():
                             if film not in utente.film_guardati.all() and \
                                     Genere.objects.get(name=logged_genre[0]) in film.generi.all():
-                                    recommended_films.append((film.titolo, int(similarity)))
+                                    recommended_films[film.titolo] = int(similarity)
 
     # Rimuovo i doppioni (dato che potrebbero essere suggeriti da più utenti).
-    recommended_films = list(set(recommended_films))
+    # recommended_films = list(set(recommended_films[0]))
 
     # Salvo i film nella sessione al fine di poterli ritornare in futuro.
     request.session["recommended_films"] = recommended_films
@@ -272,6 +272,21 @@ def update_db(request):
     rece_updated.commento_scritto = nuovo_commento
     rece_updated.save()
 
+    messages.add_message(request, messages.SUCCESS, "Recensione modificata con successo!")
+    return render(request, template_name="account.html", context={
+        "logged_user": request.user,
+        "generi_dict": json.dumps(request.session["generi"]),
+        "recommended_films": request.session["recommended_films"]
+    }, status=200)
+
+
+@login_required
+def remove_rece(request):
+
+    titolo_film = request.GET['titolo_film']
+    Recensione.objects.get(film=Film.objects.get(titolo=titolo_film), utente=request.user).delete()
+
+    messages.add_message(request, messages.SUCCESS, "Recensione eliminata con successo!")
     return render(request, template_name="account.html", context={
         "logged_user": request.user,
         "generi_dict": json.dumps(request.session["generi"]),

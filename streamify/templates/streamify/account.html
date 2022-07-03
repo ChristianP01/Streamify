@@ -66,8 +66,8 @@
                             {% comment %} Lista dei film consigliati {% endcomment %}
                             {% if recommended_films %}
                               <b> Ti consigliamo di guardare: </b> <br><br>
-                              {% for film in recommended_films %}
-                                  <input type="button" class="recommended_button" value="{{film.0 | replace_titles}} al {{film.1}}%"/>
+                              {% for titolo_film, similarity in recommended_films.items %}
+                                  <input type="button" class="recommended_button" value="{{titolo_film | replace_titles}} al {{similarity}}%"/>
                                 <br><br>
                               {% endfor %}
                             {% endif %}

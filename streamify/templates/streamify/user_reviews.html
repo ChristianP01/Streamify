@@ -38,8 +38,6 @@
                                 }
 
                                 label.radio{cursor: pointer}label.radio input{position: absolute;top: 0;left: 0;visibility: hidden;pointer-events: none}label:nth-child(1) span{padding: 10px;border-radius: 50%;border: 2px solid gray;display: inline-block;background-color: gray;text-transform: uppercase;position: relative;transition: all 2s}label:nth-child(2) span{padding: 10px;border-radius: 50%;border: 2px solid #000;background-color: #000;display: inline-block;color: #8f37aa;text-transform: uppercase;position: relative;transition: all 2s}label:nth-child(3) span{padding: 10px;border-radius: 50%;border: 2px solid pink;background-color: pink;display: inline-block;color: #8f37aa;text-transform: uppercase;position: relative;transition: all 2s}label.radio input:checked+span::after{content: '\f179';font-family: 'fontawesome';position: absolute;left: 6px;top: 2px;font-size: 11px;color: #fff}.button{width: 200px;height: 48px;border: none;border-radius: 30px;position: absolute;bottom: 20px;background-color: #126ef9;color: #fff}.button i{margin-top: 1px}@media (max-width:770px){.product-image img{position: absolute;top: 130px;right: 10px;width: 250px}}@media (max-width:470px){.product-image img{position: absolute;top: 190px;right: 10px;width: 150px}}</style>
-
-
                             </style>
                                 </head>
                                 <body className='snippet-body'>
@@ -53,6 +51,7 @@
                         <th class="font-semibold text-sm uppercase px-6 py-4"> Generi </th>
                         <th class="font-semibold text-sm uppercase px-6 py-4"> Voto recensione </th>
                         <th class="font-semibold text-sm uppercase px-6 py-4 text-center"> Commento </th>
+                        <th class="font-semibold text-sm uppercase px-6 py-4 text-center"> Elimina </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -97,20 +96,19 @@
                         </td>
                         <td class="px-6 py-4 text-center" id="column_commento"><div contenteditable>
                             <input type="text" id="cella_commento" value="{{recensione.commento_scritto}}" onchange="saveChanges(this)"/>
-                        </div></td>
+                        </td>
+
+                        <td class="px-6 py-4 text-center">
+                            <img style="cursor:pointer; "src="{% static 'imgs/trashbin.png' %}" alt="Image" width="30" onclick="eliminaRecensione(this)"/>
+                        </td>
+
                     </tr>
                     <tr>
                     {% endfor %}
                 </tbody>
             </table>
-
-            <center>
-                <button style="position: absolute; left: 43%; top: 60%;" class="button" id="save_button" onclick="saveChanges()"> <span>Salva modifiche</span> </button>
-            </center>
         </div>
     </div>
-    
-    
     </body>
 
     <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js'></script>
@@ -131,13 +129,25 @@
                     'titolo_film': titolo_film,
                     'nuovo_voto': nuovo_voto,
                     'nuovo_commento': nuovo_commento
-                },
-
-                success: function( data ) {
-                    alert("Modifica effettuata con successo!!")
                 }
             })
         };
+
+
+        function eliminaRecensione(btn) {
+            var titolo_film = btn.closest('tr').cells[0].innerText
+
+            $.ajax({
+                type:"GET",
+                url: "/streamify/remove_rece/",
+                data:{
+                    'titolo_film': titolo_film,
+                },
+                success: function(html){
+                    location.reload();
+                }
+            });
+        }
     </script>
 
 

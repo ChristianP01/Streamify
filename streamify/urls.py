@@ -15,5 +15,6 @@ urlpatterns = [
     path("catalogo_sort/<str:sort_type>/", views.film_sort, name="catalogo_sortup"),
     path("descr_film/<str:titolo_film>/", views.descrizione_film, name="descrizione_film"),
     path("set_preferito/<str:titolo_film>/<str:scelta>/", views.set_preferito, name="set_preferito"),
-    path("update_db/", views.update_db, name="update_db")
+    path("update_db/", views.update_db, name="update_db"),
+    path("remove_rece/", views.remove_rece, name="remove_rece")
 ]

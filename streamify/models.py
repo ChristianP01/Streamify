@@ -23,8 +23,7 @@ class Genere(models.Model):
 class UserManager(BaseUserManager):
 
   def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
-    if not email:
-        raise ValueError('Users must have an email address')
+
     now = datetime.datetime.now()
     email = self.normalize_email(email)
     user = self.model(

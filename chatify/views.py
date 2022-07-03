@@ -5,7 +5,7 @@ from streamify.models import Film, Genere
 def chatroom(request, room):
 
     logged_user = request.user
-        
+    
     try:
         # Controllo se l'utente loggato ha guardato il film, prima di entrare nella chat.
         # Room contiene il titolo del film

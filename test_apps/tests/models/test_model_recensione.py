@@ -1,7 +1,7 @@
 from streamify.models import Film, Genere, Recensione, Utente
 from django.test import TestCase
 
-class TestModelFilm(TestCase):
+class TestModelRecensione(TestCase):
 
     def setUp(self):
 
@@ -26,5 +26,5 @@ class TestModelFilm(TestCase):
             commento_scritto = "..."
         )
 
-    def test_model_film(self):
+    def test_model_recensione(self):
         self.assertEqual(self.test_rece.__str__(), "testUser: Voto 4 per Spiderman")

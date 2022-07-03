@@ -10,7 +10,7 @@ Le funzionalità principali implementate sono:
 * Ranking di film, per voto e per genere;
 * Recommendation system basato su gusti di altri utenti;
 * Grafici rappresentanti un riassunto dei propri gusti verso i vari generi dei film guardati;
-
+* Group chat divisa per film;
 
 # Usage
 

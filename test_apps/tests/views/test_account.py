@@ -1,7 +1,7 @@
 from django.test import Client, TestCase
 from streamify.models import Film, Genere, Recensione, Utente
 
-class TestAccountSuccess(TestCase):
+class TestAccountNoRecommendationSystem(TestCase):
 
     def setUp(self):
 
@@ -20,11 +20,11 @@ class TestAccountSuccess(TestCase):
 
         self.response = self.client.get('/streamify/account/')
 
-    def test_account_success(self):
-        self.assertEqual(self.response.status_code, 206)
+    def test_account_no_rs(self):
+        self.assertEqual(self.response.status_code, 200)
 
 
-class TestAccountRecommendedSystem(TestCase):
+class TestAccountRecommendationSystem(TestCase):
 
     def setUp(self):
 
@@ -99,5 +99,5 @@ class TestAccountRecommendedSystem(TestCase):
 
         self.response = self.client.get('/streamify/account/')
 
-    def test_account_recommended_system(self):
+    def test_account_recommendation_system(self):
         self.assertEqual(self.response.status_code, 200)

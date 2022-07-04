@@ -27,7 +27,7 @@ class TestReviewSuccess(TestCase):
         self.client = Client()
         self.client.login(username='testUser', password='testUser')
 
-        self.response = self.client.post('/streamify/review/Spiderman/')
+        self.response = self.client.get('/streamify/review/Spiderman/')
 
     def test_review_success(self):
         self.assertEqual(self.response.status_code, 200)

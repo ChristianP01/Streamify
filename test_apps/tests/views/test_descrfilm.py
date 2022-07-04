@@ -26,7 +26,7 @@ class TestDescrFilmLogged(TestCase):
         self.client = Client()
         self.client.login(username='testUser', password='testUser')
 
-        self.response = self.client.post('/streamify/descr_film/Spiderman/')
+        self.response = self.client.get('/streamify/descr_film/Spiderman/')
 
     def test_descr_film_logged(self):
         self.assertEqual(self.response.status_code, 200)
@@ -46,7 +46,7 @@ class TestDescrFilmAnonymous(TestCase):
 
         self.client = Client()
 
-        self.response = self.client.post('/streamify/descr_film/Spiderman/')
+        self.response = self.client.get('/streamify/descr_film/Spiderman/')
 
     def test_descr_film_anonymous(self):
         self.assertEqual(self.response.status_code, 200)

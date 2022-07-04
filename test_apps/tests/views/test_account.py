@@ -18,7 +18,7 @@ class TestAccountSuccess(TestCase):
         self.client = Client()
         self.client.login(username='testUser', password='testUser')
 
-        self.response = self.client.post('/streamify/account/')
+        self.response = self.client.get('/streamify/account/')
 
     def test_account_success(self):
         self.assertEqual(self.response.status_code, 206)
@@ -98,7 +98,7 @@ class TestAccountRecommendedSystem(TestCase):
         self.client = Client()
         self.client.login(username='testUser', password='testUser')
 
-        self.response = self.client.post('/streamify/account/')
+        self.response = self.client.get('/streamify/account/')
 
     def test_account_recommended_system(self):
         self.assertEqual(self.response.status_code, 200)

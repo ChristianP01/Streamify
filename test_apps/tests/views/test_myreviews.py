@@ -29,7 +29,7 @@ class TestMyReviewsLogged(TestCase):
         self.client = Client()
         self.client.login(username='testUser', password='testUser')
 
-        self.response = self.client.post('/streamify/my_reviews/')
+        self.response = self.client.get('/streamify/my_reviews/')
 
     def test_myreviews_logged(self):
         self.assertEqual(self.response.status_code, 200)

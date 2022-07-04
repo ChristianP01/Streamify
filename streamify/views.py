@@ -3,14 +3,14 @@ from django.shortcuts import render
 from streamify.methods import calcolaGeneri, calcolaVoti
 from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_safe, require_GET, require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
 # Contiene la dimensione del dizionario dei generi da considerare come preferiti, su cui applicare il RS.
 RECOM_SYS_NUMS = 3
 
-@require_http_methods("GET")
+@require_safe
 def homepage(request):
 
     # Resetto request.session in modo da simulare un logout completo.
@@ -22,7 +22,7 @@ def homepage(request):
     return render(request,template_name="streamify/home.html")
 
 
-@require_http_methods(["GET","POST"])
+@require_safe
 def catalogo(request):
     # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nei filtri del catalogo
 
@@ -35,7 +35,7 @@ def catalogo(request):
         }, status=200)
 
 
-@require_http_methods(["GET","POST"])
+@require_safe
 @login_required
 def guardaFilm(request, titolo_film):
 
@@ -63,7 +63,7 @@ def guardaFilm(request, titolo_film):
         }, status=409)
 
 
-@require_http_methods(["GET", "POST"])
+@require_safe
 @login_required
 def account(request):
 
@@ -127,7 +127,7 @@ def account(request):
     }, status=200)
     
 
-@require_http_methods(["GET", "POST"])
+@require_safe
 @login_required
 def review(request, titolo_film):
 
@@ -142,6 +142,7 @@ def review(request, titolo_film):
     }, status=200)
         
 
+@require_POST
 @login_required
 def review_final(request):
 
@@ -172,7 +173,8 @@ def review_final(request):
         }, status=409)
 
 
-@require_http_methods(["POST"])
+
+@require_POST
 def cercaFilm(request):
 
     logged_user = request.user
@@ -209,7 +211,7 @@ def cercaFilm(request):
     }, status=200)
 
 
-@require_http_methods(["GET","POST"])
+@require_safe
 @login_required
 def my_reviews(request):
 
@@ -222,7 +224,7 @@ def my_reviews(request):
 
 
 
-@require_http_methods(["GET","POST"])
+@require_GET
 def film_sort(request, sort_type):
     # sort_type = {up | down} in base al tipo di sorting richiesto.
 
@@ -237,14 +239,19 @@ def film_sort(request, sort_type):
         "lista_generi": Genere.objects.all()
     }, status=200)
 
-@require_http_methods(["GET","POST"])
+
+
+@require_GET
 def descrizione_film(request, titolo_film):
 
     return render(request,template_name="streamify/descr_film.html", context={
         "film": Film.objects.get(titolo=titolo_film)
     }, status=200)
 
-@require_http_methods(["GET","POST"])
+
+
+
+@require_GET
 @login_required
 def set_preferito(request, titolo_film, scelta):
     # Scelta può valere {yes, no}
@@ -265,6 +272,7 @@ def set_preferito(request, titolo_film, scelta):
     }, status=200)
 
 
+@require_GET
 @login_required
 def update_db(request):
 
@@ -283,6 +291,8 @@ def update_db(request):
     }, status=200)
 
 
+
+@require_GET
 @login_required
 def remove_rece(request):
 

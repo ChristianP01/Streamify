@@ -21,20 +21,27 @@ class Genere(models.Model):
 
 class UserManager(BaseUserManager):
 
-  def _create_user(self, email, password, **extra_fields):
+    def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
 
-    email = self.normalize_email(email)
-    user = self.model(
-        email=email,
-        is_active=True,
-        **extra_fields
-    )
-    user.set_password(password)
-    user.save(using=self._db)
-    return user
+        email = self.normalize_email(email)
+        user = self.model(
+            email=email,
+            is_staff=is_staff,
+            is_superuser=is_superuser,
+            is_active=True,
+            **extra_fields
+        )
 
-  def create_user(self, email, password):
-    return self._create_user(email, password)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email, password, **extra_fields):
+        return self._create_user(email, password, False, False, **extra_fields)
+
+    def create_superuser(self, password, email="email", **extra_fields ):
+        user=self._create_user(email, password, True, True, **extra_fields)
+        return user
 
 
 class Film(models.Model):
@@ -65,6 +72,8 @@ class Utente(AbstractBaseUser):
     password = models.CharField(max_length=25, default=DEFAULT_GENERIC_VALUE)
     nome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
     cognome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     
     USERNAME_FIELD = 'username'
@@ -76,6 +85,12 @@ class Utente(AbstractBaseUser):
     # Related name sono nomi che indicano il nome con cui, in altri models, si dovrà accedere a questi parametri.
     film_guardati = models.ManyToManyField(Film, default=None, related_name="film_guardati")
     film_preferiti = models.ManyToManyField(Film, default=None, related_name="film_preferiti")
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        return self.is_superuser
     
     def __str__(self):
         out = "Utente " + self.username + ", avente e-mail " + self.email + "."

@@ -2,7 +2,10 @@ from django.shortcuts import render
 from streamify.models import Utente, Film, Genere
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
+from django.views.decorators.http import require_POST
 
+
+@require_POST
 def registrati(request):
     username = request.POST['username']
     pwd = request.POST['password']
@@ -37,6 +40,8 @@ def registrati(request):
     return render(request,template_name="streamify/home.html")
 
 
+
+@require_POST
 def logged(request):
     pwd = request.POST['password']
     username = request.POST['username']

@@ -1,7 +1,11 @@
 from django.contrib import messages
 from django.shortcuts import render
 from streamify.models import Film, Genere
+from django.views.decorators.http import require_safe
+from django.contrib.auth.decorators import login_required
 
+@require_safe
+@login_required
 def chatroom(request, room):
 
     logged_user = request.user

@@ -1,11 +1,9 @@
 import json
-from multiprocessing.sharedctypes import Value
-from types import NoneType
 from django.shortcuts import render
-from streamify.methods import calcolaGeneri, calcolaVoti
+from streamify.methods import calcola_generi, calcola_voti
 from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
-from django.views.decorators.http import require_http_methods, require_safe, require_GET, require_POST
+from django.views.decorators.http import require_safe, require_GET, require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
@@ -39,7 +37,7 @@ def catalogo(request):
 
 @require_safe
 @login_required
-def guardaFilm(request, titolo_film):
+def guarda_film(request, titolo_film):
 
     logged_user = request.user
 
@@ -71,7 +69,7 @@ def account(request):
 
     utente = request.user
     
-    generi = calcolaGeneri(utente)
+    generi = calcola_generi(utente)
 
     # Le salvo nel dizionario di sessione, siccome sarà usata in altre views
     request.session["generi"] = generi
@@ -81,7 +79,7 @@ def account(request):
 
 
     # Dizionario contenente i due generi meglio votati dall'utente
-    logged_two_highest = sorted(calcolaVoti(utente, generi).items(), key=lambda x: x[1], reverse=True)\
+    logged_two_highest = sorted(calcola_voti(utente, generi).items(), key=lambda x: x[1], reverse=True)\
                                                                                                                 [0:RECOM_SYS_NUMS]
     
     if len(logged_two_highest) < RECOM_SYS_NUMS:
@@ -97,7 +95,7 @@ def account(request):
     # Struttura logged_genre/other_genre --> ['nome_genere': 'voto_genere']
     for other_user in Utente.objects.all().exclude(username=utente.username):
         
-        other_two_highest = sorted(calcolaVoti(other_user, calcolaGeneri(other_user)).items(),
+        other_two_highest = sorted(calcola_voti(other_user, calcola_generi(other_user)).items(),
                                                                 key=lambda x: x[1],
                                                                 reverse=True)[0:RECOM_SYS_NUMS]
 
@@ -177,7 +175,7 @@ def review_final(request):
 
 
 @require_POST
-def cercaFilm(request):
+def cerca_film(request):
 
     logged_user = request.user
 

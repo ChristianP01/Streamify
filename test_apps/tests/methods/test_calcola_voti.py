@@ -1,4 +1,4 @@
-from streamify.methods import calcolaGeneri, calcolaVoti
+from streamify.methods import calcola_generi, calcola_voti
 from streamify.models import Film, Genere, Utente
 from django.test import TestCase
 
@@ -30,4 +30,4 @@ class TestCalcolaVotiFilmNonRecensito(TestCase):
         self.test_user.save()
 
     def test_calcola_voti_film_non_recensito(self):
-        self.assertEqual(calcolaVoti(self.test_user, calcolaGeneri(self.test_user)), { 'Azione': 0 })
+        self.assertEqual(calcola_voti(self.test_user, calcola_generi(self.test_user)), { 'Azione': 0 })

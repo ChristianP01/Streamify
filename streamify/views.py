@@ -1,4 +1,6 @@
 import json
+from multiprocessing.sharedctypes import Value
+from types import NoneType
 from django.shortcuts import render
 from streamify.methods import calcolaGeneri, calcolaVoti
 from streamify.models import Film, Recensione, Utente, Genere
@@ -187,13 +189,13 @@ def cercaFilm(request):
     try:
         1 + float(min_score)
         min_score = float(min_score)
-    except:
+    except ValueError:
         min_score = 1.0
 
     try:
         1 + float(max_score)
         max_score = float(max_score)
-    except:
+    except ValueError:
         max_score = 5.0
 
     film_query = Film.objects.filter(titolo__startswith=user_input, generi__name__startswith=genre_input).distinct()

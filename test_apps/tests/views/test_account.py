@@ -53,7 +53,6 @@ class TestAccountRecommendedSystem(TestCase):
         gen2 = Genere.objects.create(name="Avventura")
         gen3 = Genere.objects.create(name="Horror")
         gen4 = Genere.objects.create(name="Fantascienza")
-        gen5 = Genere.objects.create(name="Comico")
         #------------------------------------------------------#
         
         #--------------Generazione film------------------#
@@ -81,13 +80,13 @@ class TestAccountRecommendedSystem(TestCase):
             voto=4,
             commento_scritto='Commento...')
 
-        rece3 = Recensione.objects.create(
+        rece2 = Recensione.objects.create(
             film=test_film1,
             utente=other_user,
             voto=4,
             commento_scritto='Commento...')
 
-        rece4 = Recensione.objects.create(
+        rece3 = Recensione.objects.create(
             film=test_film2,
             utente=other_user,
             voto=5,

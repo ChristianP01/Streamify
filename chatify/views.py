@@ -1,3 +1,4 @@
+from unittest import expectedFailure
 from django.contrib import messages
 from django.shortcuts import render
 from streamify.models import Film, Genere
@@ -15,7 +16,7 @@ def chatroom(request, room):
         # Room contiene il titolo del film
         logged_user.film_guardati.get(titolo=room)
 
-    except:
+    except Film.DoesNotExist:
         messages.error(request, "Devi aver guardato il film per chattare!")
         return render(request, "streamify/catalogo.html", context={
             "film_list": Film.objects.all(),

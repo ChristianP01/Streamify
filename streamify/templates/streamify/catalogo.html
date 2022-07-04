@@ -3,6 +3,7 @@
 {% load replace_titles %}
 
 {% block children %}
+<!doctype html>
 <html>
                             <title>Catalogo</title>
                             <head>
@@ -298,7 +299,7 @@
                         </td>
                         <td class="px-6 py-4">
                             <center> <p class="text-gray-500 text-sm font-semibold tracking-wide">
-                                {{film.get_mediavoto}}
+                                {{film.get_mediavoto|floatformat:2 }}
                             </p> </center>
                         </td>
                         <td class="px-6 py-4 text-center">

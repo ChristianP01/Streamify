@@ -10,69 +10,37 @@ from .models import Genere, Recensione, Utente
 def calcolaGeneri(utente):
     generi = {}
 
-    try:
-        for film in utente.film_guardati.all():
-            for genere in film.generi.all():
-                if genere.name not in generi:
-                    generi[genere.name] = 1
-                else:
-                    generi[genere.name] += 1
-
-        for genere in Genere.objects.all():
+    for film in utente.film_guardati.all():
+        for genere in film.generi.all():
             if genere.name not in generi:
-                generi[genere.name] = 0
+                generi[genere.name] = 1
+            else:
+                generi[genere.name] += 1
 
-        return generi
-        
-    except:
-        return generi
+    for genere in Genere.objects.all():
+        if genere.name not in generi:
+            generi[genere.name] = 0
+
+    return generi
 
 def calcolaVoti(utente, generi):
     voti = {}
-    try:
-        for film in utente.film_guardati.all():
-            try:
-                voto_recensione = int(Recensione.objects.get(utente=utente, film=film).voto)
-            except:
-                voto_recensione = 0
 
-            # Somma dei voti delle recensioni
-            for genere in film.generi.all():
-                if genere.name not in voti:
-                    voti[genere.name] = voto_recensione
-                else:
-                    voti[genere.name] += voto_recensione
-
-        # Calcolo media vera e propria
-        for genere in voti:
-            voti[genere] = voti[genere] / generi[genere]
-
-        return voti
-    
-    except:
-        return []
-            
-
-# def calcolaPercents(utente, generi):
-#     percents = {}
-#     num_films = utente.film_guardati.all().count()
-
-#     for k,v in generi.items():
-#         percents[k] = int(v/num_films*100)
-
-#     return percents
-
-
-def check_login(funz_view):
-    """Re-implementazione di @login_required, dovuta alla poca personalizzazione disponibile."""
-    
-
-    def wrapper(req, *args):
+    for film in utente.film_guardati.all():
         try:
-            logged_user = Utente.objects.get(username=req.session['logged_user']).username
-            return funz_view(req, logged_user)
+            voto_recensione = int(Recensione.objects.get(utente=utente, film=film).voto)
         except:
-            from .views import homepage
-            print("ANON")
-            return homepage(req, None)
-    return wrapper
+            voto_recensione = 0
+
+        # Somma dei voti delle recensioni
+        for genere in film.generi.all():
+            if genere.name not in voti:
+                voti[genere.name] = voto_recensione
+            else:
+                voti[genere.name] += voto_recensione
+
+    # Calcolo media vera e propria
+    for genere in voti:
+        voti[genere] = voti[genere] / generi[genere]
+
+    return voti

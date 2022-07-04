@@ -5,6 +5,7 @@ from streamify.models import Film, Recensione, Utente, Genere
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 # Contiene la dimensione del dizionario dei generi da considerare come preferiti, su cui applicare il RS.
 RECOM_SYS_NUMS = 3
@@ -14,6 +15,9 @@ def homepage(request):
 
     # Resetto request.session in modo da simulare un logout completo.
     request.session.clear()
+
+    # Logout dell'user (in caso fosse loggato), altrimenti l'esecuzione procede senza errori.
+    logout(request)
 
     return render(request,template_name="streamify/home.html")
 
@@ -228,6 +232,7 @@ def film_sort(request, sort_type):
         sort_type = False
 
     return render(request,template_name="streamify/catalogo.html", context={
+        'logged_user': request.user,
         "film_list": sorted(Film.objects.all(), key= lambda film: film.get_mediavoto(), reverse=sort_type),
         "lista_generi": Genere.objects.all()
     }, status=200)
@@ -274,9 +279,7 @@ def update_db(request):
 
     messages.add_message(request, messages.SUCCESS, "Recensione modificata con successo!")
     return render(request, template_name="account.html", context={
-        "logged_user": request.user,
-        "generi_dict": json.dumps(request.session["generi"]),
-        "recommended_films": request.session["recommended_films"]
+        "logged_user": request.user
     }, status=200)
 
 
@@ -288,7 +291,5 @@ def remove_rece(request):
 
     messages.add_message(request, messages.SUCCESS, "Recensione eliminata con successo!")
     return render(request, template_name="account.html", context={
-        "logged_user": request.user,
-        "generi_dict": json.dumps(request.session["generi"]),
-        "recommended_films": request.session["recommended_films"]
+        "logged_user": request.user
     }, status=200)

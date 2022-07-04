@@ -1,6 +1,5 @@
 from django.db import models
 import datetime
-from django.utils.timezone import now
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db.models import Avg
@@ -22,17 +21,12 @@ class Genere(models.Model):
 
 class UserManager(BaseUserManager):
 
-  def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
+  def _create_user(self, email, password, **extra_fields):
 
-    now = datetime.datetime.now()
     email = self.normalize_email(email)
     user = self.model(
         email=email,
-        is_staff=is_staff, 
         is_active=True,
-        is_superuser=is_superuser, 
-        last_login=now,
-        date_joined=now, 
         **extra_fields
     )
     user.set_password(password)
@@ -40,7 +34,7 @@ class UserManager(BaseUserManager):
     return user
 
   def create_user(self, email, password):
-    return self._create_user(email, password, False, False)
+    return self._create_user(email, password)
 
 
 class Film(models.Model):
@@ -71,12 +65,8 @@ class Utente(AbstractBaseUser):
     password = models.CharField(max_length=25, default=DEFAULT_GENERIC_VALUE)
     nome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
     cognome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    last_login = models.DateTimeField(null=True, blank=True)
-    date_joined = models.DateTimeField(default=now())
-
+    
     USERNAME_FIELD = 'username'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = [ 'password', 'nome', 'cognome' ]

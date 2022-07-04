@@ -39,7 +39,7 @@
 	
 	\noindent \textbf{Account}: Nella pagina \textit{Il mio account} sono presenti i vari \textit{componenti}:
 	\begin{itemize}
-		\item \textbf{Le mie recensioni}: Esso rappresenta un collegamento verso una pagina, in cui sarà possibile avere una panoramica delle recensioni lasciate dall'utente verso tutti i film.
+		\item \textbf{Le mie recensioni}: Esso rappresenta un collegamento verso una pagina in cui sarà possibile avere una panoramica di tutte le recensioni lasciate dall'utente. Sarà inoltre possibile modificare i valori al suo interno, in caso l'utente avesse cambiato idea, oppure eliminarla completamente attraverso il pulsante dedicato.
 		\item \textbf{Grafico}: E' un grafico di \textit{Chart.js}, è calcolato attraverso il metodo \textit{calcolaGeneri()}, presente nel file \textit{methods.py}.
 		\item \textbf{Pulsanti blu}: Rappresentano un film \textit{guardato} dall'utente.
 		\item \textbf{Pulsanti viola}: Rappresentano un film \textit{consigliato} dal \textit{recommendation system} all'utente.
@@ -64,13 +64,19 @@
 		\item \textbf{Bootstrap}: E' probabilmente il framework più utilizzato in ambito frontend, in grado di ricoprire i vari HTML, CSS e JavaScript. Ho fatto largo uso di Bootstrap, al fine di disegnare in modo facile e veloce le varie pagine del sito. \\
 		
 		\item \textbf{Chart.js}: E' una libreria che permette di importare grafici all'interno del proprio sito. È molto ben fatta, ben documentata e facile da usare. In questo contesto, è stata usata per disegnare un \textit{grafico poligonale} all'interno della pagina di account dell'utente. \\
+		
+		\item \textbf{AJAX}: Più che una tecnologia può essere vista come un'implementazione (o estensione) di JavaScript, che permette di creare richieste ad un server. E' molto importante perchè è uno strumento molto comodo quando si vuole interconnettere backend e frontend attraverso JavaScript, si pensi ad esempio al fornire al backend valori (più o meno complessi) ottenuti da elementi HTML quali tabelle o div. Facendo qualche esempio, in questo caso è stato utilizzato durante la fase di modifica ed eliminazione di una recensione, recuperando i valori dalla table attraverso JavaScript 'puro' e inviandoli con AJAX ad una Django view.
 	\end{itemize}
 
 	\noindent Lato \textbf{Backend}, invece: 
 	\begin{itemize}
 		\item \textbf{SQLite}, data la comodità nel gestire il database in modo single-file e per la sua diretta integrazione con Django. \\
 		
-		\item \textbf{VSCode}, data la comodità nell'avere plugin che renderizzassero live le pagine HTML durante la scrittura, cosa che ha velocizzato molto il workflow. Inoltre, i plugin per la gestione dei test, facilmente avviabili in qualsiasi momento. Oltretutto, la possibilità di passare facilmente da un linguaggio di markup quale HTML o CSS, a Python/JavaScript.
+		\item \textbf{VSCode}, data la comodità nell'avere plugin che renderizzassero live le pagine HTML durante la scrittura, cosa che ha velocizzato molto il workflow. Inoltre, i plugin per la gestione dei test, facilmente avviabili in qualsiasi momento. Oltretutto, la possibilità di passare facilmente da un linguaggio di markup quale HTML o CSS, a Python/JavaScript. \\
+		
+		\item \textbf{SonarQube}: E' un software dedito all'ispezione di codice al fine di migliorarne la qualità. Permette anche di controllare il coverage, però essendo un po' complicato il link con Django, ho preferito gestire questo fattore attraverso il package 'Coverage.py', mentre ho usato SonarQube per tutti gli altri check sul codice, come il \textit{naming} delle variabili, lo \textit{smell code index}, quantità di \textit{bug} rilevati...
+		
+		\item \textbf{Django}: E' il framework \textit{cuore} del progetto, dato che si occupa dell'interfacciamento con il database, della navigazione web, collegando ogni URL ad una view, della creazione dei modelli, creazione del superuser e del suo '\textit{admin panel}' (...)
 	\end{itemize}
 	\pagebreak
 
@@ -79,13 +85,13 @@
 	Il progetto è stato diviso in 4 app:
 	
 	\begin{itemize}
-		\item \textbf{Streamify}: È l'app principale del progetto, essa contiene le varie pagine, come ad esempio l'homepage, il catalogo dei film, la pagina \textit{'Il mio account'}. 
+		\item \textbf{Streamify}: È l'app principale del progetto, essa contiene tutti i templates e views, escluse quelle relative all'autenticazione e chat. 
 		
-		\item \textbf{Chatify}: Come suggerisce il nome, essa fornisce il servizio di chat all'interno del sito. Ho deciso di separarla da Streamify, al fine di vederlo come un \textit{'servizio ausiliario'}, un po' come se fosse una feature esterna rispetto allo scopo \textit{principale} del sito.
+		\item \textbf{Chatify}: Come suggerisce il nome, essa fornisce il servizio di chat all'interno del sito. Ho deciso di separarla da Streamify, al fine di vederlo come un \textit{'servizio aggiuntivo'}, un po' come se fosse una feature esterna rispetto allo scopo \textit{principale} del progetto.
 		
 		\item \textbf{Auth}: Anche l'autenticazione è stata separata dal sito principale, dato che ho cercato di tenere le varie logiche quanto più separate possibili, al fine di aumentare la modularità del sito e la sua portabilità.
 		
-		\item \textbf{TestApp}: Essa contiene i test di tutte le app citate sopra, creando un'app dedicata a questo scopo, mi è stato più facile gestirli, potendoli raggruppare tutti sotto la stessa directory. Ulteriori dettagli su questo verranno affrontati nel paragrafo dedicato.
+		\item \textbf{TestApp}: Essa contiene i test di tutte le app citate sopra, creando un'app dedicata a questo scopo mi è stato più facile gestirli, potendoli raggruppare tutti sotto la stessa directory. Ulteriori dettagli su questo verranno affrontati nel paragrafo dedicato. \\
 	\end{itemize}
 	\pagebreak
 	
@@ -93,29 +99,33 @@
 	\noindent \centerline {\Huge \textbf{Ulteriori dettagli sulle funzionalità/scelte adottate}} \\ \\
 	
 	\noindent \textbf{Recommendation System}: Esso è stato pensato come la somiglianza tra la doppia \{genere: voto medio\} di ogni utente verso ogni genere presente nel database.
-	Inoltre, verranno dati suggerimenti solamente sui due generi preferiti da utente, dato che difficilmente egli vorrà ricevere consigli su generi che non gli interessano. \\Questa lista di due generi \textit{preferiti} verrà calcolata per ogni utente e verranno cercate delle corrispondenze tra gli elementi. Se trovati, si guarderà la differenza di voto medio al genere. Più la differenza sarà bassa, più si può presumere che i gusti, quantomeno su quel genere, tra i due utenti siano simili, e verranno consigliati all'utente loggato quelli guardati dall'altro utente, ma non da lui. \\
+	Inoltre, verranno dati suggerimenti solamente sui tre generi preferiti da utente, dato che difficilmente egli vorrà ricevere consigli su generi che non gli interessano. \\Questa lista di tre generi \textit{preferiti} verrà calcolata per ogni utente e verranno cercate delle corrispondenze tra gli elementi. Se trovati, si guarderà la differenza di voto medio al genere. Più la differenza sarà bassa, più si può presumere che i gusti, quantomeno su quel genere, tra i due utenti siano simili, e verranno consigliati all'utente loggato quelli guardati dall'altro utente, ma non da lui. \\
 	Poniamo ad esempio:
 	\begin{verbatim}
 		U1: {
-		'Azione': 4.5,
-		'Avventura': 4.8,
+			'Azione': 4.5,
+			'Avventura': 4.8,
+			'Horror': 4,2
 	}
 
 	U2: {
 		'Azione': 4.4,
 		'Avventura': 5.0,
+		'Fantascienza': 4,1
 	}
 	\end{verbatim}
 
-	\noindent Ipotizzando che i due generi preferiti dei due utenti siano quelle sopra citate, verrà trovato un match per entrambi i generi, dato che entrambi i generi di U1 sono i preferiti anche di U2, a questo punto bisogna calcolare la similarità, ovvero \textbf{quanto} il suggerimento può essere inerente, la formula sarà: \\
+	\noindent Ipotizzando che i tre generi preferiti dei due utenti siano quelli sopra citati, verrà trovato un match per i primi due generi, a questo punto bisogna calcolare la similarità, ovvero \textbf{quanto} il suggerimento può essere inerente, la formula sarà: \\
 	
 	$100 - {100 * |VotoGenereU1-VotoGenereU2| \over 5}$ \\ \\
 	
-	\noindent In questo esempio, all'utente U1 verranno suggeriti con una precisione del 98\% i film di genere \textit{Azione} guardati da U2 (ma ovviamente non da U1) e allo stesso modo con la precisione del 96\% i film di genere \textit{Avventura}. \\
+	\noindent In questo esempio, all'utente U1 verranno suggeriti con una precisione del 98\% i film di genere \textit{Azione} guardati da U2 (ma ovviamente non da U1) e allo stesso modo con la precisione del 96\% i film di genere \textit{Avventura}. \\ \\
 	
-	
-	
-	\noindent \textbf{Gestione delle sessioni}: L'utente loggato è stato gestito attraverso l'uso di \textbf{session}, ovvero un dizionario Python facente parte del parametro \textit{request}, in cui è possibile salvare valori relativi alla sessione corrente.
+	\noindent \textbf{Gestione delle sessioni}: È stato fatto uso delle sessioni attraverso il dizionario associato a \textit{request}, ovvero \textit{request.session}. In esso sono stati salvati i valori che sarebbero stati utili durante tutta la durata della sessione attuale, al fine di poterli condividere con le varie views. Alcuni esempi sono:
+	\begin{itemize}
+		\item \textbf{recommended\_films} --> Contiene la lista di film consigliati dal recommendation system
+		\item \textbf{generi} --> Contiene il dizionario con coppie \{genere: quantità\_film\_visti\} per il disegno del grafico nell'account page. \\
+	\end{itemize}
 	Le sessioni possono poi essere personalizzate in base alle proprie preferenze attraverso vari parametri, personalmente ho fatto uso dei seguenti, impostati nel file \textit{settings.py}:
 	\begin{verbatim}
 		SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -128,21 +138,27 @@
 	
 	\noindent \textbf{Tipi di utenti}: Gli utenti, all'interno del sito, sono di 3 tipi:
 	\begin{itemize}
-		\item \textbf{Anonimo}: L'utente \textit{anonimo} è un utente coi permessi di base. Gli è concesso entrare nel catalogo attraverso il pulsante \textit{Entra come guest}, può solamente sfogliare il catalogo dei film e consultarne i dettagli, come titolo, valutazione media, anno di uscita...
+		\item \textbf{Anonimo}: L'utente \textit{anonimo}, o anche \textit{AnonymousUser} è un utente coi permessi di base. Gli è concesso entrare nel catalogo attraverso il pulsante \textit{Entra come guest}, può solamente sfogliare il catalogo dei film e consultarne i dettagli, come titolo, valutazione media, anno di uscita...
 		 
-		\item \textbf{Loggato}: Un utente \textit{loggato} ha invece la possibilità di guardare un film, attraverso un pulsante presente difianco al film, nel catalogo. Ha la possibilità di consultare la propria pagina \textit{Il mio account}, per avere la lista dei film da egli guardati, le recensioni lasciate e i film suggeriti dal recommendation system. Sempre in questa pagina è presente anche il grafico reso disponibile da Chart.js, che mostra in modo user-friendly i generi preferiti.
-		\item \textbf{Admin}: L'utente \textit{admin} è inteso come l'amministratore/gestore del sito. Ha il permesso di aggiungere, modificare ed eliminare utenti, film e generi. 
+		\item \textbf{Loggato}: Un utente \textit{loggato} ha invece la possibilità di guardare un film, attraverso un pulsante presente in corrispondenza del film, nel catalogo. Ha la possibilità di consultare la propria pagina \textit{Il mio account}, per avere la lista dei film da egli guardati, le recensioni lasciate e i film suggeriti dal recommendation system. Sempre in questa pagina è presente anche il grafico reso disponibile da Chart.js, che mostra in modo user-friendly i generi preferiti.
+		\item \textbf{Admin}: L'utente \textit{admin} è inteso come l'amministratore/gestore del sito. Ha il permesso di aggiungere, modificare ed eliminare utenti, film e generi. \\
 	\end{itemize}
 
-	\noindent La gestione degli utenti è stata nettamente diversificata da quella di \textit{Django}, non è presente infatti la concezione di \textit{AnonymousUser} vero e proprio (fornito per l'appunto da Django stesso). Questo perchè sono sorte alcune problematiche con i form '\textit{puri}' di Django, come ad esempio una possibile ma verbosa estensività, sia nei form che nell'autenticazione.\\
-	La soluzione è stata quindi quella di gestire manualmente gli utenti, inserendo nei template dei classici form HTML, i cui valori sarebbero poi stati inviati alle view corrispondenti attraverso \textbf{GET} o \textbf{POST}. \\
-	Tornando alla gestione degli utenti, essi sono stati gestiti, come detto, manualmente, l'utente inserirà (in caso di login), il proprio \textit{username} e \textit{password} e verrà fatto un controllo dalla view corrispondente facendo un check del database. Questa gestione ha sicuramente pro e contro, perchè in certe situazioni era più comodo controllare direttamente il parametro '\textit{user}' della request, per capire se era presente un utente loggato o meno. Al tempo stesso però, una gestione del genere mi ha dato più '\textit{awareness}' su ciò che andavo a controllare. \\ \\
+	\noindent La gestione degli utenti è stata ripresa da quella \textit{base} di Django, ovvero il modello \textit{Utente} altro non è che un'estensione della classe \textit{AbstractBaseUser}, fornito direttamente da Django. \\
+	Le classi da cui un custom user può essere esteso sono AbstractBaseUser e AbstractUser, nel mio caso ho scelto la prima, dato che si tratta di una versione quanto più \textit{basic} possibile, al fine di poterla personalizzare a mio piacimento. \\
+	Se si fa uso di AbstractUser/AbstractBaseUser, bisogna specificare a Django quale modello verrà interpretato come utente, ciò è possibile inserendo nel file \textit{settings.py} la seguente riga: \\ \\
+	AUTH\_USER\_MODEL = 'streamify.Utente' \\ \\
+	Estendere un utente da AbstractBaseUser porta notevoli benefit rispetto a crearlo \textit{from-scratch}, dato che fornisce la possibilità di usare vari decoratori (anch'essi già forniti da Django) per il controllo sugli utenti. Ad esempio: 
 	
-	\noindent \textbf{Status codes}: Gli status codes sono una parte fondamentale nello sviluppo di un applicativo web, dato che forniscono il modo per diversificare l'esito di varie operazioni. Essi sono stati utili durante la scrittura dei test, dato che mi è stato possibile usarli per confermare che l'esito di una determinata operazione fosse quello atteso. Collegandomi a loro, ho evitato l'uso del decoratore \textit{@login\_required}, perchè come dice il nome esso controlla solamente se è presente un utente loggato in quel momento. Questo porta due problemi:
-	\begin{enumerate}
-		\item Gestendo manualmente gli utenti e non facendo quindi uso del \textit{Django user}, il decoratore non aveva senso.
-		\item La maggior parte delle mie views ha più status code. Ad esempio, se viene cliccato il pulsante '\textit{Chatta}', l'utente oltre ad essere loggato deve anche aver guardato il film. Un'implementazione sarebbe comunque stata possibile, ma l'aver gestito manualmente i controlli credo abbia semplificato molto la creazione dei test e la l'ordine della view in sè. \\ \\
-	\end{enumerate}
+	\begin{itemize}
+		\item \textbf{login\_required}: Come ci suggerisce il nome, viene usato per decorare una funzione che necessita di un utente effettivamente loggato per essere eseguita.
+		
+		\item \textbf{authenticate}: Altro non è che una funzione che prende in input un set di credenziali (solitamente username/email e password), fa un check nel database cercando nel modello definito come utente e, in caso di match, ritorna l'oggetto desiderato.
+		
+		\item \textbf{login}: Una volta aver ottenuto un utente attraverso authenticate() e quindi essersi accertati che, dato il set di credenziali, esista effettivamente un tale utente nel database, sarà possibile \textit{assegnarlo} alla sessione corrente, attraverso appunto questa funzione. \\ \\
+	\end{itemize}
+	
+	\noindent \textbf{Status codes}: Gli status codes sono una parte fondamentale nello sviluppo di un applicativo web, dato che forniscono il modo per diversificare l'esito di varie operazioni. Essi sono stati utili durante la scrittura dei test, dato che mi è stato possibile usarli per confermare che l'esito di una determinata operazione fosse quello atteso. Possono essere inseriti manualmente e passati come parametro durante il return del render di una view, con parametro \textit{status}. \\ \\
 	
 	\noindent \textbf{Template tags}: Un template tag è una sorta di funzione applicabile ad un template. Nel mio caso ne ho implementata solamente una, chiamata \textit{replace\_titles}, la sua funzione è quella di prendere in input il titolo di un film, che avrà dei \_ al posto dei whitespace (per comodità nei link, quando passato come parametro GET), e sostituirà quest'ultimi con dei whitespace appropriati, si tratta quindi solamente di un workaround \textit{grafico}. \\ \\
 	
@@ -152,13 +168,15 @@
 	\noindent All'interno del progetto sono presenti 4 entità:
 	
 	\begin{itemize}
-		\item \textbf{Utente}: Un \textit{utente} è definito dai seguenti \textit{fields}:
+		\item \textbf{Utente}: Il modello Utente eredita dalla classe padre \textit{built-in} di Django, \textbf{AbstractBaseUser}. La particolarità di quest'ultima, rispetto a \textbf{AbstractUser}, è l'essere il più minimale possibile, esso infatti è composto solamente di \textit{password} e \textit{last\_login}.\\ \\
+		Un utente è stato definito dai seguenti \textit{fields}:
 		\begin{itemize}
 			\item \textbf{username}
 			\item \textbf{email}
 			\item \textbf{password}
 			\item \textbf{nome}
-			\item \textbf{cognome} \\
+			\item \textbf{cognome}
+			\item \textbf{is\_active} --> Alternativa all'eliminazione dal DB di un utente in situazioni come un \textit{blocco temporaneo} dell'account. \\
 		\end{itemize}
 		
 		\item \textbf{Film}:
@@ -172,7 +190,7 @@
 		
 		\item \textbf{Genere}:
 		\begin{itemize}
-			\item \textbf{name}: Rappresenta il nome del genere, e.g \textit{Azione, avventura...} \\
+			\item \textbf{name}: Rappresenta il nome del genere, e.g. \textit{Azione, Avventura...} \\
 		\end{itemize}
 		
 		
@@ -185,26 +203,35 @@
 			\item \textbf{commento\_scritto}: Commento scritto opzionale.
 		\end{itemize}
 	\end{itemize}
+
+	\noindent E' presente poi lo UserManager, ovvero un'estensione della classe padre BaseUserManager, il cui scopo è quello di gestire la creazione di nuovi utenti. Esso verrà chiamato durante la creazione di un utente attraverso la seguente operazione, presente nel modello Utente:\\ \noindent objects = UserManager() \\ \\
+	Lo UserManager creerà attraverso il metodo \textit{\_create\_user(self, email, password, **extra\_field)}, l'utente. Inoltre, setterà la password con il metodo \textit{set\_password()}, che effettuerà l'hash della password per aumentarne la sicurezza.
+
 	\pagebreak
 	
 	
 	\noindent \centerline {\Huge \textbf{Testing}} \\
 	
-	\noindent Come specifica nel paragrafo riguardo alla divisione in app, i test sono stati separati dal resto delle applicazioni, questo ha permesso di facilitare la loro gestione, permettendomi di raggrupparli tutti sotto la stessa app. Dentro il path ./test\_apps/tests/, possiamo trovare varie directory. \\Ho deciso di separare anche qui i test al fine di tenerli ordinati e poter, su richiesta, eseguire test riguardanti un preciso/solo alcuni argomenti. \\
+	\noindent Come specificato nel paragrafo riguardo alla divisione in più app, i test sono stati separati dal resto delle applicazioni, questo ha permesso di facilitare la loro gestione, permettendomi di raggrupparli tutti sotto la stessa app. Dentro il path ./test\_apps/tests/, possiamo trovare varie directory. \\Ho deciso di separare anche qui i test al fine di tenerli ordinati e poter, su richiesta, eseguire test riguardanti un preciso/alcuni argomenti. \\
 	Per i test mi sono affidato a \textit{Django Unit Test Framework}, che sfrutta nativamente \textit{unittest}.
-	I test totali sono 33. \\
 	Sono presenti più test per ogni singola view, dato che è stato testato ogni possibile aspetto di ogni view, ovvero il caso di \textit{success}, \textit{fail} e \textit{conflict}. \\ \\
-	Per orientarmi durante la scrittura di un test, è stato utile assegnare lo status code manualmente ad ogni render delle view:
+	Per orientarmi durante la scrittura di un test, è stato utile assegnare lo status code manualmente ad ogni render delle view, alcuni esempi:
 	\begin{itemize}
 		\item Se l'utente effettua l'accesso con successo, lo status code sarà 200 (\textbf{Successo}).
 		\item Se l'utente inserisce credenziali errate, lo status code sarà 401 (\textbf{Unauthorized}).
 		\item Se l'utente si registra con username o email già in uso, lo status code sarà 409 (\textbf{Conflitto}).
 	\end{itemize}
+
+	\noindent I test verranno \textit{eseguiti} da \textbf{coverage.py} un package fornito da PIP, con cui Django si è dimostrato veramente ben integrato. Coverage può cercare, attraverso il parametro '--source' all'interno di path specifici, motivo per cui ho tenuto a separare i vari tipi di test. Di seguito, verrà riportato un resoconto del coverage dell'intero progetto:
+	
+	\centering \includegraphics[width=11cm, ]{Immagini/coverage_report.png} \\
+	\centering Coverage report
+
 	\pagebreak
 	
 	
-	\noindent \centerline {\Huge \textbf{Schemi}} \\ \\ \\
-	\centering \includegraphics[width=11cm, ]{Immagini/uml_schema_streamify.png} \\
+	\noindent \centerline {\Huge \textbf{Schemi}} \\
+	\centering \includegraphics[width=11cm, ]{Immagini/streamify.png} \\
 	\centering Schema UML
 	
 	

@@ -3,6 +3,7 @@
 {% load replace_titles %}
 
 {% block children %}
+<!doctype html>
 <html>
                             <title>Le mie recensioni</title>
                             <head>
@@ -62,7 +63,7 @@
                                 <div>
                                    <p>
                                         <a href="/streamify/descr_film/{{recensione.film.titolo}}">
-                                            {{recensione.film.titolo | replace_titles}}
+                                            {{recensione.film.titolo}}
                                         </a>
                                     </p>
                                 </div>
@@ -129,6 +130,10 @@
                     'titolo_film': titolo_film,
                     'nuovo_voto': nuovo_voto,
                     'nuovo_commento': nuovo_commento
+                },
+
+                success: function(html) {
+                    location.reload();
                 }
             })
         };
@@ -143,7 +148,7 @@
                 data:{
                     'titolo_film': titolo_film,
                 },
-                success: function(html){
+                success: function(html) {
                     location.reload();
                 }
             });

@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import render
-from streamify.methods import calcola_generi, calcola_voti
 from streamify.models import Film, Recensione, Utente, Genere
+from streamify.methods import calcola_generi, calcola_recommendation_system
 from django.contrib import messages
 from django.views.decorators.http import require_safe, require_GET, require_POST
 from django.contrib.auth.decorators import login_required
@@ -67,63 +67,18 @@ def guarda_film(request, titolo_film):
 @login_required
 def account(request):
 
-    utente = request.user
-    
-    generi = calcola_generi(utente)
-
     # Le salvo nel dizionario di sessione, siccome sarà usata in altre views
-    request.session["generi"] = generi
-
-    # Lista contenente i film suggeriti dal recommendation system
-    recommended_films = {}
-
-
-    # Dizionario contenente i due generi meglio votati dall'utente
-    logged_two_highest = sorted(calcola_voti(utente, generi).items(), key=lambda x: x[1], reverse=True)\
-                                                                                                                [0:RECOM_SYS_NUMS]
-    
-    if len(logged_two_highest) < RECOM_SYS_NUMS:
-        request.session['recommended_films'] = {}
-
-        return render(request, template_name="streamify/account.html", context={
-        "logged_user": utente,
-        "generi_dict": json.dumps(generi),
-        "recommended_films": request.session['recommended_films']
-        }, status=206)
-
-
-    # Struttura logged_genre/other_genre --> ['nome_genere': 'voto_genere']
-    for other_user in Utente.objects.all().exclude(username=utente.username):
-        
-        other_two_highest = sorted(calcola_voti(other_user, calcola_generi(other_user)).items(),
-                                                                key=lambda x: x[1],
-                                                                reverse=True)[0:RECOM_SYS_NUMS]
-
-        for logged_genre in logged_two_highest:
-            for other_genre in other_two_highest:
-
-                if logged_genre[0] == other_genre[0]:
-                    similarity = (100-100*( abs(logged_genre[1]-other_genre[1]) /5))
-                    if similarity >= 80:
-
-                        # Ritorno i film guardati "in più" da other_user --> logged_user
-                        for film in other_user.film_guardati.all():
-                            if film not in utente.film_guardati.all() and \
-                                    Genere.objects.get(name=logged_genre[0]) in film.generi.all():
-                                    recommended_films[film.titolo] = int(similarity)
-
-    # Rimuovo i doppioni (dato che potrebbero essere suggeriti da più utenti).
-    # recommended_films = list(set(recommended_films[0]))
+    # request.session["generi"] = generi
 
     # Salvo i film nella sessione al fine di poterli ritornare in futuro.
-    request.session["recommended_films"] = recommended_films
+    # request.session["recommended_films"] = 
 
     #-------------------------------------------------------------------#
 
     return render(request, template_name="streamify/account.html", context={
-        "logged_user": utente,
-        "generi_dict": json.dumps(generi),
-        "recommended_films": recommended_films
+        "logged_user": request.user,
+        "generi_dict": json.dumps(calcola_generi(request.user)),
+        "recommended_films": calcola_recommendation_system(request.user)
     }, status=200)
     
 
@@ -159,8 +114,8 @@ def review_final(request):
         messages.add_message(request, messages.SUCCESS, "Hai recensito correttamente il film!")
         return render(request, template_name="account.html", context={
             "logged_user": logged_user,
-            "generi_dict": json.dumps(request.session["generi"]),
-            "recommended_films": request.session["recommended_films"]
+            "generi_dict": json.dumps(calcola_generi(request.user)),
+            "recommended_films": calcola_recommendation_system(request.user)
         }, status=200)
 
 
@@ -168,8 +123,8 @@ def review_final(request):
         messages.add_message(request, messages.WARNING, "Hai già recensito questo film!")
         return render(request, template_name="account.html", context={
             "logged_user": logged_user,
-            "generi_dict": json.dumps(request.session["generi"]),
-            "recommended_films": request.session["recommended_films"]
+            "generi_dict": json.dumps(calcola_generi(request.user)),
+            "recommended_films": calcola_recommendation_system(request.user)
         }, status=409)
 
 
@@ -267,8 +222,8 @@ def set_preferito(request, titolo_film, scelta):
 
     return render(request, template_name="account.html", context={
         "logged_user": logged_user,
-        "generi_dict": json.dumps(request.session["generi"]),
-        "recommended_films": request.session["recommended_films"]
+        "generi_dict": json.dumps(calcola_generi(request.user)),
+        "recommended_films": calcola_recommendation_system(request.user)
     }, status=200)
 
 

@@ -65,7 +65,7 @@
 		
 		\item \textbf{Chart.js}: E' una libreria che permette di importare grafici all'interno del proprio sito. È molto ben fatta, ben documentata e facile da usare. In questo contesto, è stata usata per disegnare un \textit{grafico poligonale} all'interno della pagina di account dell'utente. \\
 		
-		\item \textbf{AJAX}: Più che una tecnologia può essere vista come un'implementazione (o estensione) di JavaScript, che permette di creare richieste ad un server. E' molto importante perchè è uno strumento molto comodo quando si vuole interconnettere backend e frontend attraverso JavaScript, si pensi ad esempio al fornire al backend valori (più o meno complessi) ottenuti da elementi HTML quali tabelle o div. Facendo qualche esempio, in questo caso è stato utilizzato durante la fase di modifica ed eliminazione di una recensione, recuperando i valori dalla table attraverso JavaScript 'puro' e inviandoli con AJAX ad una Django view.
+		\item \textbf{AJAX}: Più che una tecnologia può essere vista come un'implementazione (o estensione) di JavaScript, che permette di creare richieste ad un server. E' molto importante perchè è uno strumento molto comodo quando si vuole interconnettere backend e frontend attraverso JavaScript, si pensi ad esempio al fornire al backend valori (più o meno complessi) ottenuti da elementi HTML quali tabelle o div. Facendo qualche esempio, in questo caso è stato utilizzato durante la fase di modifica ed eliminazione di una recensione, recuperando i valori dalla table attraverso JavaScript 'puro' e inviandoli con AJAX ad una Django view. \\ \\
 	\end{itemize}
 
 	\noindent Lato \textbf{Backend}, invece: 
@@ -74,9 +74,16 @@
 		
 		\item \textbf{VSCode}, data la comodità nell'avere plugin che renderizzassero live le pagine HTML durante la scrittura, cosa che ha velocizzato molto il workflow. Inoltre, i plugin per la gestione dei test, facilmente avviabili in qualsiasi momento. Oltretutto, la possibilità di passare facilmente da un linguaggio di markup quale HTML o CSS, a Python/JavaScript. \\
 		
-		\item \textbf{SonarQube}: E' un software dedito all'ispezione di codice al fine di migliorarne la qualità. Permette anche di controllare il coverage, però essendo un po' complicato il link con Django, ho preferito gestire questo fattore attraverso il package 'Coverage.py', mentre ho usato SonarQube per tutti gli altri check sul codice, come il \textit{naming} delle variabili, lo \textit{smell code index}, quantità di \textit{bug} rilevati...
+
 		
-		\item \textbf{Django}: E' il framework \textit{cuore} del progetto, dato che si occupa dell'interfacciamento con il database, della navigazione web, collegando ogni URL ad una view, della creazione dei modelli, creazione del superuser e del suo '\textit{admin panel}' (...)
+		\item \textbf{Django}: E' il framework \textit{cuore} del progetto, dato che si occupa dell'interfacciamento con il database, della navigazione web, collegando ogni URL ad una view, della creazione dei modelli, creazione del superuser e del suo '\textit{admin panel}' (...) \\ \\
+	\end{itemize}
+
+	\noindent \textbf{Altri strumenti}:
+	\begin{itemize}
+		\item \textbf{SonarQube}: E' un software dedito all'ispezione di codice al fine di migliorarne la qualità. Permette anche di controllare il coverage, però essendo un po' complicato il link con Django, ho preferito gestire questo fattore attraverso il package 'Coverage.py', mentre ho usato SonarQube per tutti gli altri check sul codice, come il \textit{naming} delle variabili, lo \textit{smell code index}, quantità di \textit{bug} rilevati, il \textit{security hotspot index}...
+		
+		\item \textbf{Git/Github}: Per il \textit{version control} ho usato \textit{Git}, usando come servizio di hosting \textit{Github}. Fin dalle prime righe, il progetto è stato versionato sulla piattaforma.
 	\end{itemize}
 	\pagebreak
 
@@ -85,13 +92,13 @@
 	Il progetto è stato diviso in 4 app:
 	
 	\begin{itemize}
-		\item \textbf{Streamify}: È l'app principale del progetto, essa contiene tutti i templates e views, escluse quelle relative all'autenticazione e chat. 
+		\item \textbf{Streamify}: È l'app principale del progetto, essa contiene tutti i templates e views, escluse quelle relative all'autenticazione e chat. In essa sono presenti \textbf{tutti} i model, ho preferito definirli tutti nella stessa applicazione in modo da aumentare l'ordine. \\
 		
-		\item \textbf{Chatify}: Come suggerisce il nome, essa fornisce il servizio di chat all'interno del sito. Ho deciso di separarla da Streamify, al fine di vederlo come un \textit{'servizio aggiuntivo'}, un po' come se fosse una feature esterna rispetto allo scopo \textit{principale} del progetto.
+		\item \textbf{Chatify}: Come suggerisce il nome, essa fornisce il servizio di chat all'interno del sito. Ho deciso di separarla da Streamify, al fine di vederlo come un \textit{'servizio aggiuntivo'}, un po' come se fosse una feature esterna rispetto allo scopo \textit{principale} del progetto. \\
 		
-		\item \textbf{Auth}: Anche l'autenticazione è stata separata dal sito principale, dato che ho cercato di tenere le varie logiche quanto più separate possibili, al fine di aumentare la modularità del sito e la sua portabilità.
+		\item \textbf{Auth}: Anche l'autenticazione è stata separata dal sito principale, dato che ho cercato di tenere le varie logiche quanto più separate possibili, al fine di aumentare la modularità del sito e la sua riusabilità. \\
 		
-		\item \textbf{TestApp}: Essa contiene i test di tutte le app citate sopra, creando un'app dedicata a questo scopo mi è stato più facile gestirli, potendoli raggruppare tutti sotto la stessa directory. Ulteriori dettagli su questo verranno affrontati nel paragrafo dedicato. \\
+		\item \textbf{Test\_Apps}: Essa contiene i test di tutte le app citate sopra, creando un'app dedicata a questo scopo mi è stato più facile gestirli, potendoli raggruppare tutti sotto la stessa directory. Ulteriori dettagli su questo verranno affrontati nel paragrafo dedicato. \\
 	\end{itemize}
 	\pagebreak
 	
@@ -176,7 +183,11 @@
 			\item \textbf{password}
 			\item \textbf{nome}
 			\item \textbf{cognome}
-			\item \textbf{is\_active} --> Alternativa all'eliminazione dal DB di un utente in situazioni come un \textit{blocco temporaneo} dell'account. \\
+			\item \textbf{is\_active} --> Alternativa all'eliminazione dal DB di un utente in situazioni come un \textit{blocco temporaneo} dell'account.
+			\item \textbf{is\_staff} --> Booleano che indica se un utente può accedere alla pagina di admin.
+			\item \textbf{is\_superuser} --> Booleano che indica se un utente ha i permessi di admin.
+			\item \textbf{date\_joined} --> Data in cui l'utente si è registrato al sito.
+			\item \textbf{last\_login} --> Data in cui l'utente ha effettuato l'accesso l'ultima volta.
 		\end{itemize}
 		
 		\item \textbf{Film}:
@@ -198,8 +209,8 @@
 		\item \textbf{Recensione}:
 		\begin{itemize}
 			\item \textbf{voto}: Rappresenta il voto numerico della recensione, con range 1$\sim$5.
-			\item \textbf{film}: \textit{Foreign Key} che specifica il film recensito.
-			\item \textbf{utente}: \textit{Foreign Key} che specifica l'utente autore della recensione.
+			\item \textbf{film}: \textit{Foreign Key} di \textit{Film} che specifica il film recensito.
+			\item \textbf{utente}: \textit{Foreign Key} \textit{Utente} che specifica l'utente autore della recensione.
 			\item \textbf{commento\_scritto}: Commento scritto opzionale.
 		\end{itemize}
 	\end{itemize}
@@ -233,6 +244,11 @@
 	\noindent \centerline {\Huge \textbf{Schemi}} \\
 	\centering \includegraphics[width=11cm, ]{Immagini/streamify.png} \\
 	\centering Schema UML
+	
+	\pagebreak
+	
+	
+	\noindent \centerline {\Huge \textbf{Problemi riscontrati}} \\
 	
 	
 	

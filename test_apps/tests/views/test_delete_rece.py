@@ -34,7 +34,7 @@ class TestRemoveRecensione(TestCase):
         self.client = Client()
         self.client.login(username='testUser', password='testUser')
 
-        self.response = self.client.get('/streamify/remove_rece/?titolo_film=Spiderman')
+        self.response = self.client.get('/db_ops/remove_rece/?titolo_film=Spiderman')
         
     def test_remove_recensione(self):
         self.assertEqual(self.response.status_code, 200)

@@ -69,7 +69,7 @@ class Film(models.Model):
 class Utente(AbstractBaseUser):
     username = models.CharField(max_length=25, primary_key=True)
     email = models.EmailField(max_length=50, default=DEFAULT_GENERIC_VALUE, unique=True)
-    password = models.CharField(max_length=25, default=DEFAULT_GENERIC_VALUE)
+    password = models.CharField(max_length=200, default=DEFAULT_GENERIC_VALUE)
     nome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
     cognome = models.CharField(max_length=50, default=DEFAULT_GENERIC_VALUE)
     is_staff = models.BooleanField(default=False)

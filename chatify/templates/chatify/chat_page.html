@@ -81,11 +81,13 @@
                   innerDiv.className = "comment-text text-justify mt-2"
                 
                   var ts = new Date();
+                  var minutes = ts.getMinutes()
+                  if (minutes < 10) {minutes = "0"+minutes;}
                   var seconds = ts.getSeconds()
                   if (seconds < 10) {seconds = "0"+seconds;}
                   
                   innerDiv.innerHTML =    "<h4>" + data["user"]+ " <small><i>" + 
-                                              ts.getHours()+":"+ts.getMinutes()+":"+ seconds + " </i></small></h4>" + 
+                                              ts.getHours()+":"+minutes+":"+ seconds + " </i></small></h4>" + 
                                               "<p>" + data["msg"] + "</p>";
 
                   chatMsg.appendChild(img);

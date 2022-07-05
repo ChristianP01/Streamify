@@ -30,12 +30,12 @@
 	
 	
 	
-	\noindent \centerline {\Huge \textbf{Approfondimenti sui template}} \\ \\
+	\noindent {\centerline {\Huge \textbf{Approfondimenti sui template}} \\ \par}
 	
 	\noindent \textbf{Home}: Essa contiene i form di login/registrazione. E' possibile anche accedere al sito come utenti anonimi, attraverso il tasto '\textit{Entra come guest}'. \\
 	
 	\noindent \textbf{Catalogo}: E' il catalogo del sito, al suo interno è possibile trovare la lista di tutti i film, con annessa \textbf{valutazione, generi, stato} (guardato/non guardato) e un \textbf{pulsante} che simula la possibilità di guardare il film. \\
-	Cliccando sul titolo del film si verrà reindirizzati verso una pagina descrittiva più accurata, in cui sarà possibile avere informazioni aggiuntive quali, ad esempio, la trama. Inoltre, sempre nella pagina descrittiva del film, sarà possibile trovare un pulsante chiamato \textit{Chatta}, che appunto fornirà l'accesso, previa visione del film e login nel sito, alla chat di gruppo specifica del film. \\
+	Cliccando sul titolo del film si verrà reindirizzati verso una pagina descrittiva più accurata, in cui sarà possibile avere informazioni aggiuntive quali, ad esempio, la trama. Inoltre, sempre nella pagina descrittiva del film, sarà possibile trovare un pulsante \textit{Chatta}, che appunto fornirà l'accesso, previa visione del film e login nel sito, alla chat di gruppo specifica del film. \\
 	
 	\noindent \textbf{Account}: Nella pagina \textit{Il mio account} sono presenti i vari \textit{componenti}:
 	\begin{itemize}
@@ -57,7 +57,7 @@
 	\pagebreak
 	
 	
-	\noindent \centerline {\Huge \textbf{Tecnologie utilizzate}} \\ \\
+	\noindent {\centerline {\Huge \textbf{Tecnologie utilizzate}} \\ \par}
 	
 	\noindent \textbf{Frontend}: Le tecnologie utilizzate lato frontend sono state: 
 	\begin{itemize}
@@ -88,7 +88,7 @@
 	\pagebreak
 
 	
-	\noindent \centerline {\Huge \textbf{Divisione nelle varie app}} \\ \\ 
+	\noindent {\centerline {\Huge \textbf{Divisione nelle varie app}} \\ \par} 
 	Il progetto è stato diviso in 4 app:
 	
 	\begin{itemize}
@@ -102,8 +102,7 @@
 	\end{itemize}
 	\pagebreak
 	
-	
-	\noindent \centerline {\Huge \textbf{Ulteriori dettagli sulle funzionalità/scelte adottate}} \\ \\
+	\noindent {\centerline {\Huge \textbf{Ulteriori dettagli sulle funzionalità/scelte adottate}} \\ \par}
 	
 	\noindent \textbf{Recommendation System}: Esso è stato pensato come la somiglianza tra la doppia \{genere: voto medio\} di ogni utente verso ogni genere presente nel database.
 	Inoltre, verranno dati suggerimenti solamente sui tre generi preferiti da utente, dato che difficilmente egli vorrà ricevere consigli su generi che non gli interessano. \\Questa lista di tre generi \textit{preferiti} verrà calcolata per ogni utente e verranno cercate delle corrispondenze tra gli elementi. Se trovati, si guarderà la differenza di voto medio al genere. Più la differenza sarà bassa, più si può presumere che i gusti, quantomeno su quel genere, tra i due utenti siano simili, e verranno consigliati all'utente loggato quelli guardati dall'altro utente, ma non da lui. \\
@@ -128,20 +127,17 @@
 	
 	\noindent In questo esempio, all'utente U1 verranno suggeriti con una precisione del 98\% i film di genere \textit{Azione} guardati da U2 (ma ovviamente non da U1) e allo stesso modo con la precisione del 96\% i film di genere \textit{Avventura}. \\ \\
 	
-	\noindent \textbf{Gestione delle sessioni}: È stato fatto uso delle sessioni attraverso il dizionario associato a \textit{request}, ovvero \textit{request.session}. In esso sono stati salvati i valori che sarebbero stati utili durante tutta la durata della sessione attuale, al fine di poterli condividere con le varie views. Alcuni esempi sono:
-	\begin{itemize}
-		\item \textbf{recommended\_films} --> Contiene la lista di film consigliati dal recommendation system
-		\item \textbf{generi} --> Contiene il dizionario con coppie \{genere: quantità\_film\_visti\} per il disegno del grafico nell'account page. \\
-	\end{itemize}
+	\noindent \textbf{Gestione delle sessioni}: È stato fatto uso delle sessioni attraverso il dizionario associato a \textit{request}, ovvero \textit{request.session}. In esso sono stati salvati i valori che sarebbero stati utili durante tutta la durata della sessione attuale, al fine di poterli condividere con le varie views. \\
+	Un esempio è il titolo del film che l'utente vorrebbe recensire, siccome la logica è stata '\textit{spezzata}' su due views, ho salvato il titolo del film nel dizionario di request in modo da poterlo condividere tra una view e l'altra. \\
 	Le sessioni possono poi essere personalizzate in base alle proprie preferenze attraverso vari parametri, personalmente ho fatto uso dei seguenti, impostati nel file \textit{settings.py}:
 	\begin{verbatim}
 		SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-		SESSION_COOKIE_AGE = 180
+		SESSION_COOKIE_AGE = 240
 	\end{verbatim}
 	
 	\noindent Con \textit{age} si intende la durata della validità, in secondi, della sessione, prima che il sito chieda di nuovo all'utente di effettuare l'accesso. \\ \\
 	
-	\noindent \textbf{Function-based views}: La mia scelta riguardo la scrittura delle views è ricaduta su quelle \textit{function-based}. Questo perchè fin da subito mi sono parse una scelta più \textit{ordinata} e \textit{comoda}. Soprattutto, in fase di scrittura mi sembrava di avere di più il controllo sulla logica vera e propria della view. \\ \\
+	\noindent \textbf{Function-based views}: La mia scelta riguardo la scrittura delle views è ricaduta su quelle \textit{function-based}. Questo perchè fin da subito mi sono parse una scelta più \textit{ordinata} e \textit{intuitiva}. Soprattutto, in fase di scrittura mi sembrava di avere di più il controllo sulla logica vera e propria della view. \\ \\
 	
 	\noindent \textbf{Tipi di utenti}: Gli utenti, all'interno del sito, sono di 3 tipi:
 	\begin{itemize}
@@ -155,7 +151,7 @@
 	Le classi da cui un custom user può essere esteso sono AbstractBaseUser e AbstractUser, nel mio caso ho scelto la prima, dato che si tratta di una versione quanto più \textit{basic} possibile, al fine di poterla personalizzare a mio piacimento. \\
 	Se si fa uso di AbstractUser/AbstractBaseUser, bisogna specificare a Django quale modello verrà interpretato come utente, ciò è possibile inserendo nel file \textit{settings.py} la seguente riga: \\ \\
 	AUTH\_USER\_MODEL = 'streamify.Utente' \\ \\
-	Estendere un utente da AbstractBaseUser porta notevoli benefit rispetto a crearlo \textit{from-scratch}, dato che fornisce la possibilità di usare vari decoratori (anch'essi già forniti da Django) per il controllo sugli utenti. Ad esempio: 
+	Estendere un utente da AbstractBaseUser porta notevoli benefit rispetto a crearlo \textit{from-scratch}, dato che fornisce la possibilità di usare vari decoratori (anch'essi già forniti da Django) e metodi per il controllo sugli utenti. Ad esempio: 
 	
 	\begin{itemize}
 		\item \textbf{login\_required}: Come ci suggerisce il nome, viene usato per decorare una funzione che necessita di un utente effettivamente loggato per essere eseguita.
@@ -165,12 +161,12 @@
 		\item \textbf{login}: Una volta aver ottenuto un utente attraverso authenticate() e quindi essersi accertati che, dato il set di credenziali, esista effettivamente un tale utente nel database, sarà possibile \textit{assegnarlo} alla sessione corrente, attraverso appunto questa funzione. \\ \\
 	\end{itemize}
 	
-	\noindent \textbf{Status codes}: Gli status codes sono una parte fondamentale nello sviluppo di un applicativo web, dato che forniscono il modo per diversificare l'esito di varie operazioni. Essi sono stati utili durante la scrittura dei test, dato che mi è stato possibile usarli per confermare che l'esito di una determinata operazione fosse quello atteso. Possono essere inseriti manualmente e passati come parametro durante il return del render di una view, con parametro \textit{status}. \\ \\
+	\noindent \textbf{Status codes}: Gli status codes sono una parte fondamentale nello sviluppo di un applicativo web, dato che forniscono il modo per diversificare l'esito delle varie operazioni. Essi sono stati utili durante la scrittura dei test, dato che mi è stato possibile usarli per confermare che l'esito di una determinata operazione fosse quello atteso. Possono essere inseriti manualmente e passati come parametro durante il return del render di una view, con parametro \textit{status}. \\ \\
 	
 	\noindent \textbf{Template tags}: Un template tag è una sorta di funzione applicabile ad un template. Nel mio caso ne ho implementata solamente una, chiamata \textit{replace\_titles}, la sua funzione è quella di prendere in input il titolo di un film, che avrà dei \_ al posto dei whitespace (per comodità nei link, quando passato come parametro GET), e sostituirà quest'ultimi con dei whitespace appropriati, si tratta quindi solamente di un workaround \textit{grafico}. \\ \\
 	
 	\pagebreak
-	\noindent \centerline {\Huge \textbf{Modelli}} \\
+	\noindent {\centerline {\Huge \textbf{Modelli}} \\ \par}
 	
 	\noindent All'interno del progetto sono presenti 4 entità:
 	
@@ -216,12 +212,19 @@
 	\end{itemize}
 
 	\noindent E' presente poi lo UserManager, ovvero un'estensione della classe padre BaseUserManager, il cui scopo è quello di gestire la creazione di nuovi utenti. Esso verrà chiamato durante la creazione di un utente attraverso la seguente operazione, presente nel modello Utente:\\ \noindent objects = UserManager() \\ \\
-	Lo UserManager creerà attraverso il metodo \textit{\_create\_user(self, email, password, **extra\_field)}, l'utente. Inoltre, setterà la password con il metodo \textit{set\_password()}, che effettuerà l'hash della password per aumentarne la sicurezza.
+	Lo UserManager creerà attraverso il metodo \textit{\_create\_user(self, email, password, **extra\_field)}, l'utente. \\
+	Da notare bene, lo UserManager si occupa della creazioni di utenti che possono sia essere utenti normali del sito, ma anche amministratori. La diversificazione nella creazione dei due avviene attraverso due metodi separati:
+		\begin{itemize}
+			\item Con il comando 'python manage.py createsuperuser' verrà chiamato il metodo di UserManager create\_superuser, che a sua volta chiamerà il metodo \_create\_user() con is\_staff e is\_superuser settati a 'True'.
+			\item Attraverso il form di registrazione presente nella home del sito, verrà creato un utente \textit{normale} e verrà chiamato il metodo create\_user di UserManager, che invece  chiamerà il metodo \_create\_user() con is\_staff e is\_superuser settati a 'False'.
+		\end{itemize}
+	
+	\noindent Inoltre, lo UserManager setterà la password con il metodo \textit{set\_password()}, che effettuerà l'hash della password per aumentarne la sicurezza.
 
 	\pagebreak
 	
 	
-	\noindent \centerline {\Huge \textbf{Testing}} \\
+	\noindent {\centerline {\Huge \textbf{Testing}} \\ \par}
 	
 	\noindent Come specificato nel paragrafo riguardo alla divisione in più app, i test sono stati separati dal resto delle applicazioni, questo ha permesso di facilitare la loro gestione, permettendomi di raggrupparli tutti sotto la stessa app. Dentro il path ./test\_apps/tests/, possiamo trovare varie directory. \\Ho deciso di separare anche qui i test al fine di tenerli ordinati e poter, su richiesta, eseguire test riguardanti un preciso/alcuni argomenti. \\
 	Per i test mi sono affidato a \textit{Django Unit Test Framework}, che sfrutta nativamente \textit{unittest}.
@@ -235,20 +238,44 @@
 
 	\noindent I test verranno \textit{eseguiti} da \textbf{coverage.py} un package fornito da PIP, con cui Django si è dimostrato veramente ben integrato. Coverage può cercare, attraverso il parametro '--source' all'interno di path specifici, motivo per cui ho tenuto a separare i vari tipi di test. Di seguito, verrà riportato un resoconto del coverage dell'intero progetto:
 	
-	\centering \includegraphics[width=11cm, ]{Immagini/coverage_report.png} \\
-	\centering Coverage report
+	\begin{center}
+		\centering \includegraphics[width=11cm]{Immagini/coverage_report.png} \\
+		\centering Coverage report	
+	\end{center}
+	\pagebreak
+	
+	
+	\begin{center}
+		\noindent {\centerline {\Huge \textbf{Schemi}} \\ \par}
+		\centering \includegraphics[width=11cm]{Immagini/streamify.png} \\
+		\centering UML Schema
+	\end{center}
+		\pagebreak
+		
 
+	\begin{center}
+		\noindent {\centerline {\Huge \textbf{Screenshot più interessanti}} \\ \par}
+		\centering \includegraphics[width=15cm, height=7cm]{Immagini/Home_screen.png} \\
+		\centering Screenshot della home ~\\ ~\\ ~\\ ~\\ ~\\
+		
+		\centering \includegraphics[width=15cm, height=8cm]{Immagini/Catalogo_screen.png} \\
+		\centering Screenshot del catalogo
+		
+		\centering \includegraphics[width=15cm, height=7cm]{Immagini/Account_screen.png} \\
+		\centering Screenshot dell'account page ~\\ ~\\ ~\\ ~\\ ~\\
+		
+		\centering \includegraphics[width=15cm, height=6cm]{Immagini/User_reviews_screen.png} \\
+		\centering Screenshot delle recensioni scritte dall'utente
+	\end{center}
 	\pagebreak
 	
 	
-	\noindent \centerline {\Huge \textbf{Schemi}} \\
-	\centering \includegraphics[width=11cm, ]{Immagini/streamify.png} \\
-	\centering Schema UML
+	\noindent {\centerline {\Huge \textbf{Problemi riscontrati e commenti finali}} \\ \par}
 	
-	\pagebreak
-	
-	
-	\noindent \centerline {\Huge \textbf{Problemi riscontrati}} \\
+	\noindent Di problemi in sè non ne ho trovati particolarmente, o comunque nulla che tramite qualche ricerca su Internet non possa essere risolto. D'altronde è il framework più utilizzato nel suo ambito, e la documentazione che è possibile trovare nei vari forum è elevatissima. \\
+	Ci sono alcune cose che non mi hanno del tutto convinto, durante lo sviluppo del progetto. \\
+	Ad esempio, Django tratta i QuerySet come liste di oggetti che matchano un filtro (query), sarebbe stato più comodo dare la possibilità di modificarli attraverso qualche metodo. Nel mio caso, nel recommendation system, se avessi avuto la possibilità di intervenire sugli elementi di un QuerySet (ad esempio potendo aggiungere o eliminare elementi), avrei potuto evitare di instanziare oggetti 'pressochè inutili'. Questo da un certo punto di vista ha senso, perchè si tratta comunque di una query e sarebbe concettualmente sbagliato intervenirci manualmente, anche se in alcune situazioni, appunto, sarebbe stato comodo. Apparte questo dettaglio, gli altri problemi riscontrati sono stati minori e risolvibili con qualche ricerca online. \\ \\
+	Per concludere, devo dire che come corso mi è piaciuto fin da subito, soprattutto considerando la modalità d'esame. Credo infatti si possa imparare \textit{molto} di più dallo sviluppo di un progetto, soprattutto su un argomento del genere. È stata la mia prima esperienza riguardo lo sviluppo web e ne sono rimasto soddisfatto. Mi ha insegnato molto sia dal punto di vista strutturale di un progetto (divisione in app, ordine nella struttura delle directory, test) e di come frontend e backend effettivamente riescano a comunicare. \\
 	
 	
 	

@@ -36,7 +36,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
 #Imposto il timeout dei cookie a un valore personalizzato
-SESSION_COOKIE_AGE = 18000
+SESSION_COOKIE_AGE = 240
 
 # Se c'è qualche problema di login / azioni richieste da utenti non loggati
 LOGIN_URL = "/streamify/home/?auth=err"

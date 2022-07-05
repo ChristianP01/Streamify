@@ -67,14 +67,6 @@ def guarda_film(request, titolo_film):
 @login_required
 def account(request):
 
-    # Le salvo nel dizionario di sessione, siccome sarà usata in altre views
-    # request.session["generi"] = generi
-
-    # Salvo i film nella sessione al fine di poterli ritornare in futuro.
-    # request.session["recommended_films"] = 
-
-    #-------------------------------------------------------------------#
-
     return render(request, template_name="streamify/account.html", context={
         "logged_user": request.user,
         "generi_dict": json.dumps(calcola_generi(request.user)),
@@ -85,13 +77,12 @@ def account(request):
 @require_safe
 @login_required
 def review(request, titolo_film):
-
-    logged_user = request.user
+    
     film = Film.objects.get(titolo=titolo_film)
     request.session["film"] = film.titolo
 
     return render(request, template_name="review.html", context={
-        "logged_user": logged_user,
+        "logged_user": request.user,
         "film": film,
         "lista_recensioni": Recensione.objects.filter(film=film)
     }, status=200)
@@ -101,7 +92,17 @@ def review(request, titolo_film):
 @login_required
 def review_final(request):
 
-    value = request.POST["selected_star"]
+    if request.POST["selected_star"].isnumeric():
+        value = int(request.POST["selected_star"])
+
+    else:
+        messages.add_message(request, messages.ERROR, "Devi inserire una valutazione corretta!")
+        return render(request, template_name="streamify/review.html", context={
+            "logged_user": request.user,
+            "film": Film.objects.get(titolo=request.session["film"]),
+            "lista_recensioni": Recensione.objects.filter(film=Film.objects.get(titolo=request.session["film"]))
+        }, status=206)
+        
     commento_scritto = request.POST["commento_scritto"]
 
     film = Film.objects.get(titolo=request.session["film"])

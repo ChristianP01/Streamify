@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'streamify',
     'my_auth',
     'chatify',
+    'db_operations',
     'crispy_forms',
     'django_truncate',
     'channels',

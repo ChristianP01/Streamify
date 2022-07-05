@@ -235,6 +235,12 @@ def update_db(request):
     titolo_film = request.GET['titolo_film']
     nuovo_voto = request.GET['nuovo_voto']
     nuovo_commento = request.GET['nuovo_commento']
+    
+    if int(nuovo_voto) > 5:
+        nuovo_voto = '5'
+
+    if int(nuovo_voto) < 1:
+        nuovo_voto = '1'
 
     rece_updated = Recensione.objects.get(film=Film.objects.get(titolo=titolo_film), utente=request.user)
     rece_updated.voto = nuovo_voto

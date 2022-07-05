@@ -19,13 +19,14 @@ class TestDescrFilmLogged(TestCase):
             email='test@test.it',
             nome='Test',
             cognome='test')
+
+        test_user.set_password('testUser')
+        test_user.save()
         
         self.client = Client()
-        session = self.client.session
-        session['logged_user'] = test_user.username
-        session.save()
+        self.client.login(username='testUser', password='testUser')
 
-        self.response = self.client.post('/streamify/descr_film/Spiderman/')
+        self.response = self.client.get('/streamify/descr_film/Spiderman/')
 
     def test_descr_film_logged(self):
         self.assertEqual(self.response.status_code, 200)
@@ -44,10 +45,8 @@ class TestDescrFilmAnonymous(TestCase):
         test_film.generi.set((example_genere,))
 
         self.client = Client()
-        session = self.client.session
-        session.save()
 
-        self.response = self.client.post('/streamify/descr_film/Spiderman/')
+        self.response = self.client.get('/streamify/descr_film/Spiderman/')
 
     def test_descr_film_anonymous(self):
         self.assertEqual(self.response.status_code, 200)

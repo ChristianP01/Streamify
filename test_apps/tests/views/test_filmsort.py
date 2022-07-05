@@ -21,9 +21,7 @@ class TestSortFilmUp(TestCase):
         test_film.generi.set((example_genere,))
 
         self.client = Client()
-        session = self.client.session
-        session['logged_user'] = test_user.username
-        session.save()
+        self.client.login(username='testUser', password='testUser')
 
         self.response = self.client.get('/streamify/catalogo_sort/up/')
 

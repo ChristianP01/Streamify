@@ -1,9 +1,5 @@
-from urllib import request
-from django.http import HttpRequest, HttpResponse
 from django.test import Client, TestCase
-from pyrsistent import v
-from my_auth.views import logged
-from streamify.models import Film, Genere, Recensione, Utente
+from streamify.models import Film, Genere, Utente
 
 
 class TestReviewSuccess(TestCase):
@@ -24,28 +20,14 @@ class TestReviewSuccess(TestCase):
             email='test@test.it',
             nome='Test',
             cognome='test')
+
+        test_user.set_password('testUser')
+        test_user.save()
         
         self.client = Client()
-        session = self.client.session
-        session['logged_user'] = test_user.username
-        session.save()
+        self.client.login(username='testUser', password='testUser')
 
-        self.response = self.client.post('/streamify/review/Spiderman/')
+        self.response = self.client.get('/streamify/review/Spiderman/')
 
     def test_review_success(self):
         self.assertEqual(self.response.status_code, 200)
-
-
-class TestReviewFail(TestCase):
-
-    def setUp(self):
-        
-        self.client = Client()
-        session = self.client.session
-        session['logged_user'] = None
-        session.save()
-
-        self.response = self.client.post('/streamify/review/Spiderman/')
-
-    def test_review_fail(self):
-        self.assertEqual(self.response.status_code, 401)

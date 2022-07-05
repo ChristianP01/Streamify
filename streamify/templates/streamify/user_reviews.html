@@ -1,55 +1,160 @@
 {% extends "base.html" %}
 {% load static %}
 {% load replace_titles %}
+
 {% block children %}
+<!doctype html>
+<html>
+                            <title>Le mie recensioni</title>
+                            <head>
+                                <meta charset='utf-8'>
+                                <meta name='viewport' content='width=device-width, initial-scale=1'>
+                                <link href='https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css' rel='stylesheet'>
+                                <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+                                <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css' rel='stylesheet'>
+                                <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet'>
+                                <style>
+                                
+                                    ::-webkit-scrollbar {
+                                  width: 8px;
+                                }
 
-    <html>
-        <title> Le mie recensioni </title>
+                                ::-webkit-scrollbar-track {
+                                  background: #f1f1f1; 
+                                }
+                                 
+                                ::-webkit-scrollbar-thumb {
+                                  background: #888; 
+                                }
+                                
+                                ::-webkit-scrollbar-thumb:hover {
+                                  background: #555; 
+                                } #      
 
-        <head>
-            <link rel="stylesheet" type="text/css" href="{% static 'css/user_reviews.css' %}">
-        </head>
+                                *{
+                                    margin: 0;
+                                    padding: 0;
+                                    box-sizing: border-box;
+                                    font-family: 'poppins', sans-serif;
+                                }
 
-        <center>
-           <br>
-            
-            <p class="welcome">Le mie recensioni</p> <br><br><br>
-
-            {% comment %} <input type="button" class="review" value="{{recensione}}"/> <br> <br> {% endcomment %}
-
-            <table class="listarecensioni" name="listarecensioni">
-                <tr>
-                    <th> <h3>Film:</h3> </th>
-                    <th><h3>Voto:</h3></th>
-                    <th><h3>Commento:</h3></th>
-
-                {% for recensione in lista_recensioni%}
-                    <tr>
-                        <td>    
-                            {{recensione.film.titolo | replace_titles}} 
-                        </td>
-
-                        <td>    
-                            {{recensione.voto}} 
-                        </td>
-
-                        <td>    
-                            {{recensione.commento_scritto}} 
-                        </td>
+                                label.radio{cursor: pointer}label.radio input{position: absolute;top: 0;left: 0;visibility: hidden;pointer-events: none}label:nth-child(1) span{padding: 10px;border-radius: 50%;border: 2px solid gray;display: inline-block;background-color: gray;text-transform: uppercase;position: relative;transition: all 2s}label:nth-child(2) span{padding: 10px;border-radius: 50%;border: 2px solid #000;background-color: #000;display: inline-block;color: #8f37aa;text-transform: uppercase;position: relative;transition: all 2s}label:nth-child(3) span{padding: 10px;border-radius: 50%;border: 2px solid pink;background-color: pink;display: inline-block;color: #8f37aa;text-transform: uppercase;position: relative;transition: all 2s}label.radio input:checked+span::after{content: '\f179';font-family: 'fontawesome';position: absolute;left: 6px;top: 2px;font-size: 11px;color: #fff}.button{width: 200px;height: 48px;border: none;border-radius: 30px;position: absolute;bottom: 20px;background-color: #126ef9;color: #fff}.button i{margin-top: 1px}@media (max-width:770px){.product-image img{position: absolute;top: 130px;right: 10px;width: 250px}}@media (max-width:470px){.product-image img{position: absolute;top: 190px;right: 10px;width: 150px}}</style>
+                            </style>
+                                </head>
+                                <body className='snippet-body'>
+                                    <center> <h1> Le mie recensioni </h1> </center>
+                                <div class="min-h-screen bg-cyan-700 py-5">
+        <div class='overflow-x-auto w-full'>
+            <table class='mx-auto max-w-4xl w-full whitespace-nowrap rounded-lg bg-white divide-y divide-gray-300 overflow-hidden'>
+                <thead class="bg-gray-900">
+                    <tr class="text-white text-center">
+                        <th class="font-semibold text-sm uppercase px-6 py-4"> Titolo film </th>
+                        <th class="font-semibold text-sm uppercase px-6 py-4"> Generi </th>
+                        <th class="font-semibold text-sm uppercase px-6 py-4"> Voto recensione </th>
+                        <th class="font-semibold text-sm uppercase px-6 py-4 text-center"> Commento </th>
+                        <th class="font-semibold text-sm uppercase px-6 py-4 text-center"> Elimina </th>
                     </tr>
-                {% endfor %}
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for recensione in lista_recensioni %}
+                    <tr>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center space-x-3"  id="column_titolo">
+                                <div>
+                                   <p>
+                                        <a href="/streamify/descr_film/{{recensione.film.titolo}}">
+                                            {{recensione.film.titolo}}
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <div class="flex items-center space-x-3"  id="column_titolo">
+                                <div>
+                                   <p class="text-gray-500 text-sm font-semibold tracking-wide">
+                                        {% for genere in recensione.film.generi.all %}
+                                            {{genere.name}}
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4" id="column_voto"><div contenteditable>
+                            <center> <p class="text-gray-500 text-sm font-semibold tracking-wide">
+                                {% if recensione.voto <= 2.9 %}
+                                    <p style="background-color: red; width: 10%;"> {{recensione.voto}} </p>
+                                
+                                {% elif recensione.voto >= 3.0 and recensione.voto < 4.0 %}
+                                    <p style="background-color: yellow; width: 10%;"> {{recensione.voto}} </p>
+                            
+                                {% elif recensione.voto >= 4.0 %}
+                                        <p style="background-color: green; width: 10%;"> {{recensione.voto}} </p>
+                                {% endif %}
+                            </p> </center> </div>
+                        </td>
+                        <td class="px-6 py-4 text-center" id="column_commento"><div contenteditable>
+                            <input type="text" id="cella_commento" value="{{recensione.commento_scritto}}" onchange="saveChanges(this)"/>
+                        </td>
+
+                        <td class="px-6 py-4 text-center">
+                            <img style="cursor:pointer; "src="{% static 'imgs/trashbin.png' %}" alt="Image" width="30" onclick="eliminaRecensione(this)"/>
+                        </td>
+
+                    </tr>
+                    <tr>
+                    {% endfor %}
+                </tbody>
             </table>
+        </div>
+    </div>
+    </body>
 
-            <div class="container mt-5 mb-5 d-flex justify-content-center">
-                <div class="card rounded">
-                    <div class=" d-block justify-content-center">
-                        <div class="area1 p-3 py-5"></div>
-                        <div class="area2 p- text-center px-3"></div>
-                    </div>
-                </div>
-            </div>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js'></script>
 
-        </center>
-    </html>
+    <script>
 
+        function saveChanges(elem) {
+            var riga = elem.closest('tr');
+
+            var titolo_film = riga.cells[0].innerText
+            var nuovo_voto = riga.cells[2].innerText
+            var nuovo_commento = elem.value
+
+            $.ajax({
+                type:"GET",
+                url: "/streamify/update_db/",
+                data:{
+                    'titolo_film': titolo_film,
+                    'nuovo_voto': nuovo_voto,
+                    'nuovo_commento': nuovo_commento
+                },
+
+                success: function(html) {
+                    location.reload();
+                }
+            })
+        };
+
+
+        function eliminaRecensione(btn) {
+            var titolo_film = btn.closest('tr').cells[0].innerText
+
+            $.ajax({
+                type:"GET",
+                url: "/streamify/remove_rece/",
+                data:{
+                    'titolo_film': titolo_film,
+                },
+                success: function(html) {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+
+
+</html>
 {% endblock %}

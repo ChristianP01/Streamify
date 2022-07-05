@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+{% load replace_titles %}
+
+{% block children %}
+
+<html>
+
+    <style>
+        .filtrogenere {
+            width: 10%;
+            position: absolute;
+            top: 12%;
+            left: 23%;
+            border: 3px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 15px;
+            text-align: center;
+            background-color: #FFFFFF;
+        }
+
+        .min_score {
+            position: absolute;
+            top: 17%;
+            left: 23%;
+            width: 4%;
+        }
+
+        .max_score {
+            position: absolute;
+            top: 17%;
+            left: 28%;
+            width: 4%;
+        }
+
+        .userpng {
+            position: absolute;
+            right: 8%;
+            top: 12%;
+            width: 2%;
+        }
+        
+        .logoutpng {
+            position: absolute;
+            right: 4%;
+            top: 12%;
+            width: 2%;
+        }
+
+        .label_min {
+            position: absolute;
+            top: 20%;
+            left: 23%;
+            width: 4%;
+        }
+
+        .label_max {
+            position: absolute;
+            top: 20%;
+            left: 28%;
+            width: 4%;
+        }
+
+        .film_input {
+            position: absolute;
+            top: 12%;
+            left: 2%;
+            width: 20%;
+            border: 3px solid #F34G42;
+            box-sizing: border-box;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .sort_down {
+            position: absolute;
+            right: 24.7%;
+            top: 41.3%;
+            width: 1.5%;
+        }
+
+        .sort_up {
+            position: absolute;
+            right: 35%;
+            top: 41.3%;
+            width: 1.5%;
+        }
+    </style>
+
+    
+    <title> Catalogo </title>
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/catalogo.css' %}">
+    </head>
+
+    <body>
+
+        {% for message in messages %}
+        <div class="alert success">
+            <span class="closebtn">&times;</span>
+            {{message}}
+          </div>
+        {% endfor %}
+
+        <a href="/streamify/account/"><img class="userpng" src="{% static "imgs/user.png" %}" alt="Image"></a>
+        <a href="/streamify/home/"><img class="logoutpng" src="{% static "imgs/logout.png" %}" alt="Image"></a>
+        <a href="/streamify/catalogo_sort/up/"><img class="sort_up" src="{% static "imgs/sort_up.png" %}" alt="Image"></a>
+        <a href="/streamify/catalogo_sort/down/"><img class="sort_down" src="{% static "imgs/sort_down.png" %}" alt="Image"></a>
+        
+        <form action="/streamify/cercaFilm/" method="POST">
+            {% csrf_token %}
+            <input type="text" class="film_input" placeholder="Inserisci titolo" name="film_search_title">
+
+            <select id="generi" name="generi" class="filtrogenere">
+                <option value=""/>
+            {% for genere in lista_generi %}
+                <option value={{genere}}> {{genere.name | replace_titles}} </option>
+            {% endfor %}
+            </select>
+
+            <label class="label_min"> Voto minimo: </label>
+            <label class="label_max"> Voto massimo: </label>
+            <input type="number" class="min_score" name="min_score" min="1" max="5"><br><br>
+            <input type="number" class="max_score" name="max_score" min="1" max="5"><br><br>
+
+            <a href="/streamify/catalogo/"> <input type="button" class="reset" value="Reset"> </a>
+            <input type="submit" class="cerca_film" value="Cerca">
+        </form>
+
+        <p class="welcome"> Catalogo </p>
+        <br><br><br>
+        
+        <table class="listafilm" name="listafilm">
+            <tr>
+                <th>Titolo </th>
+                <th>Genere</th>
+                <th>Anno di uscita</th>
+                <th>Valutazione</th>
+                <th>Link</th>
+            </tr>
+
+            {% for film in film_list %}
+                <tr>
+                    <td>
+                        <a href="/streamify/descr_film/{{film.titolo}}"> {{film.titolo | replace_titles}} </a>
+                    </td>
+                    <td>
+                        {% for genere in film.generi.all %}
+                            {{genere.name | replace_titles}}
+                        {% endfor %}
+                    </td>
+                    <td> {{film.anno_uscita}} </td>
+                    <td>
+                        {{film.get_mediavoto}}
+                    </td>
+                    <td>
+                        <form action="/streamify/guarda_film/{{film.titolo}}/" method="GET">
+                            <button class="guarda_ora" id="guarda_ora">Guardalo!</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+
+    <script>
+        var close = document.getElementsByClassName("closebtn");
+        var i;
+        
+        for (i = 0; i < close.length; i++) {
+          close[i].onclick = function(){
+            var div = this.parentElement;
+            div.style.opacity = "0";
+            setTimeout(function(){ div.style.display = "none"; }, 600);
+          }
+        }
+    </script>
+</html>
+
+{% endblock %}

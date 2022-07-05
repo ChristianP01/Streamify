@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+{% load replace_titles %}
+{% block children %}
+
+    <html>
+        <title> Le mie recensioni </title>
+
+        <head>
+            <link rel="stylesheet" type="text/css" href="{% static 'css/user_reviews.css' %}">
+        </head>
+
+        <center>
+           <br>
+            
+            <p class="welcome">Le mie recensioni</p> <br><br><br>
+
+            {% comment %} <input type="button" class="review" value="{{recensione}}"/> <br> <br> {% endcomment %}
+
+            <table class="listarecensioni" name="listarecensioni">
+                <tr>
+                    <th> <h3>Film:</h3> </th>
+                    <th><h3>Voto:</h3></th>
+                    <th><h3>Commento:</h3></th>
+
+                {% for recensione in lista_recensioni%}
+                    <tr>
+                        <td>    
+                            {{recensione.film.titolo | replace_titles}} 
+                        </td>
+
+                        <td>    
+                            {{recensione.voto}} 
+                        </td>
+
+                        <td>    
+                            {{recensione.commento_scritto}} 
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <div class="container mt-5 mb-5 d-flex justify-content-center">
+                <div class="card rounded">
+                    <div class=" d-block justify-content-center">
+                        <div class="area1 p-3 py-5"></div>
+                        <div class="area2 p- text-center px-3"></div>
+                    </div>
+                </div>
+            </div>
+
+        </center>
+    </html>
+
+{% endblock %}

@@ -24,16 +24,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%+--ntkl1nw_7oese$wh&am(bz9o34n5jwt+j)6cq=0wa_+iv$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1'
+]
 
 #Alla chiusura, la sessione cadrà e l'utente loggato verrà "sloggato"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
 #Imposto il timeout dei cookie a un valore personalizzato
-SESSION_COOKIE_AGE = 180
+SESSION_COOKIE_AGE = 240
 
 # Se c'è qualche problema di login / azioni richieste da utenti non loggati
 LOGIN_URL = "/streamify/home/?auth=err"
@@ -49,9 +52,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'streamify',
     'my_auth',
+    'chatify',
     'crispy_forms',
-    'django_truncate'
+    'django_truncate',
+    'channels',
+    'django_extensions'
 ]
+
+WSGI_APPLICATION = 'ProgettoTW.wsgi.application'
+ASGI_APPLICATION = 'ProgettoTW.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -86,7 +102,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ProgettoTW.wsgi.application'
 
 
 # Database
@@ -98,6 +113,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Modello che verrà usato come utente
+AUTH_USER_MODEL = 'streamify.Utente'
 
 
 # Password validation
@@ -128,7 +146,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+# USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)

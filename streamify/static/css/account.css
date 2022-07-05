@@ -15,6 +15,8 @@
     padding-top: 83px !important
 }
 
+
+
 .image {
     /* Immagine a metà tra i colori */
     top: -65px;
@@ -93,3 +95,5 @@
     background-color:#a87cf3;
     cursor:pointer;
 }
+
+.btn-close{position:absolute;top:0;right:0;z-index:2;padding:1.25rem 1rem}

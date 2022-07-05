@@ -1,9 +1,5 @@
-from urllib import request
-from django.http import HttpRequest, HttpResponse
 from django.test import Client, TestCase
-from my_auth.views import logged
 from streamify.models import Utente
-
 
 class TestLoginSuccess(TestCase):
 
@@ -15,10 +11,13 @@ class TestLoginSuccess(TestCase):
             email='test@test.it',
             nome='Test',
             cognome='test')
+
+        test_user.set_password('testUser')
+        test_user.save()
         
         creds = {
-            'uname': 'testUser',
-            'psw': 'testUser'}
+            'username': 'testUser',
+            'password': 'testUser'}
 
         self.client = Client()
         self.response = self.client.post('/auth/accedi/', creds)
@@ -39,10 +38,13 @@ class TestLoginFail(TestCase):
             email='test@test.it',
             nome='Test',
             cognome='test')
+
+        test_user.set_password('testUser')
+        test_user.save()
         
         creds = {
-            'uname': 'wrongUser',
-            'psw': 'wrongPwd'}
+            'username': 'wrongUser',
+            'password': 'wrongPwd'}
 
         self.client = Client()
         self.response = self.client.post('/auth/accedi/', creds)

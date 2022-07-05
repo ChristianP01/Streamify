@@ -20,10 +20,11 @@ class TestCercaFilmLogged(TestCase):
             nome='Test',
             cognome='test')
 
+        test_user.set_password('testUser')
+        test_user.save()
+
         self.client = Client()
-        session = self.client.session
-        session['logged_user'] = test_user.username
-        session.save()
+        self.client.login(username='testUser', password='testUser')
 
         #---------------------------Ricerca 1------------------------------#
 
@@ -82,8 +83,7 @@ class TestCercaFilmAnonymous(TestCase):
         test_film.generi.set((example_genere,))
 
         self.client = Client()
-        session = self.client.session
-        session.save()
+        self.client.login(username='testUser', password='testUser')
 
         data = {
             'film_search_title' : test_film.titolo,

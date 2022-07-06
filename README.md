@@ -8,7 +8,7 @@ Le funzionalità principali implementate sono:
 * Possibilità di "guardare" un film;
 * Possibilità di recensire un film;
 * Ranking di film, per voto e per genere;
-* Recommendation system basato su gusti di altri utenti;
+* Recommendation system basato sui gusti degli altri utenti;
 * Grafici rappresentanti un riassunto dei propri gusti verso i vari generi dei film guardati;
 * Group chat divisa per film;
 
@@ -18,6 +18,8 @@ Le funzionalità principali implementate sono:
 git clone https://github.com/ChristianP01/ProgettoTW.git;
 cd ProgettoTW/;
 pip install -r requirements.txt;
-python manage.py runserver;
+python manage.py runserver --insecure;
 firefox localhost:8000/streamify/home/;
 ```
+
+N.B. E' necessario usare il flag --insecure nel runnare il server perchè con debug=False potrebbe dare problemi di sicurezza nel servire file statici.

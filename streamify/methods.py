@@ -65,8 +65,6 @@ def calcola_recommendation_system(utente):
     if len(logged_highest) < RECOM_SYS_NUMS or logged_highest[RECOM_SYS_NUMS-1][1] == 0:
         return {}
 
-    print(logged_highest)
-
     # Struttura logged_genre/other_genre --> [('nome_genere', 'voto_genere'), (...)]
     for logged_genre in logged_highest:
         genre_cont = 0
@@ -76,8 +74,6 @@ def calcola_recommendation_system(utente):
             other_highest = sorted(calcola_voti(other_user, calcola_generi(other_user)).items(),
                                                                     key=lambda x: x[1],
                                                                     reverse=True)[0:RECOM_SYS_NUMS]
-
-            print(f"{other_user}: {other_highest}")
 
             for other_genre in other_highest:
 
@@ -92,11 +88,8 @@ def calcola_recommendation_system(utente):
 
                                 if film.titolo not in recommended_films:
                                     recommended_films[film.titolo] = int(similarity)
-                                    print(recommended_films[film.titolo])
                                     
                                 else:
-                                    print(genre_cont)
-                                    print(recommended_films[film.titolo])
                                     recommended_films[film.titolo] = ((recommended_films[film.titolo]*(genre_cont-1)) + int(similarity)) / genre_cont
                             
 

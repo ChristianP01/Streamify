@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.5.27)  5 JUL 2022 10:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.5.27)  6 JUL 2022 10:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -375,18 +375,19 @@ Underfull \hbox (badness 10000) in paragraph at lines 79--80
 
  []
 
-[4] [5]
-Underfull \hbox (badness 10000) in paragraph at lines 91--91
+[4]
+<Immagini/sonarqube_report.png, id=24, 1107.13625pt x 610.28pt>
+File: Immagini/sonarqube_report.png Graphic file (type png)
+<use Immagini/sonarqube_report.png>
+Package pdftex.def Info: Immagini/sonarqube_report.png  used on input line 87.
+(pdftex.def)             Requested size: 426.78091pt x 227.62523pt.
 
+Overfull \hbox (66.15561pt too wide) in paragraph at lines 87--87
+ [] 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 95--96
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 97--98
+[5 <./Immagini/sonarqube_report.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 95--95
 
  []
 
@@ -400,123 +401,128 @@ Underfull \hbox (badness 10000) in paragraph at lines 101--102
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 103--104
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 105--106
+
+ []
+
 [6]
-Underfull \hbox (badness 10000) in paragraph at lines 105--105
+Underfull \hbox (badness 10000) in paragraph at lines 111--111
 
  []
 
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1
-10.
+16.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-Underfull \hbox (badness 10000) in paragraph at lines 124--125
+Underfull \hbox (badness 10000) in paragraph at lines 130--131
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 126--127
+Underfull \hbox (badness 10000) in paragraph at lines 132--133
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 126--127
+Underfull \hbox (badness 10000) in paragraph at lines 132--133
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 128--129
+Underfull \hbox (badness 10000) in paragraph at lines 134--135
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 128--129
+Underfull \hbox (badness 10000) in paragraph at lines 134--135
 
  []
 
 [7]
-Overfull \hbox (12.02397pt too wide) in paragraph at lines 130--133
+Overfull \hbox (12.02397pt too wide) in paragraph at lines 136--139
 \T1/cmr/bx/n/12 Gestione delle ses-sioni\T1/cmr/m/n/12 : È stato fatto uso dell
 e ses-sioni at-traverso il dizionario
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 138--139
+Underfull \hbox (badness 10000) in paragraph at lines 144--145
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 138--139
+Underfull \hbox (badness 10000) in paragraph at lines 144--145
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--141
+Underfull \hbox (badness 10000) in paragraph at lines 146--147
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--141
+Underfull \hbox (badness 10000) in paragraph at lines 146--147
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 147--148
+Underfull \hbox (badness 10000) in paragraph at lines 153--154
 
  []
 
 [8]
-Underfull \hbox (badness 10000) in paragraph at lines 150--155
+Underfull \hbox (badness 10000) in paragraph at lines 156--161
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 150--155
+Underfull \hbox (badness 10000) in paragraph at lines 156--161
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 161--162
+Underfull \hbox (badness 10000) in paragraph at lines 167--168
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 161--162
+Underfull \hbox (badness 10000) in paragraph at lines 167--168
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 164--165
+Underfull \hbox (badness 10000) in paragraph at lines 170--171
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 164--165
+Underfull \hbox (badness 10000) in paragraph at lines 170--171
 
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 166--167
+Underfull \hbox (badness 10000) in paragraph at lines 172--173
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 166--167
+Underfull \hbox (badness 10000) in paragraph at lines 172--173
 
  []
 
 [10]
-Underfull \hbox (badness 10000) in paragraph at lines 169--169
+Underfull \hbox (badness 10000) in paragraph at lines 175--175
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 174--176
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 194--195
+Underfull \hbox (badness 10000) in paragraph at lines 180--182
 
  []
 
@@ -525,99 +531,104 @@ Underfull \hbox (badness 10000) in paragraph at lines 200--201
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 206--207
+
+ []
+
 [11]
-Underfull \hbox (badness 10000) in paragraph at lines 214--217
+Underfull \hbox (badness 10000) in paragraph at lines 220--223
 
  []
 
 
-Overfull \hbox (5.68105pt too wide) in paragraph at lines 219--220
+Overfull \hbox (5.68105pt too wide) in paragraph at lines 225--226
 \T1/cmr/m/n/12 User-Man-ager, che in-vece chi-amerà il metodo _cre-ate_user() c
 on is_staff
  []
 
 [12]
-Underfull \hbox (badness 10000) in paragraph at lines 227--227
+Underfull \hbox (badness 10000) in paragraph at lines 233--233
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 229--233
+Underfull \hbox (badness 10000) in paragraph at lines 235--239
 
  []
 
 
-Overfull \hbox (40.73915pt too wide) in paragraph at lines 235--236
+Overfull \hbox (40.73915pt too wide) in paragraph at lines 241--242
 []\T1/cmr/m/n/12 Se l'utente in-serisce cre-den-ziali er-rate, lo sta-tus code 
 sarà 401 (\T1/cmr/bx/n/12 Unauthorized\T1/cmr/m/n/12 ). 
  []
 
-<Immagini/coverage_report.png, id=62, 1927.2pt x 2124.93875pt>
+<Immagini/coverage_report.png, id=65, 1927.2pt x 2411.0075pt>
 File: Immagini/coverage_report.png Graphic file (type png)
 <use Immagini/coverage_report.png>
-Package pdftex.def Info: Immagini/coverage_report.png  used on input line 242.
-(pdftex.def)             Requested size: 312.9803pt x 345.0877pt.
+Package pdftex.def Info: Immagini/coverage_report.png  used on input line 248.
+(pdftex.def)             Requested size: 369.87704pt x 512.13919pt.
 [13] [14 <./Immagini/coverage_report.png>]
-<Immagini/streamify.png, id=74, 583.17876pt x 677.53125pt>
+<Immagini/streamify.png, id=76, 583.17876pt x 677.53125pt>
 File: Immagini/streamify.png Graphic file (type png)
 <use Immagini/streamify.png>
-Package pdftex.def Info: Immagini/streamify.png  used on input line 250.
+Package pdftex.def Info: Immagini/streamify.png  used on input line 256.
 (pdftex.def)             Requested size: 312.9803pt x 363.62836pt.
  [15 <./Immagini/streamify.png>]
-<Immagini/Home_screen.png, id=80, 1889.0575pt x 867.24pt>
+<Immagini/Home_screen.png, id=82, 1889.0575pt x 867.24pt>
 File: Immagini/Home_screen.png Graphic file (type png)
 <use Immagini/Home_screen.png>
-Package pdftex.def Info: Immagini/Home_screen.png  used on input line 258.
+Package pdftex.def Info: Immagini/Home_screen.png  used on input line 264.
 (pdftex.def)             Requested size: 426.77791pt x 199.16988pt.
 
-Overfull \hbox (36.77791pt too wide) in paragraph at lines 258--258
+Overfull \hbox (36.77791pt too wide) in paragraph at lines 264--264
  [][] 
  []
 
-<Immagini/Catalogo_screen.png, id=81, 1137.24875pt x 721.69624pt>
+<Immagini/Catalogo_screen.png, id=83, 1137.24875pt x 721.69624pt>
 File: Immagini/Catalogo_screen.png Graphic file (type png)
 <use Immagini/Catalogo_screen.png>
-Package pdftex.def Info: Immagini/Catalogo_screen.png  used on input line 261.
+Package pdftex.def Info: Immagini/Catalogo_screen.png  used on input line 267.
 (pdftex.def)             Requested size: 426.79695pt x 227.62184pt.
 
-Overfull \hbox (36.79695pt too wide) in paragraph at lines 261--261
+Overfull \hbox (36.79695pt too wide) in paragraph at lines 267--267
  [][] 
  []
 
-<Immagini/Account_screen.png, id=82, 1923.185pt x 933.4875pt>
+<Immagini/Account_screen.png, id=84, 1923.185pt x 933.4875pt>
 File: Immagini/Account_screen.png Graphic file (type png)
 <use Immagini/Account_screen.png>
-Package pdftex.def Info: Immagini/Account_screen.png  used on input line 264.
+Package pdftex.def Info: Immagini/Account_screen.png  used on input line 270.
 (pdftex.def)             Requested size: 426.77019pt x 199.15756pt.
 
-Overfull \hbox (36.77019pt too wide) in paragraph at lines 264--264
+Overfull \hbox (36.77019pt too wide) in paragraph at lines 270--270
  [][] 
  []
 
 [16 <./Immagini/Home_screen.png> <./Immagini/Catalogo_screen.png>]
-<Immagini/User_reviews_screen.png, id=89, 1449.415pt x 415.5525pt>
+<Immagini/User_reviews_screen.png, id=91, 1449.415pt x 415.5525pt>
 File: Immagini/User_reviews_screen.png Graphic file (type png)
 <use Immagini/User_reviews_screen.png>
 Package pdftex.def Info: Immagini/User_reviews_screen.png  used on input line 2
-67.
-(pdftex.def)             Requested size: 426.77754pt x 170.71368pt.
+73.
+(pdftex.def)             Requested size: 426.77754pt x 199.17125pt.
 
-Overfull \hbox (36.77754pt too wide) in paragraph at lines 267--267
+Overfull \hbox (36.77754pt too wide) in paragraph at lines 273--273
  [][] 
  []
 
 [17 <./Immagini/Account_screen.png> <./Immagini/User_reviews_screen.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 273--273
+Underfull \hbox (badness 10000) in paragraph at lines 279--279
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 275--279
+Underfull \hbox (badness 10000) in paragraph at lines 281--285
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 275--279
+Underfull \hbox (badness 10000) in paragraph at lines 281--285
 
  []
 
@@ -626,10 +637,10 @@ Package rerunfilecheck Info: File `Relazione.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 8052 strings out of 480852
- 119197 string characters out of 5906873
+ 8059 strings out of 480852
+ 119422 string characters out of 5906873
  411022 words of memory out of 6000000
- 25280 multiletter control sequences out of 15000+600000
+ 25286 multiletter control sequences out of 15000+600000
  413726 words of font info for 49 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,6n,63p,787b,440s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -646,10 +657,10 @@ frm1200.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfrm1440
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfti1440.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on Relazione.pdf (17 pages, 981642 bytes).
+Output written on Relazione.pdf (17 pages, 1055084 bytes).
 PDF statistics:
- 148 PDF objects out of 1000 (max. 8388607)
+ 150 PDF objects out of 1000 (max. 8388607)
  103 compressed objects within 2 object streams
  17 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

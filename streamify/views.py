@@ -7,9 +7,6 @@ from django.views.decorators.http import require_safe, require_GET, require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
-# Contiene la dimensione del dizionario dei generi da considerare come preferiti, su cui applicare il RS.
-RECOM_SYS_NUMS = 3
-
 @require_safe
 def homepage(request):
 
@@ -26,10 +23,8 @@ def homepage(request):
 def catalogo(request):
     # Qui ci entrerà un utente guest oppure dopo aver cliccato "Reset" nei filtri del catalogo
 
-    logged_user = request.user
-
     return render(request,template_name="streamify/catalogo.html", context={
-            "logged_user": logged_user,
+            "logged_user": request.user,
             "film_list": Film.objects.all(),
             "lista_generi": Genere.objects.all()
         }, status=200)

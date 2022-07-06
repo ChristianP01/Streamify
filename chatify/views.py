@@ -1,4 +1,3 @@
-from unittest import expectedFailure
 from django.contrib import messages
 from django.shortcuts import render
 from streamify.models import Film, Genere

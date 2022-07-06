@@ -81,7 +81,11 @@
 
 	\noindent \textbf{Altri strumenti}:
 	\begin{itemize}
-		\item \textbf{SonarQube}: E' un software dedito all'ispezione di codice al fine di migliorarne la qualità. Permette anche di controllare il coverage, però essendo un po' complicato il link con Django, ho preferito gestire questo fattore attraverso il package 'Coverage.py', mentre ho usato SonarQube per tutti gli altri check sul codice, come il \textit{naming} delle variabili, lo \textit{smell code index}, quantità di \textit{bug} rilevati, il \textit{security hotspot index}...
+		\item \textbf{SonarQube}: E' un software dedito all'ispezione di codice al fine di migliorarne la qualità. Permette anche di controllare il coverage, però essendo un po' complicato il link con Django, ho preferito gestire questo fattore attraverso il package 'Coverage.py', mentre ho usato SonarQube per tutti gli altri check sul codice, come il \textit{naming} delle variabili, lo \textit{smell code index}, quantità di \textit{bug} rilevati, il \textit{security hotspot index}. Qui sotto, il resoconto da esso ottenuto:
+
+		\begin{center}
+			\includegraphics[width=15cm, height=8cm]{Immagini/sonarqube_report.png} \\
+		\end{center}
 		
 		\item \textbf{Git/Github}: Per il \textit{version control} ho usato \textit{Git}, usando come servizio di hosting \textit{Github}. Fin dalle prime righe, il progetto è stato versionato sulla piattaforma.
 	\end{itemize}
@@ -89,7 +93,7 @@
 
 	
 	\noindent {\centerline {\Huge \textbf{Divisione nelle varie app}} \\ \par} 
-	Il progetto è stato diviso in 4 app:
+	Il progetto è stato diviso in 5 app:
 	
 	\begin{itemize}
 		\item \textbf{Streamify}: È l'app principale del progetto, essa contiene tutti i templates e views, escluse quelle relative all'autenticazione e chat. In essa sono presenti \textbf{tutti} i model, ho preferito definirli tutti nella stessa applicazione in modo da aumentare l'ordine. \\
@@ -99,6 +103,8 @@
 		\item \textbf{Auth}: Anche l'autenticazione è stata separata dal sito principale, dato che ho cercato di tenere le varie logiche quanto più separate possibili, al fine di aumentare la modularità del sito e la sua riusabilità. \\
 		
 		\item \textbf{Test\_Apps}: Essa contiene i test di tutte le app citate sopra, creando un'app dedicata a questo scopo mi è stato più facile gestirli, potendoli raggruppare tutti sotto la stessa directory. Ulteriori dettagli su questo verranno affrontati nel paragrafo dedicato. \\
+		
+		\item \textbf{DB\_Operations}: Contiene le operazioni effettuate sul DB. Per il momento, le uniche operazioni disponibili sono quelle di update e rimozione di una recensione. \\ Ho separato solo queste, piuttosto che anche quelle di '\textit{aggiunta}' perchè in questi casi si trattava di chiamate vere e proprie con AJAX, piuttosto che Django '\textit{vanilla}'.
 	\end{itemize}
 	\pagebreak
 	
@@ -206,13 +212,13 @@
 		\begin{itemize}
 			\item \textbf{voto}: Rappresenta il voto numerico della recensione, con range 1$\sim$5.
 			\item \textbf{film}: \textit{Foreign Key} di \textit{Film} che specifica il film recensito.
-			\item \textbf{utente}: \textit{Foreign Key} \textit{Utente} che specifica l'utente autore della recensione.
+			\item \textbf{utente}: \textit{Foreign Key} di \textit{Utente} che specifica l'utente autore della recensione.
 			\item \textbf{commento\_scritto}: Commento scritto opzionale.
 		\end{itemize}
 	\end{itemize}
 
 	\noindent E' presente poi lo UserManager, ovvero un'estensione della classe padre BaseUserManager, il cui scopo è quello di gestire la creazione di nuovi utenti. Esso verrà chiamato durante la creazione di un utente attraverso la seguente operazione, presente nel modello Utente:\\ \noindent objects = UserManager() \\ \\
-	Lo UserManager creerà attraverso il metodo \textit{\_create\_user(self, email, password, **extra\_field)}, l'utente. \\
+	Lo UserManager creerà, attraverso il metodo \textit{\_create\_user(self, email, password, **extra\_field)}, l'utente. \\
 	Da notare bene, lo UserManager si occupa della creazioni di utenti che possono sia essere utenti normali del sito, ma anche amministratori. La diversificazione nella creazione dei due avviene attraverso due metodi separati:
 		\begin{itemize}
 			\item Con il comando 'python manage.py createsuperuser' verrà chiamato il metodo di UserManager create\_superuser, che a sua volta chiamerà il metodo \_create\_user() con is\_staff e is\_superuser settati a 'True'.
@@ -236,10 +242,10 @@
 		\item Se l'utente si registra con username o email già in uso, lo status code sarà 409 (\textbf{Conflitto}).
 	\end{itemize}
 
-	\noindent I test verranno \textit{eseguiti} da \textbf{coverage.py} un package fornito da PIP, con cui Django si è dimostrato veramente ben integrato. Coverage può cercare, attraverso il parametro '--source' all'interno di path specifici, motivo per cui ho tenuto a separare i vari tipi di test. Di seguito, verrà riportato un resoconto del coverage dell'intero progetto:
+	\noindent I test verranno \textit{eseguiti} da \textbf{Coverage}, un package fornito da PIP, con cui Django si è dimostrato veramente ben integrato. Coverage può cercare, attraverso il parametro '--source', all'interno di path specifici, motivo per cui ho tenuto a separare i vari tipi di test. Di seguito, verrà riportato un resoconto del coverage dell'intero progetto:
 	
 	\begin{center}
-		\centering \includegraphics[width=11cm]{Immagini/coverage_report.png} \\
+		\centering \includegraphics[width=13cm,height=18cm]{Immagini/coverage_report.png} \\
 		\centering Coverage report	
 	\end{center}
 	\pagebreak
@@ -264,7 +270,7 @@
 		\centering \includegraphics[width=15cm, height=7cm]{Immagini/Account_screen.png} \\
 		\centering Screenshot dell'account page ~\\ ~\\ ~\\ ~\\ ~\\
 		
-		\centering \includegraphics[width=15cm, height=6cm]{Immagini/User_reviews_screen.png} \\
+		\centering \includegraphics[width=15cm, height=7cm]{Immagini/User_reviews_screen.png} \\
 		\centering Screenshot delle recensioni scritte dall'utente
 	\end{center}
 	\pagebreak
@@ -272,7 +278,7 @@
 	
 	\noindent {\centerline {\Huge \textbf{Problemi riscontrati e commenti finali}} \\ \par}
 	
-	\noindent Di problemi in sè non ne ho trovati particolarmente, o comunque nulla che tramite qualche ricerca su Internet non possa essere risolto. D'altronde è il framework più utilizzato nel suo ambito, e la documentazione che è possibile trovare nei vari forum è elevatissima. \\
+	\noindent Di problemi in sè non ne ho trovati particolarmente, o comunque nulla che tramite qualche ricerca sul web non possa essere risolto. D'altronde è il framework più utilizzato nel suo ambito, e la documentazione che è possibile trovare nei vari forum è elevatissima. \\
 	Ci sono alcune cose che non mi hanno del tutto convinto, durante lo sviluppo del progetto. \\
 	Ad esempio, Django tratta i QuerySet come liste di oggetti che matchano un filtro (query), sarebbe stato più comodo dare la possibilità di modificarli attraverso qualche metodo. Nel mio caso, nel recommendation system, se avessi avuto la possibilità di intervenire sugli elementi di un QuerySet (ad esempio potendo aggiungere o eliminare elementi), avrei potuto evitare di instanziare oggetti 'pressochè inutili'. Questo da un certo punto di vista ha senso, perchè si tratta comunque di una query e sarebbe concettualmente sbagliato intervenirci manualmente, anche se in alcune situazioni, appunto, sarebbe stato comodo. Apparte questo dettaglio, gli altri problemi riscontrati sono stati minori e risolvibili con qualche ricerca online. \\ \\
 	Per concludere, devo dire che come corso mi è piaciuto fin da subito, soprattutto considerando la modalità d'esame. Credo infatti si possa imparare \textit{molto} di più dallo sviluppo di un progetto, soprattutto su un argomento del genere. È stata la mia prima esperienza riguardo lo sviluppo web e ne sono rimasto soddisfatto. Mi ha insegnato molto sia dal punto di vista strutturale di un progetto (divisione in app, ordine nella struttura delle directory, test) e di come frontend e backend effettivamente riescano a comunicare. \\

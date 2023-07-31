@@ -19,7 +19,7 @@ git clone https://github.com/ChristianP01/ProgettoTW.git;
 cd ProgettoTW/;
 pip install -r requirements.txt;
 python manage.py runserver --insecure;
-firefox localhost:8000/streamify/home/;
+*your_browser* localhost:8000/streamify/home/;
 ```
 
-N.B. E' necessario usare il flag --insecure nel runnare il server perchè con debug=False potrebbe dare problemi di sicurezza nel servire file statici.
+N.B. Il flag --insecure è necessario per evitare problemi di sicurezza nel servire file statici.
